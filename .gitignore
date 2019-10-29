@@ -1,0 +1,25 @@
+
+# R and R studio files
+
+^.*\.Rproj$
+^\.Rproj\.user$
+^.*\.Rhistory
+^.*\.RData
+^.*\.Ruserdata
+
+
+# Raw data files
+
+*/IPAM/IPAM-Raw
+*/IPAM/OldData
+*/Data
+TemperatureHOBO/
+
+# Outputs
+*.html
+*.JPG
+
+# Other files
+.directory
+.dropbox
+.Rproj.user

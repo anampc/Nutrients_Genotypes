@@ -1,0 +1,350 @@
+---
+title: "Changes in Fv/Fm in elevated nutrients and heat stress"
+author: "Ana Palacio"
+date: "10/29/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fig.height=7)
+```
+
+
+# General project set-up 
+
+```{r libraries, results="hide"}
+
+# Load libraries and sources required to run the script
+    library(tidyverse)
+    library(ggthemes)
+    library(lmerTest)
+    library(emmeans)
+    library(multcomp)
+    library(effects)
+
+# Default ggplot settings
+
+    Fill.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+
+    ggthe_bw<-theme(plot.background=element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.box.background = element_rect(),
+          panel.background =element_rect(fill = NA, color = "black")
+          )+
+    theme_bw()
+```
+
+# Data exploration
+
+##  1. Get the files with all the YII by species
+
+```{r data}
+# Acer
+    YII.Acer<-read.csv("YII_Data/YII_Nutrients_Acer.csv", header = T)
+      YII.Acer$Fragment<-as.character(YII.Acer$Fragment)  # Fragment ID to character
+      YII.Acer<-subset(YII.Acer, Colony!="F")
+      YII.Acer<-subset(YII.Acer , Treatment!="Dead")
+    ## Genotype information
+      MOTE<-read.csv("Genotypes_mote.csv", header = TRUE)
+      YII.Acer<-merge(YII.Acer, MOTE, by="Colony", all.x=TRUE)
+
+# Ofav    
+    YII.Ofav<-read.csv("YII_Data/YII_Nutrients_Ofav.csv")
+      YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
+                            levels=c("31","6","20","34"))  # D dominance order
+      YII.Ofav$Genotype<-paste("Ofav", YII.Ofav$Colony, sep = "_")
+
+# Ssid      
+    YII.Ssid<-read.csv("YII_Data/YII_Nutrients_Ssid.csv")
+      YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
+                                 levels=c("30","20","24","28","22","23","27") )  # D dominance order
+      YII.Ssid$Genotype<-paste("Ssid", YII.Ssid$Colony, sep = "_")
+    
+# Pool all species the data
+      YII.data<-dplyr::bind_rows(list(YII.Acer,YII.Ofav,YII.Ssid))
+      YII.data<-YII.data[,-1]
+      summary(YII.data)
+      
+# Organize data type
+      YII.data$Date<-as.Date(YII.data$Date, "%Y-%m-%d")
+      YII.data$Days<-(as.numeric(YII.data$Date) -17485)
+      
+      YII.data$Spp <- as.factor(YII.data$Spp)
+      YII.data$Treatment[YII.data$Treatment == "Control"] <- "Ambient"
+      YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
+      YII.data$Treatment <- as.factor(YII.data$Treatment)
+      YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
+                             levels=c("Acer_07","Acer_08","Acer_31",
+                                      "Acer_48","Acer_50","Acer_62", 
+                             "Ofav_31","Ofav_6","Ofav_20","Ofav_34", 
+                             "Ssid_30","Ssid_20","Ssid_24",
+                             "Ssid_28","Ssid_22","Ssid_23","Ssid_27"))  # D dominance order
+      YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
+      YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time, sep = "_")
+      
+# Check the data
+      str(YII.data)
+      summary(YII.data)
+      summary(YII.data$Genotype)
+      write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
+    
+# Remove baseline values
+      YII.data<-subset(YII.data, Days>-1)
+    # Remove recovery values
+      YII.data<-subset(YII.data, Days<112)
+      # write.csv(YII.data, "Outputs/Experiment_YII_data.csv", row.names = F)  
+    # YII.Wide<- reshape(YII.data, idvar = "Fragment", timevar = "Days", direction = "wide")
+      
+# Subset data before heat stress (Only nutrients)
+      YII.nutrients<-subset(YII.data, Days<80)
+```
+
+## 2. Exploratory graphs
+
+All time points (nutrients + heat stress)
+
+* Colony (Genotype) differences
+
+```{r explore}
+YII_Colony<- ggplot(YII.data, aes (Days, YII, colour=Genotype)) +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.5)+
+        stat_summary(fun.y=mean, geom="line", alpha=0.6) +   theme_bw()
+      YII_Colony + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
+      
+      YII_Fragment<- ggplot(YII.data, aes (Days, YII, colour=factor(Fragment))) +
+        stat_summary(fun.y=mean, geom="line", alpha=0.6) +  
+        theme_bw() + theme(legend.position = "none")
+      YII_Fragment + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
+      
+      YII_Frag_Gen<- ggplot(YII.data, aes (Days, YII, colour=Genotype, shape=Fragment)) +
+        stat_summary(fun.y=mean, geom="line", alpha=0.5) +  
+        theme_bw() + theme(legend.position = "bottom",
+                           legend.title = element_blank())
+      YII_Frag_Gen + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
+```
+
+* Treatment differences 
+
+```{r treatmentcolours}
+YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2, position = position_dodge(1) )+
+        stat_summary(fun.y=mean, geom="line") + ggthe_bw +
+        theme(legend.position="bottom",
+              strip.background = element_rect(fill="white"))+
+        scale_y_continuous(limits = c(0.2, 0.7),
+                           breaks = seq(0.2, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=("Fv/Fm")) +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+        annotate("rect", xmin= 2, xmax = 86,
+                 ymin = 0.2, ymax =0.3, fill="blue", alpha = .05)+
+        annotate("rect", xmin= 72, xmax = 85,
+                 ymin = 0.2, ymax =0.7, fill="orange", alpha = .05)+
+        annotate("rect", xmin= 85, xmax = 113,
+                 ymin = 0.2, ymax =0.7, fill="red", alpha = .05) + facet_grid (Spp~.)
+      YII_Treat
+```
+
+# Figure 3
+
+```{r Figure, fig.height = 6, fig.width = 3.5}
+YII_Treat_BW<- ggplot(YII.data, aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
+        ggthe_bw + Fill.colour+
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                     position = position_dodge(1) )+
+        stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+         stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+        theme(legend.position="bottom", 
+              legend.title = element_blank(),
+              strip.background = element_rect(fill="white"))+
+        scale_y_continuous(limits = c(0.1, 0.7),
+                           breaks = seq(0.1, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.13,
+                  colour = "gray90", linetype=2)+
+        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.25,
+                  colour = "gray90", linetype=4)+
+        annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.25,
+                  colour = "gray90", linetype=3)
+        
+      
+      Figure3<-YII_Treat_BW +facet_grid (Spp~.)+
+        annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.2, label = "Bleaching", size=3)
+Figure3
+#ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=3.5, height=6)
+```
+
+
+# Figure 3 Supplemantary: Treatment effect by genotype
+
+```{r FigureSupple,  fig.height = 7, fig.width = 8}
+
+Figure3b<-YII_Treat_BW +facet_wrap (~Genotype, ncol = 6)
+Figure3b
+
+#ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=4.0, height=6)
+```
+
+# YII GLMs
+
+```{r models}
+#Time as a factor, not as int
+      str(YII.data)
+      YII.data$DaysF<-as.factor(YII.data$Days)
+
+# All spp together
+      LME1<-lmer(YII ~ Treatment * DaysF * Spp + (1|Genotype),
+                REML=TRUE, data=YII.data, na.action=na.omit)
+       lmerTest::step (LME1)
+       drop1(LME1, test = "Chisq")
+       summary(LME1)
+       # plot(Effect(c("Treatment","Spp","DaysF"), LME1), x.var="DaysF", multiline=T, ci.style="bars",
+       #    ylab="Fv/Fm", xlab="Days in nutient treatments")
+    
+      # EMMs
+      All.YII.emm<-emmeans(LME1, ~Treatment * DaysF* Spp)
+      emmip(LME1, ~DaysF|Treatment|Spp, CIs = TRUE) + theme_bw() + facet_grid(Spp~Treatment)
+  # Spp responded differently, do separate analysis for each one
+```
+
+## A.cer model
+
+```{r Acer_models}
+  LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment), 
+                               data=subset(YII.data, Spp=="A.cer"), na.action=na.omit)
+      summary(LME_Acer)
+      
+      Step.LME_Acer<-step (LME_Acer)
+      final_fm <- get_model(Step.LME_Acer)
+      summary(final_fm)
+      
+      # EMMs
+      Acer.YII.emm<-emmeans(LME_Acer, ~Treatment * DaysF)
+      # contrast(Acer.YII.emm, "tukey")
+      
+      # Effect plot options
+      emmip(LME_Acer, ~DaysF|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions
+      
+      # Pairwise comparisons
+      #pairs(Acer.YII.emm) # same than contrast(Acer.YII.emm, "tukey")
+      
+      #plot(emmeans(LME_Acer, ~DaysF|Treatment), comparisons = TRUE) +
+      #  coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~Treatment) +
+      #  theme_gdocs() # Tukey comparission (do not trust CI to compare EMMs)
+      
+      Acer.YII_groups<-cld(Acer.YII.emm, by=NULL) # compact-letter display
+      Acer.YII_groups<-Acer.YII_groups[order(Acer.YII_groups$Day,Acer.YII_groups$Treatment),]
+      Acer.YII_groups
+      write.csv(Acer.YII_groups, "Outputs/Multicomp_AcerYII.csv", row.names = F)
+```
+
+## O.fav model
+
+```{r Ofav_models}
+###### 
+      # Ofav 
+      LME_Ofav<-lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment), 
+                     data=subset(YII.data, Spp=="O.fav"), na.action=na.omit)
+      lmerTest::step (LME_Ofav)
+      summary(LME_Ofav)
+      
+      # EMMs
+      Ofav.YII.emm<-emmeans(LME_Ofav, ~Treatment * DaysF)
+      # contrast(Ofav.YII.emm, "tukey")
+      
+      # Effect plot options
+      emmip(LME_Ofav, ~DaysF|Treatment, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
+      
+      # Pairwise comparisons
+      #pairs(Ofav.YII.emm) # same than contrast(Acer.YII.emm, "tukey")
+      
+      # Pairwise comparisons
+      plot(emmeans(LME_Ofav, ~DaysF|Treatment), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
+        facet_wrap(~Treatment) +
+        theme_bw() # Tukey comparission (do not trust CI to compare EMMs)
+      
+      Ofav.YII_groups<-cld(Ofav.YII.emm, by=NULL) # compact-letter display
+      Ofav.YII_groups<-Ofav.YII_groups[order(Ofav.YII_groups$Day,Ofav.YII_groups$Treatment),]
+      Ofav.YII_groups
+      write.csv(Ofav.YII_groups, "Outputs/Multicomp_OfavYII.csv", row.names = F)
+```
+
+## Ssid model
+
+```{r Ssid_models}
+LME_Ssid<-lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment), 
+                     REML=TRUE, data=subset(YII.data, Spp=="S.sid"),
+                      na.action=na.omit)
+      step (LME_Ssid)
+      summary(LME_Ssid)
+      
+      # EMMs
+      Ssid.YII.emm<-emmeans(LME_Ssid, ~Treatment * DaysF)
+      # contrast(Ssid.YII.emm, "tukey")
+      
+      # Effect plot options
+      emmip(LME_Ssid, ~DaysF|Treatment, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
+      
+      # Pairwise comparisons
+      # pairs(Ssid.YII.emm) # same than contrast(Ssid.YII.emm, "tukey")
+      
+      # Tukey comparission (do not trust CI to compare EMMs)
+      plot(emmeans(LME_Ssid, ~DaysF|Treatment), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~Treatment) +
+        theme_gdocs()
+      
+      Ssid.YII_groups<-cld(Ssid.YII.emm, by=NULL) # compact-letter display
+      Ssid.YII_groups<-Ssid.YII_groups[order(Ssid.YII_groups$Day,Ssid.YII_groups$Treatment),]
+      Ssid.YII_groups
+      write.csv(Ssid.YII_groups, "Outputs/Multicomp_SsidYII.csv", row.names = F)
+```
+
+# Only nutrients 
+
+```{r N_models}
+############################################################          
+ ################### ONLY NUTRIENT PHASE ##################
+############################################################
+          
+# Select data for Nutrient enrichment (26C) only
+      
+    # Raw YII data              
+    YII_Colony<- ggplot(YII.nutrients, aes (Days, YII, colour=Genotype)) +
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+      stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
+    YII_Colony + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
+    
+    YII_Fragm<- ggplot(YII.nutrients, aes (Days, YII, colour=Treatment)) +
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+      stat_summary(fun.y=mean, geom="line") +   ggthe_bw
+    YII_Fragm + ylim(0.25, 0.65) + facet_wrap (Spp~Genotype)
+    
+    YII_Trea<- ggplot(YII.nutrients, aes (Days, YII, colour=factor(Treatment))) +
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar",
+                   position = position_dodge(width = 1), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="line") +
+      facet_grid (~Spp) + theme_gdocs()+
+      scale_x_continuous(name="Days in nutrient treatment",
+                         breaks=c(seq(-30,76, by=15))) +
+      ylab("Fv/Fm") + ylim(0.01, 0.65)
+
+    YII_Trea + guides(colour=guide_legend("Treatment"))+
+      theme(legend.position=c(0.15, 0.3),
+            plot.background=element_blank(),
+            legend.box.background = element_rect())
+
+```
