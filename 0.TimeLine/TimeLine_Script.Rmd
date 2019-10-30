@@ -1,0 +1,23 @@
+---
+title: "Experimental Timeline"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r SetUp}
+
+# Libraries
+  library(timevis)
+
+# Data
+  Time.data<-read.csv("TimeLine.csv", header = TRUE)
+  G <- read.csv("Groups.csv", header = T)
+
+timevis(Time.data, groups = G)
+
+```
