@@ -20,4 +20,4 @@ vignettes/*.pdf
 # Other files
 **/.directory
 **/.dropbox
-**/.DS_Store
+**/*.DS_Store*
