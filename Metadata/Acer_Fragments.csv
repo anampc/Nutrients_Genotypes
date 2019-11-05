@@ -1,0 +1,184 @@
+Fragment,Colony,Treatment,Replicate
+A.cer_101,Red and Yellow,NP,R1
+A.cer_102,Red and Yellow,Control,R2
+A.cer_103,Red and Yellow,N,R2
+A.cer_104,Red and Yellow,NP,R2
+A.cer_105,Red and Yellow,Control,R1
+A.cer_106,Red and Yellow,N,R1
+A.cer_107,Red and Yellow,NP,R1
+A.cer_108,Red and Yellow,Control,R2
+A.cer_109,Red and Yellow,N,R2
+A.cer_110,Red and Yellow,NP,R2
+A.cer_111,Red and Yellow,BaseLine,NA
+A.cer_112,Red and Yellow,BaseLine,NA
+A.cer_113,Red and Yellow,BaseLine,NA
+A.cer_114,Red and Yellow,BaseLine,NA
+A.cer_115,Red and Yellow,BaseLine,NA
+A.cer_116,Green and Orange,Control,R1
+A.cer_117,Green and Orange,N,R1
+A.cer_118,Green and Orange,NP,R1
+A.cer_119,Green and Orange,Control,R2
+A.cer_120,Green and Orange,N,R2
+A.cer_121,Green and Orange,NP,R2
+A.cer_122,Green and Orange,Control,R1
+A.cer_123,Green and Orange,N,R1
+A.cer_124,Green and Orange,NP,R1
+A.cer_125,Green and Orange,Control,R2
+A.cer_126,Green and Orange,N,R2
+A.cer_127,Green and Orange,BaseLine,NA
+A.cer_128,Green and Orange,NP,R2
+A.cer_129,Green and Orange,Control,R1
+A.cer_130,Green and Orange,N,R1
+A.cer_131,Yellow,BaseLine,NA
+A.cer_132,Yellow,BaseLine,NA
+A.cer_133,Yellow,BaseLine,NA
+A.cer_134,Yellow,BaseLine,NA
+A.cer_135,Yellow,BaseLine,NA
+A.cer_136,Yellow,BaseLine,NA
+A.cer_137,Yellow,BaseLine,NA
+A.cer_138,Yellow,BaseLine,NA
+A.cer_139,Yellow,BaseLine,NA
+A.cer_140,Yellow,BaseLine,NA
+A.cer_141,Yellow,BaseLine,NA
+A.cer_142,Yellow,BaseLine,NA
+A.cer_143,Yellow,Control,R1
+A.cer_144,Yellow,N,R1
+A.cer_145,Yellow,NP,R1
+A.cer_146,Orange,BaseLine,NA
+A.cer_147,Orange,BaseLine,NA
+A.cer_148,Orange,BaseLine,NA
+A.cer_149,Orange,Control,R1
+A.cer_150,Orange,N,R1
+A.cer_151,Orange,NP,R1
+A.cer_152,Orange,Control,R2
+A.cer_153,Orange,BaseLine,NA
+A.cer_154,Orange,N,R2
+A.cer_155,Orange,NP,R2
+A.cer_156,Orange,BaseLine,NA
+A.cer_157,Orange,Control,R1
+A.cer_158,Orange,N,R1
+A.cer_159,Orange,NP,R1
+A.cer_160,Orange,Control,R2
+A.cer_161,Red and Orange,BaseLine,NA
+A.cer_162,Red and Orange,Control,R1
+A.cer_163,Red and Orange,BaseLine,NA
+A.cer_164,Red and Orange,N,R1
+A.cer_165,Red and Orange,NP,R1
+A.cer_166,Red and Orange,Control,R2
+A.cer_167,Red and Orange,N,R2
+A.cer_168,Red and Orange,NP,R2
+A.cer_169,Red and Orange,Control,R1
+A.cer_170,Red and Orange,N,R1
+A.cer_171,Red and Orange,NP,R1
+A.cer_172,Red and Orange,BaseLine,NA
+A.cer_173,Red and Orange,Control,R2
+A.cer_174,Red and Orange,N,R2
+A.cer_175,Red and Orange,NP,R2
+A.cer_176,Green,Control,R1
+A.cer_177,Green,N,R1
+A.cer_178,Green,NP,R1
+A.cer_179,Green,Control,R2
+A.cer_180,Green,N,R2
+A.cer_181,Green,NP,R2
+A.cer_182,Green,Control,R1
+A.cer_183,Green,N,R1
+A.cer_184,Green,NP,R1
+A.cer_185,Green,BaseLine,NA
+A.cer_186,Green,Control,R2
+A.cer_187,Green,N,R2
+A.cer_188,Green,NP,R2
+A.cer_189,Green,Control,R1
+A.cer_190,Green,N,R1
+A.cer_200,Green and Orange,BaseLine,NA
+A.cer_201,Red and Yellow,BaseLine,NA
+A.cer_202,Red and Yellow,BaseLine,NA
+A.cer_203,Red and Yellow,BaseLine,NA
+A.cer_204,Red and Yellow,Control,R1
+A.cer_205,Red and Yellow,BaseLine,NA
+A.cer_206,Red and Yellow,N,R1
+A.cer_207,Red and Yellow,BaseLine,NA
+A.cer_208,Red and Yellow,BaseLine,NA
+A.cer_209,Red and Yellow,BaseLine,NA
+A.cer_210,Red and Yellow,BaseLine,NA
+A.cer_211,Red and Yellow,BaseLine,NA
+A.cer_212,Red and Yellow,BaseLine,NA
+A.cer_213,Red and Yellow,BaseLine,NA
+A.cer_214,Red and Yellow,BaseLine,NA
+A.cer_215,Red and Yellow,BaseLine,NA
+A.cer_216,Green and Orange,NP,R1
+A.cer_217,Green and Orange,Control,R2
+A.cer_218,Green and Orange,N,R2
+A.cer_219,Green and Orange,NP,R2
+A.cer_220,Green and Orange,Control,R1
+A.cer_221,Green and Orange,N,R1
+A.cer_222,Green and Orange,NP,R1
+A.cer_223,Green and Orange,Control,R2
+A.cer_224,Green and Orange,N,R2
+A.cer_225,Green and Orange,NP,R2
+A.cer_226,Green and Orange,Control,R1
+A.cer_227,Green and Orange,N,R1
+A.cer_228,Green and Orange,NP,R1
+A.cer_229,Green and Orange,NP,R2
+A.cer_230,Green and Orange,N,R2
+A.cer_231,Yellow,Control,R2
+A.cer_232,Yellow,N,R2
+A.cer_233,Yellow,NP,R2
+A.cer_234,Yellow,N,R2
+A.cer_235,Yellow,NP,R2
+A.cer_236,Yellow,BaseLine,NA
+A.cer_237,Yellow,BaseLine,NA
+A.cer_238,Yellow,BaseLine,NA
+A.cer_239,Yellow,BaseLine,NA
+A.cer_240,Yellow,BaseLine,NA
+A.cer_241,Yellow,BaseLine,NA
+A.cer_242,Yellow,BaseLine,NA
+A.cer_243,Yellow,BaseLine,NA
+A.cer_244,Yellow,BaseLine,NA
+A.cer_245,Yellow,BaseLine,NA
+A.cer_246,Orange,N,R2
+A.cer_247,Orange,NP,R2
+A.cer_248,Orange,Control,R1
+A.cer_249,Orange,N,R1
+A.cer_250,Orange,NP,R1
+A.cer_251,Orange,BaseLine,NA
+A.cer_252,Orange,BaseLine,NA
+A.cer_253,Orange,BaseLine,NA
+A.cer_254,Orange,BaseLine,NA
+A.cer_255,Orange,BaseLine,NA
+A.cer_256,Orange,BaseLine,NA
+A.cer_257,Orange,BaseLine,NA
+A.cer_258,Orange,BaseLine,NA
+A.cer_259,Orange,BaseLine,NA
+A.cer_260,Orange,BaseLine,NA
+A.cer_261,Red and Orange,Control,R1
+A.cer_262,Red and Orange,N,R1
+A.cer_263,Red and Orange,NP,R1
+A.cer_264,Red and Orange,Control,R2
+A.cer_265,Red and Orange,N,R2
+A.cer_266,Red and Orange,NP,R2
+A.cer_267,Red and Orange,Control,R1
+A.cer_268,Red and Orange,N,R1
+A.cer_269,Red and Orange,NP,R1
+A.cer_270,Red and Orange,Control,R2
+A.cer_271,Red and Orange,N,R2
+A.cer_272,Red and Orange,NP,R2
+A.cer_273,Red and Orange,Control,R1
+A.cer_274,Red and Orange,N,R1
+A.cer_275,Red and Orange,BaseLine,NA
+A.cer_276,Green,NP,R1
+A.cer_277,Green,Control,R2
+A.cer_278,Green,N,R2
+A.cer_279,Green,BaseLine,NA
+A.cer_280,Green,NP,R2
+A.cer_281,Green,Control,R1
+A.cer_282,Green,N,R1
+A.cer_283,Green,NP,R1
+A.cer_284,Green,Control,R2
+A.cer_285,Green,N,R2
+A.cer_286,Green,NP,R2
+A.cer_287,Green,Control,R1
+A.cer_288,Green,N,R1
+A.cer_289,Green,NP,R1
+A.cer_290,Green,Control,R2
+A.cer_299,Orange,N,R2
+A.cer_300,Red and Yellow,NP,R1

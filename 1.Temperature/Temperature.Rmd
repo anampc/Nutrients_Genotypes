@@ -1,6 +1,6 @@
 ---
 title: "Temperature conditions during the experiment"
-author: "AnaPalacio"
+author: "Ana Palacio"
 date: "July 26, 2017"
 output:
   html_document:
@@ -47,8 +47,8 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 Temperature<-read.csv("Day_Tem.csv", header = T)
 
 Temperature$Period<-factor((Temperature$Period),levels=c
-              ("Acer","Ofav-Ssid","Nutrients", "Ramping",
-                "Bleaching","Ramping2", "Recovery2"))
+              ("Acer","Ofav-Ssid","Nutrients", "Ramping up",
+                "Bleaching","Ramping down", "Recovery2"))
   
 # Temperature data available from each treatment-replicate-day
 Periods.days <- ddply (Temperature, .(Period, Treatment),summarise,
@@ -58,8 +58,8 @@ Periods.days
 ```
 
 # 3. Glance at temperature conditions during each period of the experiment:
-* during recovery from collection and fragemntation and 
-* during the experiment (nutrient addition, ramping, and bleaching)
+* during recovery from collection and fragmentation and 
+* during the experiment (nutrient addition, ramping up, and bleaching)
 * during recovery from bleaching
 
 ```{r}
@@ -102,7 +102,7 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
               ymin = c(25, 25, 25), 
               ymax = c(27, 32, 32), fill=c("blue" , "orange", "red"), alpha = .1)+
     annotate("text", x= c(46, 84, 104), y = 25.5, 
-              label=c("Nutrient addition", "Ramping", "Bleaching"), size=3) +
+              label=c("Nutrient addition", "Ramping up", "Heat"), size=3) +
     theme(legend.position=c(0.2, 0.7)) +
     scale_colour_manual(values = c("black","gray"))+
     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
@@ -115,7 +115,7 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
   
   Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
     ggthe_bw +
-    scale_y_continuous(limits = c(24,32),
+    scale_y_continuous(limits = c(23.9,32.1),
                        name=(expression("Temperature"~(degree*C))),
                        breaks = seq(24, 32, 1),  
                        expand = c(0, 0)) +
@@ -126,22 +126,24 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
   
     annotate("segment", x = 2, xend = 91, y = 25, yend = 25,
               colour = "black")+
-    annotate("segment", x = 79, xend = 90, y = 25, yend = 27,
+    annotate("segment", x = 79, xend = 90, y = 25.3, yend = 27,
               colour = "black", linetype=2)+
     annotate("segment", x = 91, xend = 113, y = 27, yend = 27,
               colour = "black", linetype=3)+
 
-    annotate("text", x= c(46, 84, 102.5), y = 24.5, 
-             label=c("Nutrient addition", "Ramping", "Bleaching"), size=3) +
+    annotate("text", x= c(46, 82, 103), y = 24.5, 
+             label=c("Nutrient addition", "Ramping up", "Heat"), size=3) +
     theme(legend.position=c(0.2, 0.7)) +
     scale_colour_manual(values = c("black","gray"))+
     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
     stat_summary(fun.y=mean, geom="line") 
   Temperature_BW
   
+  # ggsave(file="Figure_1_Experiment_a.svg", plot=Temperature_BW, width=3.5, height=2)
+  
 ```
 
-# Figure 1: Experimantl conditions
+# Figure 1: Experimental conditions
 
 ```{r}
   
@@ -164,14 +166,14 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
               colour = "black", linetype=3)+
 
     annotate("text", x= c(46, 84, 101), y = c(24.5,25.5, 26.5), 
-             label=c("Nutrient addition", "Ramping", "Bleaching"), size=3) +
+             label=c("Nutrient addition", "Ramping up", "Heat"), size=3) +
     theme(legend.position=c(0.2, 0.7)) +
     scale_colour_manual(values = c("black","gray"))+
     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
     stat_summary(fun.y=mean, geom="line") 
   Temperature_BW2
   
-  ggsave(file="Figure_1_Experiment.svg", plot=Temperature_BW2, width=3.5, height=2)
+  # ggsave(file="Figure_1_Experiment_b.svg", plot=Temperature_BW2, width=3.5, height=2)
   
 ```
 
