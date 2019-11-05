@@ -53,6 +53,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
 
 # Ofav    
     YII.Ofav<-read.csv("YII_Data/YII_Nutrients_Ofav.csv")
+      YII.Ofav$Fragment<-as.character(YII.Ofav$Fragment) 
       YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
                             levels=c("31","6","20","34"))  # D dominance order
       YII.Ofav$Genotype<-paste("Ofav", YII.Ofav$Colony, sep = "_")
@@ -62,6 +63,10 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
                                  levels=c("30","20","24","28","22","23","27") )  # D dominance order
       YII.Ssid$Genotype<-paste("Ssid", YII.Ssid$Colony, sep = "_")
+      
+      Ssid.cores<-YII.Ssid %>% group_by(Fragment, Colony, Treatment) %>% count(Replicate)
+      Ssid.cores$Fragment<-as.character(Ssid.cores$Fragment)
+      write.csv(Ssid.cores, "Ssid_Fragments.csv", row.names = F)
     
 # Pool all species the data
       YII.data<-dplyr::bind_rows(list(YII.Acer,YII.Ofav,YII.Ssid))

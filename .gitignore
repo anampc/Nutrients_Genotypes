@@ -5,6 +5,7 @@
 #/*.Rcheck/
 # RStudio files
 **/.Rproj.user
+#**/.Rproj
 **/.RData
 **/.Ruserdata
 # produced vignettes
@@ -21,3 +22,4 @@ vignettes/*.pdf
 **/.directory
 **/.dropbox
 **/*.DS_Store*
+.Rproj.user
