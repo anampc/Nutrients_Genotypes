@@ -163,7 +163,7 @@ YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
                  ymin = 0.2, ymax =0.7, fill="orange", alpha = .05)+
         annotate("rect", xmin= 85, xmax = 113,
                  ymin = 0.2, ymax =0.7, fill="red", alpha = .05) + facet_grid (Spp~.)
-      YII_Treat
+YII_Treat
 ```
 
 # Figure 3
@@ -197,7 +197,7 @@ YII_Treat_BW<- ggplot(YII.data, aes (Days, YII, colour=factor(Treatment), shape=
       
       Figure3<-YII_Treat_BW +facet_grid (Spp~.)+
         annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.2, label = "Bleaching", size=3)
+        annotate("text", x = 99, y = 0.2, label = "Heat", size=3)
 Figure3
 #ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=3.5, height=6)
 ```
