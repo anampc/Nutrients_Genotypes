@@ -47,6 +47,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.Acer$Fragment<-as.character(YII.Acer$Fragment)  # Fragment ID to character
       YII.Acer<-subset(YII.Acer, Colony!="F")
       YII.Acer<-subset(YII.Acer , Treatment!="Dead")
+      YII.Acer$Spp<-"Ac"
     ## Genotype information
       MOTE<-read.csv("Genotypes_mote.csv", header = TRUE)
       YII.Acer<-merge(YII.Acer, MOTE, by="Colony", all.x=TRUE)
@@ -56,25 +57,24 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.Ofav$Fragment<-as.character(YII.Ofav$Fragment) 
       YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
                             levels=c("31","6","20","34"))  # D dominance order
-      YII.Ofav$Genotype<-paste("Ofav", YII.Ofav$Colony, sep = "_")
+      YII.Ofav$Genotype<-paste("Of", YII.Ofav$Colony, sep = "_")
+      YII.Ofav$Spp<-"Of"
 
+            
 # Ssid      
     YII.Ssid<-read.csv("YII_Data/YII_Nutrients_Ssid.csv")
       YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
                                  levels=c("30","20","24","28","22","23","27") )  # D dominance order
-      YII.Ssid$Genotype<-paste("Ssid", YII.Ssid$Colony, sep = "_")
+      YII.Ssid$Genotype<-paste("Ss", YII.Ssid$Colony, sep = "_")
+      YII.Ssid$Spp<-"Ss"
       
-      Ssid.cores<-YII.Ssid %>% group_by(Fragment, Colony, Treatment) %>% count(Replicate)
-      Ssid.cores$Fragment<-as.character(Ssid.cores$Fragment)
-      write.csv(Ssid.cores, "Ssid_Fragments.csv", row.names = F)
-    
 # Pool all species the data
       YII.data<-dplyr::bind_rows(list(YII.Acer,YII.Ofav,YII.Ssid))
       YII.data<-YII.data[,-1]
       summary(YII.data)
       
 # Organize data type
-      YII.data$Date<-as.Date(YII.data$Date, "%Y-%m-%d")
+      YII.data$Date<-as.Date(YII.data$Date, "%m/%d/%y")
       YII.data$Days<-(as.numeric(YII.data$Date) -17485)
       
       YII.data$Spp <- as.factor(YII.data$Spp)
@@ -82,19 +82,24 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
       YII.data$Treatment <- as.factor(YII.data$Treatment)
       YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
-                             levels=c("Acer_07","Acer_08","Acer_31",
-                                      "Acer_48","Acer_50","Acer_62", 
-                             "Ofav_31","Ofav_6","Ofav_20","Ofav_34", 
-                             "Ssid_30","Ssid_20","Ssid_24",
-                             "Ssid_28","Ssid_22","Ssid_23","Ssid_27"))  # D dominance order
+                             levels=c("Ac_07","Ac_08","Ac_31",
+                                      "Ac_48","Ac_50","Ac_62", 
+                             "Of_31","Of_6","Of_20","Of_34", 
+                             "Ss_30","Ss_20","Ss_24",
+                             "Ss_28","Ss_22","Ss_23","Ss_27"))  # D dominance order
       YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
       YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time, sep = "_")
       
 # Check the data
       str(YII.data)
       summary(YII.data)
-      summary(YII.data$Genotype)
-      write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
+      # YII.data<-YII.data[order(
+      #   YII.data$Spp, YII.data$Treatment, YII.data$Replicate,
+      #   YII.data$Fragment, YII.data$Date),]
+      YII.data<-YII.data[order(
+        YII.data$Spp, YII.data$Date, YII.data$Treatment, YII.data$Replicate,
+        YII.data$Fragment),]
+      #write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
     
 # Remove baseline values
       YII.data<-subset(YII.data, Days>-1)
@@ -103,6 +108,11 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       # write.csv(YII.data, "Outputs/Experiment_YII_data.csv", row.names = F)  
     # YII.Wide<- reshape(YII.data, idvar = "Fragment", timevar = "Days", direction = "wide")
       
+      Spp.fragments<-YII.data %>% 
+        group_by(Spp, Genotype, Treatment, Replicate) %>% count(Fragment)
+      Spp.fragments
+      #write.csv(Spp.fragments, "Meassurments_perFragments.csv", row.names = F)
+
 # Subset data before heat stress (Only nutrients)
       YII.nutrients<-subset(YII.data, Days<80)
 ```

@@ -76,14 +76,14 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     BW.Tall$SampleID <- paste("A.cer", BW.Tall$Fra, BW.Tall$TimePoint, sep = "_")
   
     BW.Initial<-subset(BW.Tall, Initial.Date=="2017-08-30")
-    BW.Control<-subset(BW.Tall, Treatment=="Control")
+    BW.Control<-subset(BW.Tall, Treatment=="Ambient")
     BW.Control<-subset(BW.Control, Days<80)
     BW.nutrients<-subset(BW.Tall, Days>-10)
     BW.nutrients<-subset(BW.nutrients, Days<113)
     
   ## Remove recovery data points
     BW.Tall<-subset(BW.Tall, Initial.Date!="2017-10-18")
-    BW.Tall<-subset(BW.Tall, Initial.Date!="2018-02-23")
+    BW.Tall<-subset(BW.Tall, Initial.Date!="2018-02-23") # After heat stress
   
 ```
 
@@ -123,18 +123,20 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
               colour = "gray90")+
     annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
   
-    annotate("segment", x = 79, xend = 91, y = -1.5, yend = -1,
+    annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
               colour = "gray90")+
   
     annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
               colour = "gray90")+
-    annotate("text", x = 99, y = -1.2, label = "Bleaching", size=3)
+    annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
   BW_Treat
   
-ggsave(file="Figure2_BW.svg", plot=BW_Treat, dpi = 300, units="in", width=3.5, height=3.5)
+# ggsave(file="Figure2_BW.svg", plot=BW_Treat, dpi = 300, units="in", width=3.5, height=3.0)
 ```
 
 ## Supplement: All genotypes by treatment over time
+
+Including baseline
 
 ```{r, echo =FALSE}
 BW_Colony<- ggplot(BW.Tall, aes (Days, dBW.g, shape=factor(Treatment),
@@ -158,9 +160,9 @@ BW_Colony + facet_grid(~MoteGen)
 BW_Colony + facet_wrap(MoteGen~.)
 
 
-BW_ColonyT<- ggplot(BW.Tall, aes (Days, dBW.g, colour=factor(MoteGen))) +   
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+BW_ColonyT<- ggplot(BW.Tall, aes (Days, dBW.g, colour=MoteGen)) +   
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
   stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (~Treatment)  
 BW_ColonyT
 ```
@@ -184,11 +186,9 @@ BW_Colony_Control
 
 ```
 
-# Model selection and Pair-wise comparisons
+Data after nutrients (no baseline)
 
 ```{r}
-# Data after nutrients
-
 BW <- ggplot(BW.nutrients, aes(Days, dBW.g, colour=factor(Treatment))) +
           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
           stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
@@ -215,27 +215,33 @@ BW2 <- ggplot(BW.nutrients, aes(Final.Date, dBW.g, colour=factor(Treatment))) +
             legend.title = element_blank())
 ```
 
+# Model selection and Pair-wise comparisons
 
 ```{r}
 # Complex to simple models 
-
+  
   LM_1 <- lmer(dBW.g ~ Treatment*Day +
-                               (1 + Treatment|Colony), REML=TRUE, data= BW.nutrients)
+                               (1 + Treatment|Colony), REML=TRUE, data= BW.Tall)
   
   LM_2 <- lmer(dBW.g ~ Treatment * Day +
-                               (Treatment|Colony), REML=TRUE,  data= BW.nutrients)
+                               (Treatment|Colony), REML=TRUE,  data= BW.Tall)
    
   LM_3 <- lmer(dBW.g ~ Treatment  * Day +
-                               (1|Colony), REML=TRUE, data= BW.nutrients)
+                               (1|Colony), REML=TRUE, data= BW.Tall)
  
 
 # Select model
-    anova(LM_1, LM_2, refit=FALSE)
-    anova(LM_2, LM_3, refit=FALSE)
+  AIC(LM_1, LM_2, LM_3) # 1=2, but 3 has higher AIC
+  
+  anova(LM_1, LM_2, refit=FALSE)
+  anova(LM_2, LM_3, refit=FALSE)
+  anova(LM_1, LM_3, refit=FALSE)
  
 # Final model 
   LM_Treatment_Days<-lmer(dBW.g ~ Treatment * Day +
-                             (Treatment|Colony),  data= BW.nutrients)
+                             (Treatment|Colony),  data= BW.Tall)
+  isSingular(LM_Treatment_Days)
+  
   anova(LM_Treatment_Days)
   summary(LM_Treatment_Days)
   
@@ -245,5 +251,7 @@ BW2 <- ggplot(BW.nutrients, aes(Final.Date, dBW.g, colour=factor(Treatment))) +
     #BW_groups<-as.data.frame(BW_groups[complete.cases(BW_groups),])
     BW_groups<-BW_groups[order(BW_groups$Day,BW_groups$Treatment),]
   BW_groups
+  
+  write.csv(BW_groups, "BW_groups.csv", row.names = F)
 
 ```

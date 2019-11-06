@@ -139,7 +139,7 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
     stat_summary(fun.y=mean, geom="line") 
   Temperature_BW
   
-  # ggsave(file="Figure_1_Experiment_a.svg", plot=Temperature_BW, width=3.5, height=2)
+  # ggsave(file="Figure_1_Experiment_a.svg", dpi = 300, plot=Temperature_BW, width=3.5, height=2)
   
 ```
 
@@ -173,7 +173,7 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
     stat_summary(fun.y=mean, geom="line") 
   Temperature_BW2
   
-  # ggsave(file="Figure_1_Experiment_b.svg", plot=Temperature_BW2, width=3.5, height=2)
+  # ggsave(file="Figure_1_Experiment_b.svg", plot=Temperature_BW2, dpi = 300, width=3.5, height=2)
   
 ```
 
