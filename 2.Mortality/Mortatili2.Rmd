@@ -72,10 +72,20 @@ Try survival package
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit1 <- survfit(surv_object ~ Treatment, data = Survival.data)
     summary(fit1)
+    #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, ties = 'exact')
+    #summary(coxfit)
+
     # Plot the survival model
     Treatment_Only<-ggsurvplot(fit1, data = Survival.data, pval = TRUE, 
-           conf.int = T, risk.table=T, palette=Fill.colour)
+           conf.int = T, risk.table=T, palette=Fill.colour,
+           break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
+           risk.table.title="Number of fragments at risk")
     Treatment_Only
+    ggsave("Fig_2_Surv_Treatment.svg", 
+           Treatment_Only$plot, width=4, height=3.5,dpi = 300)
+    ggsave("Fig_2_Surv_Treatment.pdf", print(Treatment_Only),
+           width=5, height=6,dpi = 300)
+
 
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
@@ -108,6 +118,7 @@ Try survival package
 
 ```
 
+Do not run
 ```{r}
 fit.coxph0 <- coxph(surv_object ~ Genotype, data = Survival.data)
 ggforest(fit.coxph0, data = Survival.data)
@@ -154,20 +165,34 @@ summary(fit.coxph3)
   # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit0_2 <- survfit(surv_object2 ~ Genotype, conf.type = "log-log", data = Survival.data2)
     summary(fit0_2)
+    surv_pvalue(fit0_2)
+    coxfit0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2, ties = 'exact')
   # Plot the survival model
     Genotype_only2<-ggsurvplot(fit0_2, data = Survival.data2, pval = TRUE,
-               risk.table=T, tables.height=0.4, conf.int = T, n.risk   = TRUE )
+               risk.table=F, tables.height=0.4, conf.int = T, n.risk = TRUE,
+               #risk.table.y.text = FALSE, 
+               break.time.by=15, xlim=c(0,115), 
+           risk.table.title="Number of A. cervicornis at risk")
     Genotype_only2
+    
+    ggsave("Fig_2_Surv_Genotype.svg", 
+           Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
+    ggsave("Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
+           width=4.5, height=4.5,dpi = 300)
 
 # Only treatment model
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit1_2 <- survfit(surv_object2 ~ Treatment, data = Survival.data2)
     summary(fit1_2)
+    surv_pvalue(fit1_2)
+    coxfit1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2, ties = 'exact')
+    #summary(coxfit1_2)
+
     # Plot the survival model
     Treatment_Only<-ggsurvplot(fit1_2, data = Survival.data2, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour)
     Treatment_Only
-
+    
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit2_2 <- survfit(surv_object2 ~ Genotype + Treatment, data = Survival.data2)
@@ -193,9 +218,12 @@ summary(fit.coxph3)
 
 ```{r}
 fit.coxph0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
-ggforest(fit.coxph0_2, data = Survival.data2)
+HazardRatio<-ggforest(fit.coxph0_2, data = Survival.data2)
 fit.coxph0_2
 
+    ggsave("Fig_S1_HazardRatio.svg", 
+           HazardRatio, width=6, height=4,dpi = 300)
+    
 fit.coxph1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
 ggforest(fit.coxph1_2, data = Survival.data2)
 fit.coxph1_2
@@ -204,13 +232,6 @@ fit.coxph2_2 <- coxph(surv_object2 ~ Treatment + Genotype, data = Survival.data2
 ggforest(fit.coxph2_2, data = Survival.data2)
 fit.coxph2_2
 summary(fit.coxph2_2)
-
-fit.coxph3_2 <- coxph(surv_object2 ~ Gen_Treat, data = Survival.data2)
-ggforest(fit.coxph3_2, data = Survival.data2)
-fit.coxph3_2
-summary(fit.coxph3_2)
-
-
 ```
 
 
