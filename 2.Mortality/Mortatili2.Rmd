@@ -4,8 +4,8 @@ author: "Ana Palacio"
 date: "Nov 18, 2019"
 output:
   html_document:
-    fig_height: 3.5
-    fig_width: 3.5
+    fig_height: 7
+    fig_width: 5
     df_print: paged
     toc: yes
 editor_options:
@@ -96,15 +96,16 @@ Try survival package
            risk.table=T,  tables.height=0.5)
     GenTre_1
     
-    ggsurvplot_facet(fit2, data = Survival.data, 
-                 facet.by="Genotype", risk.table=T, 
-                 tables.height=0.5, nrow = 6, alpha=1,
+    ggsurvplot_facet(fit2, data = Survival.data, facet.by="Genotype", 
+                     #risk.table=T, tables.height=0.5, 
+                 nrow = 6, alpha=1,
                  palette=Fill.colour, linetype=1)
 
 
     ggsurvplot_facet(fit2, data = Survival.data, 
-                 facet.by="Treatment", risk.table=T, 
-                 tables.height=0.5, nrow = 3, alpha=0.5,
+                 facet.by="Treatment", 
+                 # risk.table=T, tables.height=0.5, 
+                 nrow = 3, alpha=0.5,
                  linetype=1)
     
 # Treatment and genotype model 2
@@ -112,7 +113,7 @@ Try survival package
     fit3 <- survfit(surv_object ~ Gen_Treat, data = Survival.data)
     summary(fit3)
     # Plot the survival model
-    ggsurvplot(fit3, data = Survival.data, pval = TRUE, conf.int = T,
+    ggsurvplot(fit3, data = Survival.data, pval = TRUE, conf.int = F,
            risk.table=T,  tables.height=0.5)
     
 
@@ -120,24 +121,23 @@ Try survival package
 
 Do not run
 ```{r}
-fit.coxph0 <- coxph(surv_object ~ Genotype, data = Survival.data)
-ggforest(fit.coxph0, data = Survival.data)
-fit.coxph0
+# fit.coxph0 <- coxph(surv_object ~ Genotype, data = Survival.data)
+# ggforest(fit.coxph0, data = Survival.data)
+# fit.coxph0
 
-fit.coxph1 <- coxph(surv_object ~ Treatment, data = Survival.data)
-ggforest(fit.coxph1, data = Survival.data)
-fit.coxph1
-
-fit.coxph2 <- coxph(surv_object ~ factor(Treatment) + factor (Genotype), data = Survival.data)
-ggforest(fit.coxph2, data = Survival.data)
-fit.coxph2
-summary(fit.coxph2)
-
-fit.coxph3 <- coxph(surv_object ~ factor(Gen_Treat), data = Survival.data)
-ggforest(fit.coxph3, data = Survival.data)
-fit.coxph3
-summary(fit.coxph3)
-
+# fit.coxph1 <- coxph(surv_object ~ Treatment, data = Survival.data)
+# ggforest(fit.coxph1, data = Survival.data)
+# fit.coxph1
+# 
+# fit.coxph2 <- coxph(surv_object ~ factor(Treatment) + factor (Genotype), data = Survival.data)
+# ggforest(fit.coxph, data = Survival.data)
+# fit.coxph2
+# summary(fit.coxph2)
+# 
+# fit.coxph3 <- coxph(surv_object ~ factor(Gen_Treat), data = Survival.data)
+# ggforest(fit.coxph3, data = Survival.data)
+# fit.coxph3
+# summary(fit.coxph3)
 
 ```
 
@@ -233,289 +233,3 @@ ggforest(fit.coxph2_2, data = Survival.data2)
 fit.coxph2_2
 summary(fit.coxph2_2)
 ```
-
-
-```{r}
-############################################################
-###### Get the files all growth data for A.cer #######
-############################################################
-
-Death.data<-read.csv("Acer_Mortality.csv", header = TRUE)
-
-# Organize data type
-    #Death.data$Date<-as.Date(Death.data$Date, "%Y-%m-%d")
-    Death.data$Date<-as.Date(Death.data$Date, "%m/%d/%y")
-    Death.data$Genotype <- as.factor(Death.data$Gen)
-    Death.data$Treatment <- as.factor(Death.data$Treatment)
-    Death.data$Days<-(as.numeric(Death.data$Date) -17485)
-    
-    
-    Death.data$Treatment <- as.character(Death.data$Treatment)
-    Death.data$Treatment[Death.data$Treatment == "Control"] <- "Ambient"
-    Death.data$Treatment[Death.data$Treatment == "NP"] <- "N+P"
-    Death.data$Treatment[Death.data$Treatment == "Recovery"] <- "0.Baseline"
-    Death.data$Treatment <- as.factor(Death.data$Treatment)
-    
-    MOTE<-read.csv("Genotype_Info.csv", header = TRUE)
-    Death.data<-merge(Death.data, MOTE, by="Genotype", all.x=TRUE)
-  
-    
-  # Check the data
-    str(Death.data)
-    BW.Wide<- reshape(Death.data, idvar = "Colony", timevar = "Days", direction = "wide")
-    
-    #Death.data<-filter(Death.data, Colony!="Yellow")
-    
-    #Death.data<-Death.data[Death.data$Days>-1,]
-```
-
-
-```{r}
-Death_Colony<- ggplot(Death.data, aes (Days, Survivorship, colour=(MoteGen))) +
-      #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-      stat_summary(fun.y=mean, geom="line", linetype=2) + ggthe_bw + 
-      facet_grid (Treatment~.)  +
-    annotate("segment", x = -100, xend = -2, y = -0, yend = 0,
-              colour = "gray")+
-    annotate("text", x = -50, y = 0.1, label = "Baseline", size=3)+
-  
-    annotate("segment", x = 2, xend = 91, y = 0, yend = 0,
-              colour = "gray")+
-    annotate("text", x = 45, y = 0.1, label = "Nutrients", size=3)+
-  
-    annotate("segment", x = 79, xend = 91, y = 0.05, yend = 1,
-              colour = "gray")+
-  
-    annotate("segment", x = 91, xend = 120, y = 1, yend = 1,
-              colour = "gray")+
-    annotate("text", x = 105, y = 0.1, label = "Heat", size=3)
-Death_Colony
-ggsave(file="ByTreatment_Survivorship.svg", plot=Death_Colony, width=3.0, height=6)
-```
-
-
-```{r}
-Death_Colony<- ggplot(Death.data, aes (Days, Survivorship, 
-                                           colour=factor(Treatment))) +
-      geom_line() + geom_point(position=position_dodge(width=6), alpha=0.8, size=0.8) +
-      scale_y_continuous(limits = c(0,1),
-                         breaks = seq(0, 1, 0.3),  
-                         expand = c(0, 0),
-                         name=("Proportion of surviving corals")) +
-      scale_x_continuous(name="Days in the experiment",
-                         limits = c(0,120),
-                         breaks = seq(0, 115, 15))+
-      theme(plot.background=element_blank(), 
-            panel.border = element_blank(),
-            axis.line = element_line(colour = "black"),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            legend.position="bottom",
-            strip.background = element_rect(fill="white")) +
-       ggthe_bw + Fill.colour+
-      annotate("segment", x = -100, xend = -2, y = -0, yend = 0,
-              colour = "gray")+
-    annotate("text", x = -50, y = 0.1, label = "Baseline", size=3)+
-  
-    annotate("segment", x = 2, xend = 91, y = 0, yend = 0,
-              colour = "gray")+
-    annotate("text", x = 45, y = 0.1, label = "Nutrients", size=3)+
-  
-    annotate("segment", x = 79, xend = 91, y = 0.12, yend = 1,
-              colour = "gray")+
-  
-    annotate("segment", x = 91, xend = 120, y = 1, yend = 1,
-              colour = "gray")+
-    annotate("text", x = 105, y = 0.1, label = "Heat", size=3)
-    
-    Death_Colony<-Death_Colony + facet_grid (MoteGen~.) 
-        
-    Death_Colony
-    
-    ggsave(file="5.2_Survivorship.svg", plot=Death_Colony, width=3.0, height=6)
-    ggsave(file="5.2_Survivorship_NoColony.svg", plot=Death_Colony, width=3.0, height=3)
-    
-    
-    Death.data$Treatment<-factor(as.character(Death.data$Treatment), 
-                                      levels=c( "Ambient", "N","N+P"))
-    
-    Death.data$Type<-"A.cer Resistant"
-    Death.data$Type[which(Death.data$Colony == "Yellow")]<-"A.cer Sensitive"
-    Death.data$Type[which(Death.data$Colony == "Red and Yellow")]<-"A.cer Sensitive"
-    Death.data$Type[which(Death.data$Colony == "Red and Orange")]<-"A.cer Sensitive"
-    
-    
-
-    BW_Treatment<- ggplot(Death.data, aes (Days, Survivorship, colour=factor(Treatment))) +
-      stat_summary(fun.y=mean, geom="line") +   
-      theme_bw( ) +
-      ylab("Proportion of surviving corals") + 
-      xlab("Days in nutrient treatment")  + scale_colour_discrete(name  ="Treatment",
-                                                                  breaks=c("Control", "N", "NP", "Recovery"),
-                                                                  labels=c("Control", "N", "NP", "Recovery"))+
-      scale_x_continuous(breaks = seq(-120,120, by = 45))+
-      scale_y_continuous(breaks = seq(0,1, by = 0.5))
-    BW_Treatment + theme(legend.position="bottom",
-                         legend.box.background = element_rect(), 
-                         panel.border = element_blank()) + facet_wrap(Type~Colony)
-
-    Death.nutrients<- subset(Death.data, Days<85)
-  
-  tiff('Growth_Treatment.tiff', units="in", width=7, height=4, res=300)   
-    BW_Treatment<- ggplot(Death.nutrients, aes (Days, Survivorship, 
-                                                colour=factor(Treatment))) +
-      geom_line() +
-      geom_point(position=position_dodge(width=6), alpha=0.8, size=0.8) +
-      # stat_summary(fun.y=mean, geom="line", linetype="dotted", size=1, alpha=0.8) +   
-      ylab("Proportion of surviving corals") + 
-      xlab("Days in nutrient treatment")  + 
-      scale_colour_discrete(name  ="Treatment",
-                                               breaks=c("Control", "N", "NP", NA),
-                                               labels=c("Control", "N", "NP", "Recovery"))+
-      scale_x_continuous(breaks = seq(-120,90, by = 60))+
-      scale_y_continuous(breaks = seq(0,1, by = 0.5))+
-      theme_gdocs( )  + annotate("rect", xmin = -120, xmax = 0, ymin = 0, ymax = 1,alpha = .2)
-   
-     BW_Treatment + theme(legend.position="right",
-                         legend.box.background = element_rect(), 
-                         plot.background=element_blank()) + facet_wrap(Type~Colony)
-
-dev.off()
-    
-    # Summary per colony per Treatment
-    
-    library(plyr)
-    library(plotrix)# To get SE function
-    BW.summary <- plyr::ddply (Death.data, . (Days, Treatment),summarise, 
-                                G_mean = mean ( dBW.g, na.rm = T), 
-                                G_sd = sd (dBW.g, na.rm = T),
-                                G_se =  std.error (dBW.g, na.rm = T))
-    write.csv(BW.summary, "BW_summary.csv")
-    
-    ############################################################          
-    ################### ONLY NUTRIENT PHASE ##################
-    ############################################################
-    
-    
-    # Select data for Nutrient enrichment (26C) only
-    
-   Death.data<-Death.data[(Death.data$Days<80),]
-    
-    BW_Colony<- ggplot(Death.data, aes (Days, dBW.g , colour=factor(Colony))) +
-      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-      stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
-    BW_Colony + facet_grid (~Treatment)
-    
-    BW_Fr<- ggplot(Death.data, aes (Days, dBW.g, colour=factor(Fragment))) +
-      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-      stat_summary(fun.y=mean, geom="line") +   theme_gdocs() + theme(legend.position = "none")
-    BW_Fr + facet_grid (Colony~Treatment)
-    
-    tiff('Growth_Treatment.tiff', units="in", width=6, height=4, res=300) 
-    BW_Treatment<- ggplot(Death.data, aes (Days, dBW.g, colour=factor(Treatment))) +
-      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar",
-                   position = position_dodge(width = 3), width = 0.2 )+
-      stat_summary(fun.y=mean, geom="line") +  
-      scale_x_continuous(name="Days in nutrient treatment",
-                         breaks=c(seq(-30,76, by=15))) +
-      ylab("Growth (mg/g d)") + 
-      guides(colour=guide_legend("Treatment"))  + theme_gdocs()
-    BW_Treatment +theme(legend.position=c(0.15, 0.25),
-                        legend.box.background = element_rect(), 
-                        panel.border = element_blank())
-    dev.off()
-    
-    BW_Treatment<- ggplot(Death.data, aes (Days, dBW.g, colour=factor(Treatment))) +
-      #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-      #stat_summary(fun.y=mean, geom="line") +  
-      geom_smooth() + theme_gdocs() +
-      xlab("Days in nutrient treatment")  + guides(colour=guide_legend("Treatment")) +
-      scale_x_continuous(name="Days in nutrient treatment",
-                         breaks=c(seq(-30,76, by=15))) +
-      ylab("Growth (mg/g d)") + 
-      guides(colour=guide_legend("Treatment"))  + theme_gdocs()
-    BW_Treatment +theme(legend.position=c(0.15, 0.25),
-                        legend.box.background = element_rect(), 
-                        panel.border = element_blank())
-    
-    ############################################################
-    ##################### Linear models ####################  
-    ############################################################
-    library(lme4)
-    library(lsmeans)
-    library(effects)
-     library(emmeans) # does not give me the groups!
-    library(lmerTest)
-    library(multcomp)
-    
-    # Time as a factor??
-    str(Death.data)
-    Death.data$DaysF<-as.factor(Death.data$Days)
-    
-    LME_Acer<-lme4::lmer(dBW.g ~ Treatment * DaysF + (1|Colony/Fragment), 
-                             data=Death.data, na.action=na.omit, RML)
-    summary(LME_Acer)
-    
-    Step.LME_Acer<-step (LME_Acer)
-    # final_fm <- get_model(s.LME_Acer)
-    # summary(final_fm)
-    
-    Acer.YII.lsmeans<-(print(cld(lsmeans(LME_Acer, specs = c("Treatment", "DaysF"))), digits = 3))
-    write.csv(Acer.YII.lsmeans, "YII_Ac_lsmeans.csv")
-    plot(Effect(c("Treatment","DaysF"), LME_Acer), x.var="DaysF", multiline=T, ci.style="bars", 
-         ylab="Growth (mg/g d)", xlab="Days in nutrient treatments")
-    
-    
-    # Time as a factor??
-    str(Death.data)
-    Death.data$DaysF<-as.factor(Death.data$Days)
-    
-    LME_Acer<-lme4::lmer(dBW.g ~ Treatment * DaysF + (1|Colony/Fragment), 
-                         data=Death.data, na.action=na.omit)
-    summary(LME_Acer)
-    
-    Step.LME_Acer<-step (LME_Acer)
-    # final_fm <- get_model(s.LME_Acer)
-    # summary(final_fm)
-    
-    Acer.G.lsmeans<-(print(cld(lsmeans(LME_Acer, specs = c("Treatment", "DaysF"))), digits = 3))
-    write.csv(Acer.G.lsmeans, "YII_Ac_lsmeans.csv")
-    plot(Effect(c("Treatment","DaysF"), LME_Acer), x.var="DaysF", multiline=T, ci.style="bars", 
-         ylab="Growth (mg/g d)", xlab="Days in nutrient treatments")
-    
-    #### emmeans
-    library(emmeans)
-    library(ggplot2)
-    library(ggthemes)
-    weight.LM2<-lme4::lmer(dBW.g ~ Treatment * DaysF + (1|Colony/Fragment), 
-               data=Death.data, na.action=na.omit)
-    weight.emmc<-emmeans(weight.LM, ~Treatment | DaysF)
-    contrast(weight.emmc, "tukey")
-    
-    # Effect plot options
-    Effect<-(emmip(weight.LM, ~Treatment|DaysF, CI=T)+ 
-               theme_gdocs()) # interaction plot of predictions
-    
-    # Pairwise comparisons
-    pairs(weight.emmc)
-    plot(emmeans(weight.LM, ~Treatment|DaysF), comparisons = TRUE) 
-    
-    plot(emmeans(weight.LM, ~DaysF*Treatment), comparisons = TRUE) +
-      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~Treatment)
-    
-    
-    cld(weight.emmc, by=NULL) # compact-letter display
-    
-    # weight.LM2<-lme4::lmer(dBW.g ~ Treatment * DaysF + (1|Colony/Fragment), 
-    #                        data=Death.data, na.action=na.omit, contrasts = list(DaysF = "contr.sum"))
-    # weight.emml <- emmeans(weight.LM2, ~Treatment|DaysF, consec ~ DaysF)
-    # contrast(weight.emml, "tukey")
-    
-```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
-
