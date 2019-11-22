@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     library(ggthemes)
     library(survival)
     library(survminer)
-    library(rms)
+    #library(rms)
    
 # Default ggplot settings
 

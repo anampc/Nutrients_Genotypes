@@ -125,9 +125,9 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
                        expand = c(0, 0))+
   
     annotate("segment", x = 2, xend = 91, y = 25, yend = 25,
-              colour = "black")+
-    annotate("segment", x = 79, xend = 90, y = 25.3, yend = 27,
               colour = "black", linetype=2)+
+    annotate("segment", x = 79, xend = 90, y = 25.3, yend = 27,
+              colour = "black", linetype=4)+
     annotate("segment", x = 91, xend = 113, y = 27, yend = 27,
               colour = "black", linetype=3)+
 
