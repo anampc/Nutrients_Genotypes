@@ -74,6 +74,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     BW.Tall$Treatment <- as.factor(BW.Tall$Treatment)
     
     BW.Tall$Colony <- as.factor(BW.Tall$Gen)
+    BW.Tall$MoteGen<-factor(BW.Tall$MoteGen, 
+                                   levels=c("Ac_48", "Ac_62","Ac_31", "Ac_08","Ac_07", "Ac_50"))
     BW.Tall$SampleID <- paste("Ac", BW.Tall$Fra, BW.Tall$TimePoint, sep = "_")
   
     BW.Initial<-subset(BW.Tall, Initial.Date=="2017-08-30")
@@ -85,6 +87,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
   ## Remove recovery data points
     BW.Tall<-subset(BW.Tall, Initial.Date!="2017-10-18")
     BW.Tall<-subset(BW.Tall, Initial.Date!="2018-02-23") # After heat stress
+    
   
 ```
 
@@ -186,9 +189,11 @@ BW_Init<- ggplot(BW.Initial, aes (MoteGen, dAW.gd)) +
 BW_Init
 
 BW_Colony_Control<- ggplot(BW.Control, aes (Days, dAW.gd, colour=MoteGen)) +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw + geom_jitter()
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+               width = 0.2, position=position_dodge(width=5)) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5,
+               position=position_dodge(width=5)) +
+  stat_summary(fun.y=mean, geom="line") + ggthe_bw #+ ggthe_bw + geom_jitter()
 BW_Colony_Control
 
 BW_Colony_Control<-ggplot(BW.Control, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +   
@@ -203,7 +208,7 @@ BW_Colony_Control
 Data after nutrients (no baseline)
 
 ```{r}
-BW <- ggplot(BW.nutrients, aes(Days, dAW.gd, colour=factor(Treatment))) +
+BW <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment))) +
           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
           stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
           stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 

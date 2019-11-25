@@ -82,8 +82,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
       YII.data$Treatment <- as.factor(YII.data$Treatment)
       YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
-                             levels=c("Ac_07","Ac_08","Ac_31",
-                                      "Ac_48","Ac_50","Ac_62", 
+                             levels=c("Ac_48", "Ac_62","Ac_31", 
+                                      "Ac_08","Ac_07", "Ac_50", 
                              "Of_31","Of_6","Of_20","Of_34", 
                              "Ss_30","Ss_20","Ss_24",
                              "Ss_28","Ss_22","Ss_23","Ss_27"))  # D dominance order
@@ -169,7 +169,7 @@ YII_Treat
 # Figure 3
 
 ```{r Figure, fig.height = 6, fig.width = 3.5}
-YII_Treat_BW<- ggplot(YII.data, aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
+YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
         ggthe_bw + Fill.colour+
         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                      position = position_dodge(1) )+
@@ -195,11 +195,44 @@ YII_Treat_BW<- ggplot(YII.data, aes (Days, YII, colour=factor(Treatment), shape=
                   colour = "gray90", linetype=3)
         
       
-      Figure3<-YII_Treat_BW +facet_grid (Spp~.)+
+      Figure3<-YII_Treat_BW + #facet_grid (Spp~.)+
         annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
         annotate("text", x = 99, y = 0.2, label = "Heat", size=3)
 Figure3
 #ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=3.5, height=6)
+```
+
+```{r}
+YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Genotype))) +
+        ggthe_bw + 
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                     position = position_dodge(1) )+
+  stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+  stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+  theme(legend.position="bottom", 
+              legend.title = element_blank(),
+              strip.background = element_rect(fill="white"))+
+  scale_y_continuous(limits = c(0.1, 0.7),
+                           breaks = seq(0.1, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+  scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+  annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.13,
+                  colour = "gray90", linetype=2)+
+  annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.25,
+                  colour = "gray90", linetype=4)+
+  annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.25,
+                  colour = "gray90", linetype=3)
+        
+      
+   Figure3<-YII_Treat_BW + facet_grid (~Treatment)+
+        annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.2, label = "Heat", size=3)
+Figure3
 ```
 
 
