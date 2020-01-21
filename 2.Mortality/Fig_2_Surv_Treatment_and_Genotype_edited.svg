@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,7 +41,7 @@
      id="namedview192"
      showgrid="false"
      inkscape:zoom="1.28"
-     inkscape:cx="40.510297"
+     inkscape:cx="-93.474078"
      inkscape:cy="24.974333"
      inkscape:window-x="71"
      inkscape:window-y="27"
@@ -11581,7 +11581,7 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;font-size:14.86513424px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99100894px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="157.63985"
+     x="149.62984"
      y="108.54259"
      id="text1005-38-3"
      inkscape:export-xdpi="299.11099"
@@ -11589,9 +11589,9 @@
      transform="scale(0.99874926,1.0012523)"><tspan
        sodipodi:role="line"
        id="tspan1003-60-0"
-       x="157.63985"
+       x="149.62984"
        y="108.54259"
-       style="font-size:9.2494173px;stroke-width:0.99100894px">Number at risk</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.2494173px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.99100894px">Number at risk</tspan></text>
   <polyline
      points="62.82,71.23 236.13,71.23 236.13,71.23 286.85,71.23 286.85,109.96 295.30,109.96 295.30,187.42 301.64,187.42 301.64,187.42 "
      style="fill:none;stroke:#f8766d;stroke-width:2.13000011;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10"
@@ -12640,7 +12640,7 @@
        id="tspan962">105</tspan>
   </text>
   <g
-     transform="matrix(0.81807465,0,0,-0.81807465,27.158318,412.74599)"
+     transform="matrix(0.81807465,0,0,-0.81807465,23.158318,412.74599)"
      id="g1000">
     <text
        xml:space="preserve"
@@ -12653,7 +12653,7 @@
          id="tspan2002"
          x="131.5179"
          y="-138.61371"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.4285717px;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:1.07142866px">Number at risk</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.4285717px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:1.07142866px">Number at risk</tspan></text>
   </g>
   <line
      transform="matrix(0.65738145,0,0,0.5609655,28.858274,298.20028)"
@@ -12869,23 +12869,23 @@
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="56.830769"
+     x="54.830769"
      y="21.461538"
      id="text3868"><tspan
        sodipodi:role="line"
        id="tspan3866"
-       x="56.830769"
+       x="54.830769"
        y="21.461538"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:sans-serif">a.</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.33333302px;font-family:arial;-inkscape-font-specification:arial">a</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="56.672264"
+     x="54.791706"
      y="241.2547"
      id="text3868-8"><tspan
        sodipodi:role="line"
        id="tspan3866-9"
-       x="56.672264"
+       x="54.791706"
        y="241.2547"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:sans-serif">b.</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.33333302px;font-family:Arial;-inkscape-font-specification:'Arial Bold'">b</tspan></text>
 </svg>
