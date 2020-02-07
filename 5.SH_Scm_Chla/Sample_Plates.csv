@@ -1,0 +1,563 @@
+Genotype,Treatment,Rep,Frag,Date,ProK T=9,1st  EtOH,2nd EtOH,DNA,qPCR,Targets,Plate,Sample,Sample.Plate
+F,Control,R1,137,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 1,Sample 1_Plate6.csv
+F,Control,R1,291,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 2,Sample 2_Plate6.csv
+Green,Control,R1,176,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 3,Sample 3_Plate6.csv
+Green,Control,R1,182,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 4,Sample 4_Plate6.csv
+Green,Control,R1,189,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 5,Sample 5_Plate6.csv
+Green,Control,R1,281,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 6,Sample 6_Plate6.csv
+Green,Control,R1,287,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 7,Sample 7_Plate6.csv
+Green and Orange,Control,R1,116,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 8,Sample 8_Plate6.csv
+Green and Orange,Control,R1,122,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 9,Sample 9_Plate6.csv
+Green and Orange,Control,R1,129,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 10,Sample 10_Plate6.csv
+Green and Orange,Control,R1,220,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 11,Sample 11_Plate6.csv
+Green and Orange,Control,R1,226,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 12,Sample 12_Plate6.csv
+Orange,Control,R1,149,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 13,Sample 13_Plate6.csv
+Orange,Control,R1,157,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 14,Sample 14_Plate6.csv
+Orange,Control,R1,248,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 15,Sample 15_Plate6.csv
+Red and Orange,Control,R1,162,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 16,Sample 16_Plate6.csv
+Red and Orange,Control,R1,169,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 17,Sample 17_Plate6.csv
+Red and Orange,Control,R1,261,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 18,Sample 18_Plate6.csv
+Red and Orange,Control,R1,267,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 19,Sample 19_Plate6.csv
+Red and Orange,Control,R1,273,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 20,Sample 20_Plate6.csv
+Red and Yellow,Control,R1,105,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate6,Sample 21,Sample 21_Plate6.csv
+Red and Yellow,Control,R1,204,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate5,Sample 22,Sample 22_Plate6.csv
+Yellow,Control,R1,143,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 1,Sample 1_Plate7.csv
+F,Control,R2,139,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 2,Sample 2_Plate7.csv
+F,Control,R2,192,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 3,Sample 3_Plate7.csv
+F,Control,R2,241,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 4,Sample 4_Plate7.csv
+Green,Control,R2,179,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 5,Sample 5_Plate7.csv
+Green,Control,R2,186,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 6,Sample 6_Plate7.csv
+Green,Control,R2,277,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 7,Sample 7_Plate7.csv
+Green,Control,R2,284,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 8,Sample 8_Plate7.csv
+Green,Control,R2,290,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 9,Sample 9_Plate7.csv
+Green and Orange,Control,R2,119,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 10,Sample 10_Plate7.csv
+Green and Orange,Control,R2,125,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 11,Sample 11_Plate7.csv
+Green and Orange,Control,R2,217,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 12,Sample 12_Plate7.csv
+Green and Orange,Control,R2,223,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 13,Sample 13_Plate7.csv
+Orange,Control,R2,152,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 14,Sample 14_Plate7.csv
+Orange,Control,R2,160,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 15,Sample 15_Plate7.csv
+Red and Orange,Control,R2,166,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 16,Sample 16_Plate7.csv
+Red and Orange,Control,R2,173,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 17,Sample 17_Plate7.csv
+Red and Orange,Control,R2,264,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 18,Sample 18_Plate7.csv
+Red and Orange,Control,R2,270,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 19,Sample 19_Plate7.csv
+Red and Yellow,Control,R2,102,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 20,Sample 20_Plate7.csv
+Red and Yellow,Control,R2,108,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 21,Sample 21_Plate7.csv
+Yellow,Control,R2,231,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/24,"Acer, A",Plate7,Sample 22,Sample 22_Plate7.csv
+F,N,R1,146,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 1,Sample 1_Plate8.csv
+F,N,R1,239,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 2,Sample 2_Plate8.csv
+Green,N,R1,177,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 3,Sample 3_Plate8.csv
+Green,N,R1,183,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 4,Sample 4_Plate8.csv
+Green,N,R1,190,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 5,Sample 5_Plate8.csv
+Green,N,R1,282,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 6,Sample 6_Plate8.csv
+Green,N,R1,288,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 7,Sample 7_Plate8.csv
+Green and Orange,N,R1,117,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 8,Sample 8_Plate8.csv
+Green and Orange,N,R1,123,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 9,Sample 9_Plate8.csv
+Green and Orange,N,R1,130,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 10,Sample 10_Plate8.csv
+Green and Orange,N,R1,221,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 11,Sample 11_Plate8.csv
+Green and Orange,N,R1,227,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 12,Sample 12_Plate8.csv
+Orange,N,R1,150,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 13,Sample 13_Plate8.csv
+Orange,N,R1,158,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 14,Sample 14_Plate8.csv
+Orange,N,R1,249,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 15,Sample 15_Plate8.csv
+Red and Orange,N,R1,164,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 16,Sample 16_Plate8.csv
+Red and Orange,N,R1,170,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 17,Sample 17_Plate8.csv
+Red and Orange,N,R1,262,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 18,Sample 18_Plate8.csv
+Red and Orange,N,R1,268,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 19,Sample 19_Plate8.csv
+Red and Orange,N,R1,274,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 20,Sample 20_Plate8.csv
+Red and Yellow,N,R1,106,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 21,Sample 21_Plate8.csv
+Red and Yellow,N,R1,206,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate8,Sample 22,Sample 22_Plate8.csv
+Yellow,N,R1,144,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 1,Sample 1_Plate9.csv
+F,N,R2,236,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 2,Sample 2_Plate9.csv
+F,N,R2,242,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 3,Sample 3_Plate9.csv
+Green,N,R2,180,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 4,Sample 4_Plate9.csv
+Green,N,R2,187,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 5,Sample 5_Plate9.csv
+Green,N,R2,278,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate9,Sample 6,Sample 6_Plate9.csv
+Green,N,R2,285,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 7,Sample 7_Plate9.csv
+Green and Orange,N,R2,120,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 8,Sample 8_Plate9.csv
+Green and Orange,N,R2,126,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 9,Sample 9_Plate9.csv
+Green and Orange,N,R2,218,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 10,Sample 10_Plate9.csv
+Green and Orange,N,R2,224,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 11,Sample 11_Plate9.csv
+Green and Orange,N,R2,230,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 12,Sample 12_Plate9.csv
+Orange,N,R2,154,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 13,Sample 13_Plate9.csv
+Orange,N,R2,246,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 14,Sample 14_Plate9.csv
+Orange,N,R2,299,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 15,Sample 15_Plate9.csv
+Red and Orange,N,R2,167,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 16,Sample 16_Plate9.csv
+Red and Orange,N,R2,174,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 17,Sample 17_Plate9.csv
+Red and Orange,N,R2,265,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 18,Sample 18_Plate9.csv
+Red and Orange,N,R2,271,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 19,Sample 19_Plate9.csv
+Red and Yellow,N,R2,103,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 20,Sample 20_Plate9.csv
+Red and Yellow,N,R2,109,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 21,Sample 21_Plate9.csv
+Yellow,N,R2,232,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 22,Sample 22_Plate9.csv
+Yellow,N,R2,234,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate10,Sample 1,Sample 1_Plate10.csv
+F,NP,R1,138,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 2,Sample 2_Plate10.csv
+F,NP,R1,191,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 3,Sample 3_Plate10.csv
+F,NP,R1,240,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 4,Sample 4_Plate10.csv
+Green,NP,R1,178,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 5,Sample 5_Plate10.csv
+Green,NP,R1,184,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 6,Sample 6_Plate10.csv
+Green,NP,R1,276,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 7,Sample 7_Plate10.csv
+Green,NP,R1,283,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 8,Sample 8_Plate10.csv
+Green,NP,R1,289,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 9,Sample 9_Plate10.csv
+Green and Orange,NP,R1,118,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 10,Sample 10_Plate10.csv
+Green and Orange,NP,R1,124,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 11,Sample 11_Plate10.csv
+Green and Orange,NP,R1,216,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 12,Sample 12_Plate10.csv
+Green and Orange,NP,R1,222,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 13,Sample 13_Plate10.csv
+Green and Orange,NP,R1,228,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 14,Sample 14_Plate10.csv
+Orange,NP,R1,151,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 15,Sample 15_Plate10.csv
+Orange,NP,R1,159,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 16,Sample 16_Plate10.csv
+Orange,NP,R1,250,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 17,Sample 17_Plate10.csv
+Red and Orange,NP,R1,165,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 18,Sample 18_Plate10.csv
+Red and Orange,NP,R1,171,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 19,Sample 19_Plate10.csv
+Red and Orange,NP,R1,263,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 20,Sample 20_Plate10.csv
+Red and Orange,NP,R1,269,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 21,Sample 21_Plate10.csv
+Red and Yellow,NP,R1,101,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate10,Sample 22,Sample 22_Plate10.csv
+Red and Yellow,NP,R1,107,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate11,Sample 1,Sample 1_Plate11.csv
+Red and Yellow,NP,R1,300,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate11,Sample 2,Sample 2_Plate11.csv
+Yellow,NP,R1,145,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/04/25,"Acer, A",Plate11,Sample 3,Sample 3_Plate11.csv
+F,NP,R2,140,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 4,Sample 4_Plate11.csv
+F,NP,R2,237,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 5,Sample 5_Plate11.csv
+Green,NP,R2,181,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 6,Sample 6_Plate11.csv
+Green,NP,R2,188,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 7,Sample 7_Plate11.csv
+Green,NP,R2,280,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 8,Sample 8_Plate11.csv
+Green,NP,R2,286,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 9,Sample 9_Plate11.csv
+Green and Orange,NP,R2,121,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 10,Sample 10_Plate11.csv
+Green and Orange,NP,R2,128,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 11,Sample 11_Plate11.csv
+Green and Orange,NP,R2,219,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 12,Sample 12_Plate11.csv
+Green and Orange,NP,R2,225,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 13,Sample 13_Plate11.csv
+Green and Orange,NP,R2,229,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 14,Sample 14_Plate11.csv
+Orange,NP,R2,155,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 15,Sample 15_Plate11.csv
+Orange,NP,R2,247,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 16,Sample 16_Plate11.csv
+Red and Orange,NP,R2,168,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 17,Sample 17_Plate11.csv
+Red and Orange,NP,R2,175,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 18,Sample 18_Plate11.csv
+Red and Orange,NP,R2,266,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 19,Sample 19_Plate11.csv
+Red and Orange,NP,R2,272,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 20,Sample 20_Plate11.csv
+Red and Yellow,NP,R2,104,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 21,Sample 21_Plate11.csv
+Red and Yellow,NP,R2,110,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 22,Sample 22_Plate11.csv
+Yellow,NP,R2,233,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate9,Sample 23,Sample 23_Plate9.csv
+Yellow,NP,R2,235,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/04/25,"Acer, A",Plate11,Sample 23,Sample 23_Plate11.csv
+F,Control,R1,137,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 1,Sample 1_Plate12.csv
+F,Control,R1,291,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 2,Sample 2_Plate12.csv
+Green,Control,R1,176,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 3,Sample 3_Plate12.csv
+Green,Control,R1,182,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 4,Sample 4_Plate12.csv
+Green,Control,R1,189,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 5,Sample 5_Plate12.csv
+Green,Control,R1,281,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 6,Sample 6_Plate12.csv
+Green,Control,R1,287,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 7,Sample 7_Plate12.csv
+Green and Orange,Control,R1,116,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 8,Sample 8_Plate12.csv
+Green and Orange,Control,R1,122,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 9,Sample 9_Plate12.csv
+Green and Orange,Control,R1,129,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 10,Sample 10_Plate12.csv
+Green and Orange,Control,R1,220,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 11,Sample 11_Plate12.csv
+Green and Orange,Control,R1,226,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 12,Sample 12_Plate12.csv
+Orange,Control,R1,149,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 13,Sample 13_Plate12.csv
+Orange,Control,R1,157,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 14,Sample 14_Plate12.csv
+Orange,Control,R1,248,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 15,Sample 15_Plate12.csv
+Red and Orange,Control,R1,162,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 16,Sample 16_Plate12.csv
+Red and Orange,Control,R1,169,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 17,Sample 17_Plate12.csv
+Red and Orange,Control,R1,261,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 18,Sample 18_Plate12.csv
+Red and Orange,Control,R1,267,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 19,Sample 19_Plate12.csv
+Red and Orange,Control,R1,273,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 20,Sample 20_Plate12.csv
+Red and Yellow,Control,R1,105,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 21,Sample 21_Plate12.csv
+Red and Yellow,Control,R1,204,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate12,Sample 22,Sample 22_Plate12.csv
+Yellow,Control,R1,143,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 1,Sample 1_Plate13.csv
+F,N,R1,146,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 2,Sample 2_Plate13.csv
+Green,N,R1,177,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 3,Sample 3_Plate13.csv
+Green,N,R1,183,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 4,Sample 4_Plate13.csv
+Green,N,R1,190,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 5,Sample 5_Plate13.csv
+Green,N,R1,282,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 6,Sample 6_Plate13.csv
+Green,N,R1,288,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 7,Sample 7_Plate13.csv
+Green and Orange,N,R1,117,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 8,Sample 8_Plate13.csv
+Green and Orange,N,R1,123,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 9,Sample 9_Plate13.csv
+Green and Orange,N,R1,130,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 10,Sample 10_Plate13.csv
+Green and Orange,N,R1,221,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 11,Sample 11_Plate13.csv
+Green and Orange,N,R1,227,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 12,Sample 12_Plate13.csv
+Orange,N,R1,150,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 13,Sample 13_Plate13.csv
+Orange,N,R1,158,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 14,Sample 14_Plate13.csv
+Orange,N,R1,249,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 15,Sample 15_Plate13.csv
+Red and Orange,N,R1,164,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 16,Sample 16_Plate13.csv
+Red and Orange,N,R1,170,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 17,Sample 17_Plate13.csv
+Red and Orange,N,R1,262,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 18,Sample 18_Plate13.csv
+Red and Orange,N,R1,268,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 19,Sample 19_Plate13.csv
+Red and Orange,N,R1,274,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 20,Sample 20_Plate13.csv
+Red and Yellow,N,R1,106,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 21,Sample 21_Plate13.csv
+Yellow,N,R1,144,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/08,"Acer, A",Plate13,Sample 22,Sample 22_Plate13.csv
+F,NP,R1,138,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 1,Sample 1_Plate14.csv
+F,NP,R1,240,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 2,Sample 2_Plate14.csv
+Green,NP,R1,178,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 3,Sample 3_Plate14.csv
+Green,NP,R1,184,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 4,Sample 4_Plate14.csv
+Green,NP,R1,276,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 5,Sample 5_Plate14.csv
+Green,NP,R1,283,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 6,Sample 6_Plate14.csv
+Green,NP,R1,289,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 7,Sample 7_Plate14.csv
+Green and Orange,NP,R1,118,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 8,Sample 8_Plate14.csv
+Green and Orange,NP,R1,124,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 9,Sample 9_Plate14.csv
+Green and Orange,NP,R1,216,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 10,Sample 10_Plate14.csv
+Green and Orange,NP,R1,222,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 11,Sample 11_Plate14.csv
+Green and Orange,NP,R1,228,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 12,Sample 12_Plate14.csv
+Orange,NP,R1,151,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 13,Sample 13_Plate14.csv
+Orange,NP,R1,159,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 14,Sample 14_Plate14.csv
+Orange,NP,R1,250,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 15,Sample 15_Plate14.csv
+Red and Orange,NP,R1,165,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 16,Sample 16_Plate14.csv
+Red and Orange,NP,R1,171,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 17,Sample 17_Plate14.csv
+Red and Orange,NP,R1,263,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 18,Sample 18_Plate14.csv
+Red and Orange,NP,R1,269,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 19,Sample 19_Plate14.csv
+Red and Yellow,NP,R1,101,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 20,Sample 20_Plate14.csv
+Red and Yellow,NP,R1,107,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 21,Sample 21_Plate14.csv
+Yellow,NP,R1,145,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate14,Sample 22,Sample 22_Plate14.csv
+F,Control,R2,139,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 1,Sample 1_Plate15.csv
+F,Control,R2,192,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 2,Sample 2_Plate15.csv
+F,Control,R2,241,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 3,Sample 3_Plate15.csv
+Green,Control,R2,179,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 4,Sample 4_Plate15.csv
+Green,Control,R2,186,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 5,Sample 5_Plate15.csv
+Green,Control,R2,277,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 6,Sample 6_Plate15.csv
+Green,Control,R2,284,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 7,Sample 7_Plate15.csv
+Green,Control,R2,290,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 8,Sample 8_Plate15.csv
+Green and Orange,Control,R2,119,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 9,Sample 9_Plate15.csv
+Green and Orange,Control,R2,125,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 10,Sample 10_Plate15.csv
+Green and Orange,Control,R2,217,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 11,Sample 11_Plate15.csv
+Green and Orange,Control,R2,223,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 12,Sample 12_Plate15.csv
+Orange,Control,R2,152,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 13,Sample 13_Plate15.csv
+Orange,Control,R2,160,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 14,Sample 14_Plate15.csv
+Red and Orange,Control,R2,166,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 15,Sample 15_Plate15.csv
+Red and Orange,Control,R2,173,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 16,Sample 16_Plate15.csv
+Red and Orange,Control,R2,264,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 17,Sample 17_Plate15.csv
+Red and Orange,Control,R2,270,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 18,Sample 18_Plate15.csv
+Red and Yellow,Control,R2,102,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 19,Sample 19_Plate15.csv
+Red and Yellow,Control,R2,108,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 20,Sample 20_Plate15.csv
+Yellow,Control,R2,231,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 21,Sample 21_Plate15.csv
+F,N,R2,236,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate15,Sample 22,Sample 22_Plate15.csv
+F,N,R2,242,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 1,Sample 1_Plate16.csv
+Green,N,R2,180,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 2,Sample 2_Plate16.csv
+Green,N,R2,187,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 3,Sample 3_Plate16.csv
+Green,N,R2,278,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 4,Sample 4_Plate16.csv
+Green,N,R2,285,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 5,Sample 5_Plate16.csv
+Green and Orange,N,R2,120,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 6,Sample 6_Plate16.csv
+Green and Orange,N,R2,126,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 7,Sample 7_Plate16.csv
+Green and Orange,N,R2,218,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 8,Sample 8_Plate16.csv
+Green and Orange,N,R2,224,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 9,Sample 9_Plate16.csv
+Green and Orange,N,R2,230,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 10,Sample 10_Plate16.csv
+Orange,N,R2,154,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 11,Sample 11_Plate16.csv
+Orange,N,R2,246,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 12,Sample 12_Plate16.csv
+Orange,N,R2,299,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 13,Sample 13_Plate16.csv
+Red and Orange,N,R2,174,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 14,Sample 14_Plate16.csv
+Red and Orange,N,R2,265,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 15,Sample 15_Plate16.csv
+Red and Orange,N,R2,271,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 16,Sample 16_Plate16.csv
+Yellow,N,R2,232,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 17,Sample 17_Plate16.csv
+Yellow,N,R2,234,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 18,Sample 18_Plate16.csv
+F,NP,R2,140,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 19,Sample 19_Plate16.csv
+Green,NP,R2,181,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 20,Sample 20_Plate16.csv
+Green,NP,R2,188,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 21,Sample 21_Plate16.csv
+Green,NP,R2,280,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate16,Sample 22,Sample 22_Plate16.csv
+Green,NP,R2,286,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 1,Sample 1_Plate17.csv
+Green and Orange,NP,R2,121,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 2,Sample 2_Plate17.csv
+Green and Orange,NP,R2,128,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 3,Sample 3_Plate17.csv
+Green and Orange,NP,R2,219,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 4,Sample 4_Plate17.csv
+Green and Orange,NP,R2,225,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 5,Sample 5_Plate17.csv
+Green and Orange,NP,R2,229,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 6,Sample 6_Plate17.csv
+Orange,NP,R2,155,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 7,Sample 7_Plate17.csv
+Orange,NP,R2,247,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 8,Sample 8_Plate17.csv
+Red and Orange,NP,R2,168,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 9,Sample 9_Plate17.csv
+Red and Orange,NP,R2,175,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 10,Sample 10_Plate17.csv
+Red and Orange,NP,R2,266,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 11,Sample 11_Plate17.csv
+Red and Orange,NP,R2,272,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 12,Sample 12_Plate17.csv
+Red and Yellow,NP,R2,104,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 13,Sample 13_Plate17.csv
+Red and Yellow,NP,R2,110,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 14,Sample 14_Plate17.csv
+Yellow,NP,R2,233,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 15,Sample 15_Plate17.csv
+Yellow,NP,R2,235,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/02/09,"Acer, A",Plate17,Sample 16,Sample 16_Plate17.csv
+F,Control,R1,291,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 1,Sample 1_Plate18.csv
+Green,Control,R1,176,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 2,Sample 2_Plate18.csv
+Green,Control,R1,182,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 3,Sample 3_Plate18.csv
+Green,Control,R1,281,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 4,Sample 4_Plate18.csv
+Green,Control,R1,287,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 5,Sample 5_Plate18.csv
+Green and Orange,Control,R1,116,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 6,Sample 6_Plate18.csv
+Green and Orange,Control,R1,122,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 7,Sample 7_Plate18.csv
+Green and Orange,Control,R1,220,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 8,Sample 8_Plate18.csv
+Green and Orange,Control,R1,226,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 9,Sample 9_Plate18.csv
+Orange,Control,R1,157,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 10,Sample 10_Plate18.csv
+Orange,Control,R1,248,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 11,Sample 11_Plate18.csv
+Red and Orange,Control,R1,162,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 12,Sample 12_Plate18.csv
+Red and Orange,Control,R1,169,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 13,Sample 13_Plate18.csv
+Red and Orange,Control,R1,261,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 14,Sample 14_Plate18.csv
+Red and Orange,Control,R1,273,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 15,Sample 15_Plate18.csv
+Red and Yellow,Control,R1,105,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 16,Sample 16_Plate18.csv
+Red and Yellow,Control,R1,204,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 17,Sample 17_Plate18.csv
+Yellow,Control,R1,143,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 18,Sample 18_Plate18.csv
+Green,N,R1,177,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 19,Sample 19_Plate18.csv
+Green,N,R1,190,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 20,Sample 20_Plate18.csv
+Green,N,R1,282,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 21,Sample 21_Plate18.csv
+Green,N,R1,288,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate18,Sample 22,Sample 22_Plate18.csv
+Green and Orange,N,R1,117,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 1,Sample 1_Plate19.csv
+Green and Orange,N,R1,123,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 2,Sample 2_Plate19.csv
+Green and Orange,N,R1,130,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 3,Sample 3_Plate19.csv
+Green and Orange,N,R1,221,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 4,Sample 4_Plate19.csv
+Green,NP,R1,178,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 5,Sample 5_Plate19.csv
+Green,NP,R1,184,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 6,Sample 6_Plate19.csv
+Green,NP,R1,276,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 7,Sample 7_Plate19.csv
+Green,NP,R1,289,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 8,Sample 8_Plate19.csv
+Green and Orange,NP,R1,118,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 9,Sample 9_Plate19.csv
+Green and Orange,NP,R1,124,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 10,Sample 10_Plate19.csv
+Green and Orange,NP,R1,222,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 11,Sample 11_Plate19.csv
+Green and Orange,NP,R1,228,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 12,Sample 12_Plate19.csv
+Orange,NP,R1,250,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/12,"Acer, A",Plate19,Sample 13,Sample 13_Plate19.csv
+F,Control,R2,139,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 14,Sample 14_Plate19.csv
+F,Control,R2,192,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 15,Sample 15_Plate19.csv
+Green,Control,R2,179,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 16,Sample 16_Plate19.csv
+Green,Control,R2,186,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 17,Sample 17_Plate19.csv
+Green,Control,R2,277,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 18,Sample 18_Plate19.csv
+Green,Control,R2,284,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 19,Sample 19_Plate19.csv
+Green and Orange,Control,R2,119,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 20,Sample 20_Plate19.csv
+Green and Orange,Control,R2,125,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 21,Sample 21_Plate19.csv
+Red and Orange,Control,R1,273,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate19,Sample 22,Sample 22_Plate19.csv
+Orange,Control,R2,152,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 1,Sample 1_Plate20.csv
+Orange,Control,R2,160,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 2,Sample 2_Plate20.csv
+Red and Orange,Control,R2,166,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 3,Sample 3_Plate20.csv
+Red and Orange,Control,R2,173,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 4,Sample 4_Plate20.csv
+Red and Orange,Control,R2,264,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 5,Sample 5_Plate20.csv
+Red and Yellow,Control,R2,102,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 6,Sample 6_Plate20.csv
+Red and Yellow,Control,R2,108,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 7,Sample 7_Plate20.csv
+Yellow,Control,R2,231,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 8,Sample 8_Plate20.csv
+Green,N,R2,187,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 9,Sample 9_Plate20.csv
+Green,N,R2,278,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 10,Sample 10_Plate20.csv
+Green,N,R2,285,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 11,Sample 11_Plate20.csv
+Green and Orange,N,R2,126,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 12,Sample 12_Plate20.csv
+Green and Orange,N,R2,224,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/13,"Acer, A",Plate20,Sample 13,Sample 13_Plate20.csv
+Green and Orange,N,R2,230,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 14,Sample 14_Plate20.csv
+Green,NP,R2,188,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 15,Sample 15_Plate20.csv
+Green,NP,R2,280,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 16,Sample 16_Plate20.csv
+Green,NP,R2,286,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 17,Sample 17_Plate20.csv
+Green and Orange,NP,R2,128,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 18,Sample 18_Plate20.csv
+Green and Orange,NP,R2,225,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 19,Sample 19_Plate20.csv
+Green and Orange,NP,R2,229,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 20,Sample 20_Plate20.csv
+Orange,NP,R2,155,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/03/13,"Acer, A",Plate20,Sample 21,Sample 21_Plate20.csv
+F,Control,R1,137,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 1,Sample 1_Plate21.csv
+Green,Control,R1,189,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 2,Sample 2_Plate21.csv
+Green and Orange,Control,R1,129,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 3,Sample 3_Plate21.csv
+Orange,Control,R1,149,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 4,Sample 4_Plate21.csv
+Red and Orange,Control,R1,267,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 5,Sample 5_Plate21.csv
+Green,N,R1,183,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 6,Sample 6_Plate21.csv
+Green and Orange,N,R1,227,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 7,Sample 7_Plate21.csv
+Orange,N,R1,158,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 8,Sample 8_Plate21.csv
+Red and Orange,N,R1,268,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 9,Sample 9_Plate21.csv
+F,NP,R1,240,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 10,Sample 10_Plate21.csv
+Green,NP,R1,283,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 11,Sample 11_Plate21.csv
+Green and Orange,NP,R1,216,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 12,Sample 12_Plate21.csv
+Orange,NP,R1,159,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 13,Sample 13_Plate21.csv
+Red and Orange,NP,R1,269,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 14,Sample 14_Plate21.csv
+F,Control,R2,241,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 15,Sample 15_Plate21.csv
+Green,Control,R2,290,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 16,Sample 16_Plate21.csv
+Green and Orange,Control,R2,223,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 17,Sample 17_Plate21.csv
+Red and Orange,Control,R2,270,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 18,Sample 18_Plate21.csv
+Green,N,R2,180,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 19,Sample 19_Plate21.csv
+Green and Orange,N,R2,218,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 20,Sample 20_Plate21.csv
+Orange,N,R2,246,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 21,Sample 21_Plate21.csv
+Red and Orange,N,R2,265,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/13,"Acer, A",Plate21,Sample 22,Sample 22_Plate21.csv
+Yellow,N,R2,234,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 1,Sample 1_Plate22.csv
+Green,NP,R2,181,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 2,Sample 2_Plate22.csv
+Green and Orange,NP,R2,121,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 3,Sample 3_Plate22.csv
+Green and Orange,NP,R2,219,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 4,Sample 4_Plate22.csv
+Red and Orange,NP,R2,266,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 5,Sample 5_Plate22.csv
+Red and Yellow,NP,R2,110,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 6,Sample 6_Plate22.csv
+Green,NP,R1,276,2018/02/26,,2018/02/28,2018/02/28,2018/03/01,2018/03/16,"Acer, A",Plate22,Sample 7,Sample 7_Plate22.csv
+Green,NP,R1,289,2018/02/26,,2018/02/28,2018/02/28,2018/03/01,2018/03/16,"Acer, A",Plate22,Sample 8,Sample 8_Plate22.csv
+Green and Orange,NP,R1,118,2018/02/26,,2018/02/28,2018/02/28,2018/03/01,2018/03/16,"Acer, A",Plate22,Sample 9,Sample 9_Plate22.csv
+Green,N,R1,288,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 10,Sample 10_Plate22.csv
+Green,NP,R1,184,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 11,Sample 11_Plate22.csv
+Green and Orange,NP,R1,124,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 12,Sample 12_Plate22.csv
+Green and Orange,NP,R1,222,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 13,Sample 13_Plate22.csv
+Green and Orange,NP,R1,228,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 14,Sample 14_Plate22.csv
+Green,N,R1,177,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 15,Sample 15_Plate22.csv
+Green,N,R1,282,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 16,Sample 16_Plate22.csv
+Green,N,R1,288,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 17,Sample 17_Plate22.csv
+Green and Orange,N,R1,123,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 18,Sample 18_Plate22.csv
+Green and Orange,N,R1,221,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 19,Sample 19_Plate22.csv
+Green,NP,R1,178,2018/03/02,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 20,Sample 20_Plate22.csv
+Green,N,R1,190,2018/03/03,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 21,Sample 21_Plate22.csv
+Green and Orange,N,R1,117,2018/03/03,,2018/03/06,2018/03/07,2018/03/09,2018/03/16,"Acer, A",Plate22,Sample 22,Sample 22_Plate22.csv
+F,Control,R2,139,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/22,"Acer, A",Plate23,Sample 1,Sample 1_Plate23.csv
+F,Control,R2,139,2018/03/03,,2018/03/06,2018/03/07,2018/03/09,2018/03/22,"Acer, A",Plate23,Sample 2,Sample 2_Plate23.csv
+Green,N,R2,285,2018/02/26,,2018/02/28,2018/02/28,2018/03/01,2018/03/22,"Acer, A",Plate23,Sample 3,Sample 3_Plate23.csv
+Green and Orange,N,R2,126,2018/02/26,,2018/02/28,2018/02/28,2018/03/01,2018/03/22,"Acer, A",Plate23,Sample 4,Sample 4_Plate23.csv
+Orange,NP,R2,155,2018/03/01,,2018/03/06,2018/03/07,2018/03/09,2018/03/22,"Acer, A",Plate23,Sample 5,Sample 5_Plate23.csv
+F,Control,R1,291,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 6,Sample 6_Plate23.csv
+Green,Control,R1,176,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 7,Sample 7_Plate23.csv
+Green,Control,R1,182,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 8,Sample 8_Plate23.csv
+Green,Control,R1,281,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 9,Sample 9_Plate23.csv
+Green,Control,R1,287,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 10,Sample 10_Plate23.csv
+Green and Orange,Control,R1,116,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 11,Sample 11_Plate23.csv
+Green and Orange,Control,R1,122,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 12,Sample 12_Plate23.csv
+Green and Orange,Control,R1,220,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 13,Sample 13_Plate23.csv
+Yellow,Control,R2,231,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 14,Sample 14_Plate23.csv
+Green,NP,R2,188,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 15,Sample 15_Plate23.csv
+Orange,Control,R1,248,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 16,Sample 16_Plate23.csv
+Red and Orange,Control,R1,162,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 17,Sample 17_Plate23.csv
+Red and Orange,Control,R1,169,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 18,Sample 18_Plate23.csv
+Red and Orange,Control,R1,261,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 19,Sample 19_Plate23.csv
+Red and Orange,Control,R1,273,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 20,Sample 20_Plate23.csv
+Red and Yellow,Control,R2,108,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 21,Sample 21_Plate23.csv
+Red and Yellow,Control,R1,204,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate23,Sample 22,Sample 22_Plate23.csv
+Yellow,Control,R1,143,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 1,Sample 1_Plate24.csv
+Green,Control,R2,179,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 2,Sample 2_Plate24.csv
+Green,Control,R2,186,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 3,Sample 3_Plate24.csv
+Green,Control,R2,277,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 4,Sample 4_Plate24.csv
+Green and Orange,Control,R2,119,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 5,Sample 5_Plate24.csv
+Green and Orange,Control,R2,125,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 6,Sample 6_Plate24.csv
+Green and Orange,Control,R2,217,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 7,Sample 7_Plate24.csv
+Orange,Control,R2,152,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 8,Sample 8_Plate24.csv
+Orange,Control,R2,160,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 9,Sample 9_Plate24.csv
+Red and Orange,Control,R2,166,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 10,Sample 10_Plate24.csv
+Red and Orange,Control,R2,173,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 11,Sample 11_Plate24.csv
+Red and Orange,Control,R2,264,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 12,Sample 12_Plate24.csv
+Red and Yellow,Control,R2,102,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 13,Sample 13_Plate24.csv
+Green and Orange,Control,R1,226,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 15,Sample 15_Plate24.csv
+Green,NP,R2,286,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 16,Sample 16_Plate24.csv
+Green and Orange,NP,R2,128,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 17,Sample 17_Plate24.csv
+Green and Orange,NP,R2,225,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 18,Sample 18_Plate24.csv
+Orange,NP,R2,155,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 19,Sample 19_Plate24.csv
+Orange,Control,R1,157,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 20,Sample 20_Plate24.csv
+Red and Yellow,Control,R1,105,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/03/22,"Acer, A",Plate24,Sample 21,Sample 21_Plate24.csv
+F,Control,R1,137,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 1,Sample 1_Plate25.csv
+F,Control,R1,291,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 2,Sample 2_Plate25.csv
+Green,Control,R1,176,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 3,Sample 3_Plate25.csv
+Green,Control,R1,182,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 4,Sample 4_Plate25.csv
+Green,Control,R1,189,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 5,Sample 5_Plate25.csv
+Green,Control,R1,281,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 6,Sample 6_Plate25.csv
+Green,Control,R1,287,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 7,Sample 7_Plate25.csv
+Green and Orange,Control,R1,116,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 8,Sample 8_Plate25.csv
+Green and Orange,Control,R1,122,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 9,Sample 9_Plate25.csv
+Green and Orange,Control,R1,129,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 10,Sample 10_Plate25.csv
+Green and Orange,Control,R1,220,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 11,Sample 11_Plate25.csv
+Green and Orange,Control,R1,226,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 12,Sample 12_Plate25.csv
+Orange,Control,R1,149,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 13,Sample 13_Plate25.csv
+Orange,Control,R1,157,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 14,Sample 14_Plate25.csv
+Orange,Control,R1,248,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 15,Sample 15_Plate25.csv
+Red and Orange,Control,R1,162,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 16,Sample 16_Plate25.csv
+Red and Orange,Control,R1,169,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 17,Sample 17_Plate25.csv
+Red and Orange,Control,R1,261,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 18,Sample 18_Plate25.csv
+Red and Orange,Control,R1,267,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 19,Sample 19_Plate25.csv
+Red and Orange,Control,R1,273,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 20,Sample 20_Plate25.csv
+Red and Yellow,Control,R1,105,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 21,Sample 21_Plate25.csv
+Red and Yellow,Control,R1,204,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate25,Sample 22,Sample 22_Plate25.csv
+Yellow,Control,R1,143,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 1,Sample 1_Plate26.csv
+F,N,R1,146,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 2,Sample 2_Plate26.csv
+F,N,R1,239,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 3,Sample 3_Plate26.csv
+Green,N,R1,177,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 4,Sample 4_Plate26.csv
+Green,N,R1,183,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 5,Sample 5_Plate26.csv
+Green,N,R1,190,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 6,Sample 6_Plate26.csv
+Green,N,R1,282,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 7,Sample 7_Plate26.csv
+Green,N,R1,288,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 8,Sample 8_Plate26.csv
+Green and Orange,N,R1,117,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 9,Sample 9_Plate26.csv
+Green and Orange,N,R1,123,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 10,Sample 10_Plate26.csv
+Green and Orange,N,R1,130,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 11,Sample 11_Plate26.csv
+Green and Orange,N,R1,221,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 12,Sample 12_Plate26.csv
+Green and Orange,N,R1,227,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 13,Sample 13_Plate26.csv
+Orange,N,R1,150,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 14,Sample 14_Plate26.csv
+Orange,N,R1,158,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 15,Sample 15_Plate26.csv
+Orange,N,R1,249,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 16,Sample 16_Plate26.csv
+Red and Orange,N,R1,164,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 17,Sample 17_Plate26.csv
+Red and Orange,N,R1,170,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 18,Sample 18_Plate26.csv
+Red and Orange,N,R1,262,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 19,Sample 19_Plate26.csv
+Red and Orange,N,R1,268,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 20,Sample 20_Plate26.csv
+Red and Orange,N,R1,274,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 21,Sample 21_Plate26.csv
+Red and Yellow,N,R1,106,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/23,"Acer, A",Plate26,Sample 22,Sample 22_Plate26.csv
+Red and Yellow,N,R1,206,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 1,Sample 1_Plate27.csv
+Yellow,N,R1,144,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 2,Sample 2_Plate27.csv
+F,NP,R1,138,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 3,Sample 3_Plate27.csv
+F,NP,R1,191,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 4,Sample 4_Plate27.csv
+F,NP,R1,240,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 5,Sample 5_Plate27.csv
+Green,NP,R1,178,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 6,Sample 6_Plate27.csv
+Green,NP,R1,184,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 7,Sample 7_Plate27.csv
+Green,NP,R1,276,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 8,Sample 8_Plate27.csv
+Green,NP,R1,283,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 9,Sample 9_Plate27.csv
+Green,NP,R1,289,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 10,Sample 10_Plate27.csv
+Green and Orange,NP,R1,118,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 11,Sample 11_Plate27.csv
+Green and Orange,NP,R1,124,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 12,Sample 12_Plate27.csv
+Green and Orange,NP,R1,216,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 13,Sample 13_Plate27.csv
+Green and Orange,NP,R1,222,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 14,Sample 14_Plate27.csv
+Green and Orange,NP,R1,228,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 15,Sample 15_Plate27.csv
+Orange,NP,R1,151,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 16,Sample 16_Plate27.csv
+Orange,NP,R1,159,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 17,Sample 17_Plate27.csv
+Orange,NP,R1,250,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 18,Sample 18_Plate27.csv
+Red and Orange,NP,R1,165,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 19,Sample 19_Plate27.csv
+Red and Orange,NP,R1,171,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 20,Sample 20_Plate27.csv
+Red and Orange,NP,R1,263,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 21,Sample 21_Plate27.csv
+Red and Orange,NP,R1,269,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate27,Sample 22,Sample 22_Plate27.csv
+Red and Yellow,NP,R1,101,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 1,Sample 1_Plate28.csv
+Red and Yellow,NP,R1,107,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 2,Sample 2_Plate28.csv
+Red and Yellow,NP,R1,300,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 3,Sample 3_Plate28.csv
+Yellow,NP,R1,145,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 4,Sample 4_Plate28.csv
+F,Control,R2,139,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 5,Sample 5_Plate28.csv
+F,Control,R2,192,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 6,Sample 6_Plate28.csv
+F,Control,R2,241,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 7,Sample 7_Plate28.csv
+Green,Control,R2,179,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 8,Sample 8_Plate28.csv
+Green,Control,R2,186,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 9,Sample 9_Plate28.csv
+Green,Control,R2,277,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 10,Sample 10_Plate28.csv
+Green,Control,R2,284,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 11,Sample 11_Plate28.csv
+Green,Control,R2,290,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 12,Sample 12_Plate28.csv
+Green and Orange,Control,R2,119,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 13,Sample 13_Plate28.csv
+Green and Orange,Control,R2,125,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 14,Sample 14_Plate28.csv
+Green and Orange,Control,R2,217,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 15,Sample 15_Plate28.csv
+Green and Orange,Control,R2,223,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 16,Sample 16_Plate28.csv
+Orange,Control,R2,152,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 17,Sample 17_Plate28.csv
+Orange,Control,R2,160,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 18,Sample 18_Plate28.csv
+Red and Orange,Control,R2,166,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 19,Sample 19_Plate28.csv
+Red and Orange,Control,R2,173,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 20,Sample 20_Plate28.csv
+Red and Orange,Control,R2,264,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 21,Sample 21_Plate28.csv
+Red and Orange,Control,R2,270,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/03/28,"Acer, A",Plate28,Sample 22,Sample 22_Plate28.csv
+Red and Yellow,Control,R2,102,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 1,Sample 1_Plate29.csv
+Red and Yellow,Control,R2,108,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 2,Sample 2_Plate29.csv
+Yellow,Control,R2,231,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 3,Sample 3_Plate29.csv
+F,N,R2,236,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 4,Sample 4_Plate29.csv
+F,N,R2,242,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 5,Sample 5_Plate29.csv
+Green,N,R2,180,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 6,Sample 6_Plate29.csv
+Green,N,R2,187,2017/11/15,2017/11/20,2018/01/08,2018/01/10,2018/01/11,2018/04/10,"Acer, A",Plate29,Sample 7,Sample 7_Plate29.csv
+Green,N,R2,278,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 8,Sample 8_Plate29.csv
+Green,N,R2,285,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 9,Sample 9_Plate29.csv
+Green and Orange,N,R2,120,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 10,Sample 10_Plate29.csv
+Green and Orange,N,R2,126,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 11,Sample 11_Plate29.csv
+Green and Orange,N,R2,218,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 12,Sample 12_Plate29.csv
+Green and Orange,N,R2,224,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 13,Sample 13_Plate29.csv
+Green and Orange,N,R2,230,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 14,Sample 14_Plate29.csv
+Orange,N,R2,154,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 15,Sample 15_Plate29.csv
+Orange,N,R2,246,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 16,Sample 16_Plate29.csv
+Orange,N,R2,299,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 17,Sample 17_Plate29.csv
+Red and Orange,N,R2,167,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 18,Sample 18_Plate29.csv
+Red and Orange,N,R2,174,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 19,Sample 19_Plate29.csv
+Red and Orange,N,R2,265,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 20,Sample 20_Plate29.csv
+Red and Orange,N,R2,271,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 21,Sample 21_Plate29.csv
+Red and Yellow,N,R2,103,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate29,Sample 22,Sample 22_Plate29.csv
+Red and Yellow,N,R2,109,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 1,Sample 1_Plate30.csv
+Yellow,N,R2,232,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 2,Sample 2_Plate30.csv
+Yellow,N,R2,234,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 3,Sample 3_Plate30.csv
+F,NP,R2,140,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 4,Sample 4_Plate30.csv
+F,NP,R2,237,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 5,Sample 5_Plate30.csv
+Green,NP,R2,181,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 6,Sample 6_Plate30.csv
+Green,NP,R2,188,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 7,Sample 7_Plate30.csv
+Green,NP,R2,280,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 8,Sample 8_Plate30.csv
+Green,NP,R2,286,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 9,Sample 9_Plate30.csv
+Green and Orange,NP,R2,121,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 10,Sample 10_Plate30.csv
+Green and Orange,NP,R2,128,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 11,Sample 11_Plate30.csv
+Green and Orange,NP,R2,219,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 12,Sample 12_Plate30.csv
+Green and Orange,NP,R2,225,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 13,Sample 13_Plate30.csv
+Green and Orange,NP,R2,229,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 14,Sample 14_Plate30.csv
+Orange,NP,R2,155,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 15,Sample 15_Plate30.csv
+Orange,NP,R2,247,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 16,Sample 16_Plate30.csv
+Red and Orange,NP,R2,168,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 17,Sample 17_Plate30.csv
+Red and Orange,NP,R2,175,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 18,Sample 18_Plate30.csv
+Red and Orange,NP,R2,266,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 19,Sample 19_Plate30.csv
+Red and Orange,NP,R2,272,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 20,Sample 20_Plate30.csv
+Red and Yellow,NP,R2,104,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 21,Sample 21_Plate30.csv
+Red and Yellow,NP,R2,110,2017/11/15,2017/11/20,2018/01/16,,,2018/04/10,"Acer, A",Plate30,Sample 22,Sample 22_Plate30.csv
+Green,NP,R1,184,2017/11/15,5,2017/11/20,2018/01/08,2018/01/10,2018/05/03,"Acer, A",Plate31,Sample 1,Sample 1_Plate31.csv
+Green,NP,R1,184,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/05/03,"Acer, A",Plate31,Sample 2,Sample 2_Plate31.csv
+Green,NP,R1,184,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/05/03,"Acer, A",Plate31,Sample 3,Sample 3_Plate31.csv
+Green,NP,R1,184,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/05,2018/05/03,"Acer, A",Plate31,Sample 4,Sample 4_Plate31.csv
+Orange,Control,R2,152,2017/11/15,6,2017/11/20,2018/01/08,2018/01/10,2018/05/03,"Acer, A",Plate31,Sample 5,Sample 5_Plate31.csv
+Orange,Control,R2,152,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/05/03,"Acer, A",Plate31,Sample 6,Sample 6_Plate31.csv
+Orange,Control,R2,152,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/05/03,"Acer, A",Plate31,Sample 7,Sample 7_Plate31.csv
+Orange,Control,R2,152,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/05/03,"Acer, A",Plate31,Sample 8,Sample 8_Plate31.csv
+Orange,Control,R2,152,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/05/03,"Acer, A",Plate31,Sample 9,Sample 9_Plate31.csv
+Red and Orange,N,R2,265,2017/11/15,6,2017/11/20,2018/01/16,,2018/05/03,"Acer, A",Plate31,Sample 10,Sample 10_Plate31.csv
+Red and Orange,N,R2,265,2017/12/14,2017/12/19,2017/12/20,2017/12/21,2017/12/22,2018/05/03,"Acer, A",Plate31,Sample 11,Sample 11_Plate31.csv
+Red and Orange,N,R2,265,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/05/03,"Acer, A",Plate31,Sample 12,Sample 12_Plate31.csv
+Red and Orange,N,R2,265,2018/02/05,2018/03/05,2018/03/06,2018/03/07,2018/03/09,2018/05/03,"Acer, A",Plate31,Sample 13,Sample 13_Plate31.csv
+Orange,Control,R2,160,2017/11/15,6,2017/11/20,2018/01/08,2018/01/10,2018/05/03,"Acer, A",Plate31,Sample 14,Sample 14_Plate31.csv
+Orange,Control,R2,160,2017/12/14,2017/12/17,2017/12/21,2017/12/22,2017/12/23,2018/05/03,"Acer, A",Plate31,Sample 15,Sample 15_Plate31.csv
+Orange,Control,R2,160,2018/01/29,2018/01/29,2018/02/01,2018/02/02,2018/02/03,2018/05/03,"Acer, A",Plate31,Sample 16,Sample 16_Plate31.csv
+Orange,Control,R2,160,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/05/03,"Acer, A",Plate31,Sample 17,Sample 17_Plate31.csv
+Orange,Control,R2,160,2018/03/06,2018/03/07,2018/03/13,2018/03/14,2018/03/19,2018/05/03,"Acer, A",Plate31,Sample 18,Sample 18_Plate31.csv
+Green and Orange,Control,R2,217,2018/02/23,2018/02/26,2018/02/28,2018/02/28,2018/03/01,2018/03/12,"Acer, A",Plate20,Sample 22,Sample 22_Plate20.csv

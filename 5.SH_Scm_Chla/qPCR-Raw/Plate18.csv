@@ -1,0 +1,139 @@
+96-Well 0.1-mL Block,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+No,,,,,,,,,,,,,,,,,,,,,,,,,,,
+03-02-2017,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TAQMAN,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2018-04-30 10:51:05 AM PDT,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+D:\Users\INSTR-ADMIN\experiments\Ana\Nutrients\Acer_Nutrients_Plate18.eds,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Acer_Nutrients_Plate18,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2018-03-12 08:39:37 AM PDT,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Standard Curve,,,,,,,,,,,,,,,,,,,,,,,,,,,
+      172310454,,,,,,,,,,,,,,,,,,,,,,,,,,,
+172310454,,,,,,,,,,,,,,,,,,,,,,,,,,,
+QuantStudio™ 3 System,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ROX,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Ct,,,,,,,,,,,,,,,,,,,,,,,,,,,
+true,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"Stage2, Step2",,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Well,Omit,Sample Name,Target Name,Task,Reporter,Quencher,C_,Ct Mean,Ct SD,Quantity,Quantity Mean,Quantity SD,Y-Intercept,R(superscript 2),Slope,Efficiency,Automatic Ct Threshold,Ct Threshold,Automatic Baseline,Baseline Start,Baseline End,Amp Status,Comments,Cq Conf,CQCONF,EXPFAIL,NOAMP
+A1,0,NTC,Acer,UNKNOWN,SYBR,None,Undetermined,,,,,,,,,,0,0.200,1,3,39,No Amp,,0.000,Y,Y,Y
+A2,0,+,A,UNKNOWN,SYBR,None,24.795,24.800,0.007,,,,,,,,0,0.200,1,3,20,Amp,,0.981,N,N,N
+A3,0,Sample 7,Acer,UNKNOWN,SYBR,None,24.336,24.313,0.033,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+A4,0,Sample 7,A,UNKNOWN,SYBR,None,25.546,25.427,0.169,,,,,,,,0,0.200,1,3,20,Amp,,0.980,N,N,N
+A5,0,Sample 7,Acer,UNKNOWN,SYBR,None,24.290,24.313,0.033,,,,,,,,0,0.200,1,3,18,Amp,,0.990,N,N,N
+A6,0,Sample 7,A,UNKNOWN,SYBR,None,25.307,25.427,0.169,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+A7,0,Sample 15,Acer,UNKNOWN,SYBR,None,24.721,24.753,0.046,,,,,,,,0,0.200,1,3,19,Amp,,0.991,N,N,N
+A8,0,Sample 15,A,UNKNOWN,SYBR,None,24.579,24.333,0.347,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+A9,0,Sample 15,Acer,UNKNOWN,SYBR,None,24.786,24.753,0.046,,,,,,,,0,0.200,1,3,18,Amp,,0.991,N,N,N
+A10,0,Sample 15,A,UNKNOWN,SYBR,None,24.088,24.333,0.347,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+A11,0,+,Acer,UNKNOWN,SYBR,None,22.980,23.011,0.044,,,,,,,,0,0.200,1,3,18,Amp,,0.991,N,N,N
+A12,0,NTC,A,UNKNOWN,SYBR,None,Undetermined,,,,,,,,,,0,0.200,1,3,39,No Amp,,0.000,Y,Y,Y
+B1,0,Sample 1,Acer,UNKNOWN,SYBR,None,24.019,24.013,0.009,,,,,,,,0,0.200,1,3,19,Amp,,0.986,N,N,N
+B2,0,Sample 1,A,UNKNOWN,SYBR,None,25.301,25.352,0.072,,,,,,,,0,0.200,1,3,20,Amp,,0.986,N,N,N
+B3,0,Sample 1,Acer,UNKNOWN,SYBR,None,24.007,24.013,0.009,,,,,,,,0,0.200,1,3,18,Amp,,0.983,N,N,N
+B4,0,Sample 1,A,UNKNOWN,SYBR,None,25.403,25.352,0.072,,,,,,,,0,0.200,1,3,20,Amp,,0.989,N,N,N
+B5,0,Sample 8,Acer,UNKNOWN,SYBR,None,24.618,24.746,0.181,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+B6,0,Sample 8,A,UNKNOWN,SYBR,None,25.460,25.341,0.168,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+B7,0,Sample 8,Acer,UNKNOWN,SYBR,None,24.874,24.746,0.181,,,,,,,,0,0.200,1,3,20,Amp,,0.994,N,N,N
+B8,0,Sample 8,A,UNKNOWN,SYBR,None,25.222,25.341,0.168,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+B9,0,Sample 16,Acer,UNKNOWN,SYBR,None,24.518,24.500,0.025,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+B10,0,Sample 16,A,UNKNOWN,SYBR,None,24.874,25.076,0.285,,,,,,,,0,0.200,1,3,20,Amp,,0.995,N,N,N
+B11,0,Sample 16,Acer,UNKNOWN,SYBR,None,24.483,24.500,0.025,,,,,,,,0,0.200,1,3,19,Amp,,0.993,N,N,N
+B12,0,Sample 16,A,UNKNOWN,SYBR,None,25.277,25.076,0.285,,,,,,,,0,0.200,1,3,19,Amp,,0.985,N,N,N
+C1,0,Sample 2,Acer,UNKNOWN,SYBR,None,24.983,25.088,0.149,,,,,,,,0,0.200,1,3,19,Amp,,0.991,N,N,N
+C2,0,Sample 2,A,UNKNOWN,SYBR,None,25.341,25.565,0.318,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+C3,0,Sample 2,Acer,UNKNOWN,SYBR,None,25.194,25.088,0.149,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+C4,0,Sample 2,A,UNKNOWN,SYBR,None,25.790,25.565,0.318,,,,,,,,0,0.200,1,3,20,Amp,,0.988,N,N,N
+C5,0,Sample 9,Acer,UNKNOWN,SYBR,None,24.981,25.017,0.050,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+C6,0,Sample 9,A,UNKNOWN,SYBR,None,25.498,25.439,0.084,,,,,,,,0,0.200,1,3,19,Amp,,0.990,N,N,N
+C7,0,Sample 9,Acer,UNKNOWN,SYBR,None,25.053,25.017,0.050,,,,,,,,0,0.200,1,3,20,Amp,,0.989,N,N,N
+C8,0,Sample 9,A,UNKNOWN,SYBR,None,25.380,25.439,0.084,,,,,,,,0,0.200,1,3,20,Amp,,0.990,N,N,N
+C9,0,Sample 17,Acer,UNKNOWN,SYBR,None,24.138,24.113,0.035,,,,,,,,0,0.200,1,3,18,Amp,,0.991,N,N,N
+C10,0,Sample 17,A,UNKNOWN,SYBR,None,25.966,25.805,0.227,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+C11,0,Sample 17,Acer,UNKNOWN,SYBR,None,24.088,24.113,0.035,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+C12,0,Sample 17,A,UNKNOWN,SYBR,None,25.645,25.805,0.227,,,,,,,,0,0.200,1,3,20,Amp,,0.989,N,N,N
+D1,0,Sample 3,Acer,UNKNOWN,SYBR,None,25.013,25.128,0.163,,,,,,,,0,0.200,1,3,20,Amp,,0.988,N,N,N
+D2,0,Sample 3,A,UNKNOWN,SYBR,None,25.580,25.755,0.249,,,,,,,,0,0.200,1,3,20,Amp,,0.990,N,N,N
+D3,0,Sample 3,Acer,UNKNOWN,SYBR,None,25.243,25.128,0.163,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+D4,0,Sample 3,A,UNKNOWN,SYBR,None,25.931,25.755,0.249,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+D5,0,Sample 10,Acer,UNKNOWN,SYBR,None,23.000,23.103,0.145,,,,,,,,0,0.200,1,3,18,Amp,,0.988,N,N,N
+D6,0,Sample 10,A,UNKNOWN,SYBR,None,25.935,25.806,0.183,,,,,,,,0,0.200,1,3,21,Amp,,0.984,N,N,N
+D7,0,Sample 10,Acer,UNKNOWN,SYBR,None,23.205,23.103,0.145,,,,,,,,0,0.200,1,3,18,Amp,,0.987,N,N,N
+D8,0,Sample 10,A,UNKNOWN,SYBR,None,25.677,25.806,0.183,,,,,,,,0,0.200,1,3,21,Amp,,0.986,N,N,N
+D9,0,Sample 18,Acer,UNKNOWN,SYBR,None,24.251,24.186,0.092,,,,,,,,0,0.200,1,3,19,Amp,,0.992,N,N,N
+D10,0,Sample 18,A,UNKNOWN,SYBR,None,24.984,24.955,0.041,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+D11,0,Sample 18,Acer,UNKNOWN,SYBR,None,24.122,24.186,0.092,,,,,,,,0,0.200,1,3,19,Amp,,0.992,N,N,N
+D12,0,Sample 18,A,UNKNOWN,SYBR,None,24.926,24.955,0.041,,,,,,,,0,0.200,1,3,19,Amp,,0.990,N,N,N
+E1,0,Sample 4,Acer,UNKNOWN,SYBR,None,24.522,24.592,0.098,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+E2,0,Sample 4,A,UNKNOWN,SYBR,None,25.002,25.022,0.028,,,,,,,,0,0.200,1,3,19,Amp,,0.987,N,N,N
+E3,0,Sample 4,Acer,UNKNOWN,SYBR,None,24.661,24.592,0.098,,,,,,,,0,0.200,1,3,19,Amp,,0.985,N,N,N
+E4,0,Sample 4,A,UNKNOWN,SYBR,None,25.042,25.022,0.028,,,,,,,,0,0.200,1,3,18,Amp,,0.990,N,N,N
+E5,0,Sample 11,Acer,UNKNOWN,SYBR,None,23.803,23.857,0.076,,,,,,,,0,0.200,1,3,19,Amp,,0.984,N,N,N
+E6,0,Sample 11,A,UNKNOWN,SYBR,None,25.286,25.420,0.189,,,,,,,,0,0.200,1,3,19,Amp,,0.984,N,N,N
+E7,0,Sample 11,Acer,UNKNOWN,SYBR,None,23.911,23.857,0.076,,,,,,,,0,0.200,1,3,18,Amp,,0.990,N,N,N
+E8,0,Sample 11,A,UNKNOWN,SYBR,None,25.554,25.420,0.189,,,,,,,,0,0.200,1,3,20,Amp,,0.988,N,N,N
+E9,0,Sample 19,Acer,UNKNOWN,SYBR,None,24.456,24.524,0.097,,,,,,,,0,0.200,1,3,18,Amp,,0.992,N,N,N
+E10,0,Sample 19,A,UNKNOWN,SYBR,None,25.329,25.420,0.129,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+E11,0,Sample 19,Acer,UNKNOWN,SYBR,None,24.592,24.524,0.097,,,,,,,,0,0.200,1,3,19,Amp,,0.993,N,N,N
+E12,0,Sample 19,A,UNKNOWN,SYBR,None,25.512,25.420,0.129,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+F1,0,Sample 5,Acer,UNKNOWN,SYBR,None,25.643,25.820,0.249,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+F2,0,Sample 5,A,UNKNOWN,SYBR,None,26.120,26.192,0.102,,,,,,,,0,0.200,1,3,21,Amp,,0.988,N,N,N
+F3,0,Sample 5,Acer,UNKNOWN,SYBR,None,25.996,25.820,0.249,,,,,,,,0,0.200,1,3,21,Amp,,0.994,N,N,N
+F4,0,Sample 5,A,UNKNOWN,SYBR,None,26.264,26.192,0.102,,,,,,,,0,0.200,1,3,21,Amp,,0.991,N,N,N
+F5,0,Sample 12,Acer,UNKNOWN,SYBR,None,22.670,22.746,0.107,,,,,,,,0,0.200,1,3,17,Amp,,0.989,N,N,N
+F6,0,Sample 12,A,UNKNOWN,SYBR,None,25.698,25.377,0.453,,,,,,,,0,0.200,1,3,19,Amp,,0.985,N,N,N
+F7,0,Sample 12,Acer,UNKNOWN,SYBR,None,22.821,22.746,0.107,,,,,,,,0,0.200,1,3,17,Amp,,0.984,N,N,N
+F8,0,Sample 12,A,UNKNOWN,SYBR,None,25.057,25.377,0.453,,,,,,,,0,0.200,1,3,20,Amp,,0.984,N,N,N
+F9,0,Sample 20,Acer,UNKNOWN,SYBR,None,24.322,24.387,0.092,,,,,,,,0,0.200,1,3,19,Amp,,0.988,N,N,N
+F10,0,Sample 20,A,UNKNOWN,SYBR,None,24.959,25.095,0.192,,,,,,,,0,0.200,1,3,20,Amp,,0.986,N,N,N
+F11,0,Sample 20,Acer,UNKNOWN,SYBR,None,24.453,24.387,0.092,,,,,,,,0,0.200,1,3,19,Amp,,0.993,N,N,N
+F12,0,Sample 20,A,UNKNOWN,SYBR,None,25.231,25.095,0.192,,,,,,,,0,0.200,1,3,19,Amp,,0.988,N,N,N
+G1,0,Sample 6,Acer,UNKNOWN,SYBR,None,24.136,24.315,0.253,,,,,,,,0,0.200,1,3,19,Amp,,0.990,N,N,N
+G2,0,Sample 6,A,UNKNOWN,SYBR,None,24.696,24.680,0.023,,,,,,,,0,0.200,1,3,19,Amp,,0.983,N,N,N
+G3,0,Sample 6,Acer,UNKNOWN,SYBR,None,24.494,24.315,0.253,,,,,,,,0,0.200,1,3,19,Amp,,0.991,N,N,N
+G4,0,Sample 6,A,UNKNOWN,SYBR,None,24.664,24.680,0.023,,,,,,,,0,0.200,1,3,19,Amp,,0.984,N,N,N
+G5,0,Sample 13,Acer,UNKNOWN,SYBR,None,21.836,21.909,0.105,,,,,,,,0,0.200,1,3,16,Amp,,0.986,N,N,N
+G6,0,Sample 13,A,UNKNOWN,SYBR,None,24.409,24.363,0.065,,,,,,,,0,0.200,1,3,19,Amp,,0.981,N,N,N
+G7,0,Sample 13,Acer,UNKNOWN,SYBR,None,21.983,21.909,0.105,,,,,,,,0,0.200,1,3,17,Amp,,0.985,N,N,N
+G8,0,Sample 13,A,UNKNOWN,SYBR,None,24.317,24.363,0.065,,,,,,,,0,0.200,1,3,19,Amp,,0.991,N,N,N
+G9,0,Sample 21,Acer,UNKNOWN,SYBR,None,24.466,24.622,0.221,,,,,,,,0,0.200,1,3,19,Amp,,0.992,N,N,N
+G10,0,Sample 21,A,UNKNOWN,SYBR,None,25.739,25.804,0.092,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+G11,0,Sample 21,Acer,UNKNOWN,SYBR,None,24.778,24.622,0.221,,,,,,,,0,0.200,1,3,19,Amp,,0.991,N,N,N
+G12,0,Sample 21,A,UNKNOWN,SYBR,None,25.869,25.804,0.092,,,,,,,,0,0.200,1,3,21,Amp,,0.993,N,N,N
+H1,0,NTC,Acer,UNKNOWN,SYBR,None,Undetermined,,,,,,,,,,0,0.200,1,3,39,No Amp,,0.000,Y,Y,N
+H2,0,+,A,UNKNOWN,SYBR,None,24.806,24.800,0.007,,,,,,,,0,0.200,1,3,19,Amp,,0.990,N,N,N
+H3,0,Sample 14,Acer,UNKNOWN,SYBR,None,24.156,24.132,0.034,,,,,,,,0,0.200,1,3,19,Amp,,0.984,N,N,N
+H4,0,Sample 14,A,UNKNOWN,SYBR,None,24.731,24.877,0.207,,,,,,,,0,0.200,1,3,20,Amp,,0.992,N,N,N
+H5,0,Sample 14,Acer,UNKNOWN,SYBR,None,24.107,24.132,0.034,,,,,,,,0,0.200,1,3,19,Amp,,0.989,N,N,N
+H6,0,Sample 14,A,UNKNOWN,SYBR,None,25.024,24.877,0.207,,,,,,,,0,0.200,1,3,19,Amp,,0.990,N,N,N
+H7,0,Sample 22,Acer,UNKNOWN,SYBR,None,23.828,23.853,0.035,,,,,,,,0,0.200,1,3,19,Amp,,0.986,N,N,N
+H8,0,Sample 22,A,UNKNOWN,SYBR,None,25.231,25.193,0.055,,,,,,,,0,0.200,1,3,20,Amp,,0.987,N,N,N
+H9,0,Sample 22,Acer,UNKNOWN,SYBR,None,23.878,23.853,0.035,,,,,,,,0,0.200,1,3,19,Amp,,0.986,N,N,N
+H10,0,Sample 22,A,UNKNOWN,SYBR,None,25.154,25.193,0.055,,,,,,,,0,0.200,1,3,20,Amp,,0.991,N,N,N
+H11,0,+,Acer,UNKNOWN,SYBR,None,23.042,23.011,0.044,,,,,,,,0,0.200,1,3,17,Amp,,0.990,N,N,N
+H12,0,NTC,A,UNKNOWN,SYBR,None,Undetermined,,,,,,,,,,0,0.200,1,3,34,No Amp,,0.000,Y,N,N

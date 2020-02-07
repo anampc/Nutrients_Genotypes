@@ -1,0 +1,427 @@
+---
+title: "Acer SH Nutrients"
+author: "AnaPalacio"
+date: "Aug 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+
+# General project set-up 
+
+```{r libraries , results="hide"}
+
+    getwd()
+
+    # Get all libraries and sources required to run the script
+        library(plyr)
+        library(dplyr)
+        library(reshape2)
+        library(ggplot2)
+        library(ggthemes)
+        library(lme4)
+library(lmerTest)
+        library(emmeans)
+        library(scales)
+        library(skimr)
+
+```
+
+#---------------------------------------------------------------------------------
+## 1. DATA Exploration
+
+    
+### 1. Select qPCR info and define factors
+ 
+
+```{r VariablesToUse}
+
+qPCR.variables  <- Acer[, c("Sample", "Treatment", "Replicate", "Genotype", "Fragment", "Date", "Days", "A.Acer", "logA.SH")]
+
+# Variable types 
+str(qPCR.variables)
+  qPCR.variables$Colony<-as.factor(qPCR.variables$Genotype)
+  qPCR.variables$DaysF<-as.factor(qPCR.variables$Days)
+  
+  summary(qPCR.variables)
+  skim(qPCR.variables)
+
+```  
+
+### 2. Exploratory graphs
+
+```{r Histograms}
+
+   HistoL_SH<-qplot(logA.SH, data=qPCR.variables, binwidth=0.15)
+   HistoL_SH + facet_grid(Treatment~Date)
+  # 
+  ggplot(qPCR.variables, aes(logA.SH, fill = Treatment , colour = Treatment)) +
+   geom_density(alpha = 0.1) + facet_wrap(~Date)
+  # 
+  
+```
+
+#### 2.2 Mean -+ SD
+
+```{r}
+logSHTreatment <- ggplot(qPCR.variables, aes(Date, logA.SH, colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Treatment))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+       stat_summary(fun.y=mean, geom="line", size =1) +
+       theme_gdocs() 
+logSHTreatment + facet_wrap(~Genotype)
+
+# Revoving weird points and colonies not used 
+    qPCR.variables_2<-subset(qPCR.variables, Date!="2018-02-05")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2017-12-14")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-01")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-02")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-03")
+    qPCR.variables_2<-subset(qPCR.variables_2, Colony!="F")
+    qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
+
+logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Treatment))) +
+  geom_jitter(alpha=0.3)+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+  stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
+logSH_Colony + facet_wrap (~Colony)
+
+logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Colony))) +
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+  stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
+logSH_Colony + facet_grid (Treatment~Replicate) +
+  theme(legend.position = "none" )
+
+
+logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment)) +  theme_bw() + ggtitle("A.")+
+    theme(plot.background=element_blank(), 
+            panel.border = element_blank(),
+            axis.line = element_line(colour = "black"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.position="bottom",
+            strip.background = element_rect(fill="white")) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 0.2 )+
+      #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+       #            position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line") + 
+        annotate("rect", xmin= 2, xmax = 91,
+                 ymin = -2, ymax = -1.5, fill="blue", alpha = 0.04)+
+        annotate("rect", xmin= 79, xmax = 90,
+                 ymin = -2, ymax = -0.1, fill="orange", alpha = 0.04)+
+        annotate("rect", xmin= 90, xmax = 113,
+               ymin =  -2, ymax = -0.1, fill="red", alpha = 0.04)+
+      scale_y_continuous(breaks = seq(0, 0.4, 0.1),
+                    expand = c(0,0),
+                   name=("Symbiodinium / A.cervicornis (A/H) cell ratio")) +
+      scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) #+
+  facet_grid (Colony~., labeller = labeller(Colony=c(`Green` = "A.cer_1", 
+                                    `Green and Orange` = "A.cer_2",
+                                    `Orange` = "A.cer_3", 
+                                    `Red and Orange` = "A.cer_4",
+                                    `Red and Yellow` = "A.cer_5")))
+  
+  logSHTreatment
+  
+  ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
+  ggsave(file="5.3A_AH_NoColony.svg", plot=logSHTreatment, width=3.0, height=3)
+
+  
+  # NOT log 10
+  
+  SHTreatment_2 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment)) +  theme_bw() + ggtitle("A.")+
+    theme(plot.background=element_blank(), 
+            panel.border = element_blank(),
+            axis.line = element_line(colour = "black"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.position="bottom",
+            strip.background = element_rect(fill="white")) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 0.2 )+
+      #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+       #            position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line") +
+        annotate("rect", xmin= 2, xmax = 91,
+                 ymin = 0, ymax = 0.1, fill="blue", alpha = 0.04)+
+        annotate("rect", xmin= 79, xmax = 90,
+                 ymin = 0, ymax = 0.35, fill="orange", alpha = 0.04)+
+        annotate("rect", xmin= 90, xmax = 113,
+               ymin = 0, ymax = 0.35, fill="red", alpha = 0.04)+
+      scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+                    expand = c(0,0),
+                   name=("Symbiodinium to A.cervicornis cell ratio  (A/H)")) +
+      scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) #+
+  facet_grid (Colony~., labeller = labeller(Colony=c(`Green` = "A.cer_1", 
+                                    `Green and Orange` = "A.cer_2",
+                                    `Orange` = "A.cer_3", 
+                                    `Red and Orange` = "A.cer_4",
+                                    `Red and Yellow` = "A.cer_5")))
+  
+  SHTreatment_2
+  
+  ggsave(file="5.3A_AH_2.svg", plot=SHTreatment_2, width=3.0, height=6)
+  ggsave(file="5.3A_AH_NoColony_2.svg", plot=SHTreatment_2, width=3.0, height=3)
+
+# 
+  
+  
+  
+  
+  
+# Day as contin.
+    LM_1 <- lmer(logA.SH ~ Treatment * Days + (1|Colony/Fragment),data= qPCR.variables_2)
+    
+    step(LM_1)
+    
+    LM_1 <-lmer(logA.SH ~ Treatment + Days + (1 | Colony), REML=TRUE, data= qPCR.variables_2)
+    
+    summary(LM_1)
+    A.H.emm<-emmeans(LM_1, ~Treatment + Days)
+    emmip(LM_1, ~Treatment + Days, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
+    pairs(A.H.emm)
+
+# Day as factor
+
+LM_Acer.qpCR<-lmer(logA.SH ~ Treatment * DaysF + (1|Replicate) + (1|Colony/Fragment), data= qPCR.variables_2)
+step(LM_Acer.qpCR)
+summary(LM_Acer.qpCR)
+
+LM_Acer.qpCR<-lmer(logA.SH ~ Treatment + DaysF + Replicate + (1|Colony),
+                   data= qPCR.variables_2)
+ step(LM_Acer.qpCR)
+Acer.YII.emm<-emmeans(LM_Acer.qpCR, ~Treatment * DaysF)
+     contrast(Acer.YII.emm, "tukey")
+    # Effect plot options
+emmip(LM_Acer.qpCR, ~DaysF|Treatment, CIs = TRUE, aes(Colony=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
+
+    
+    # Pairwise comparisons
+    pairs(Acer.YII.emm) # same than contrast(Acer.YII.emm, "tukey")
+    plot(emmeans(LM_Acer.qpCR, ~Treatment|DaysF), comparisons = TRUE) +
+        theme_gdocs() # Tukey comparission (do not trust CI to compare EMMs)
+    
+    plot(emmeans(LM_Acer.qpCR, ~Treatment|DaysF), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~DaysF) +
+      theme_gdocs()
+    
+    EMM_AH<-cld(Acer.YII.emm, by=NULL) # compact-letter display
+    write.csv(EMM_AH, "EMM_AH.csv")  
+    
+```
+
+
+## 3. Calculate SH ratios relative to controls (1-Control)
+
+```{r Relative to control}
+ # Claculate relative changes (1 - Control)
+      
+          # Summary per colony per Treatment
+          library(plyr)
+          SH.Summary <- plyr::ddply (qPCR.variables, . (Genotype, Treatment, Days),summarise, 
+                                                A.H_mean = mean (A.Acer , na.rm = F), 
+                                                A.H_sd = sd (A.Acer, na.rm = F))
+          
+        SH.SummaryCon<-subset(SH.Summary, Treatment=="Control" )
+        SH.SummaryCon$Colony_Day<-paste(SH.SummaryCon$Genotype, SH.SummaryCon$Days, sep = "_")
+        qPCR.variables$Colony_Day<-paste(qPCR.variables$Colony, qPCR.variables$Days, sep = "_")
+          
+        qPCR.variables$Control.A.H<- 
+                SH.SummaryCon[match(qPCR.variables$Colony_Day, SH.SummaryCon$Colony_Day),"A.H_mean"] 
+        qPCR.variables$Control_A.Acer<-((qPCR.variables$A.Acer)-qPCR.variables$Control.A.H)
+          
+        HistoL_SH<-qplot(Control_A.Acer, data=qPCR.variables, binwidth=0.1)
+          HistoL_SH + facet_grid(Treatment~Date)
+          
+          
+logSHTreatment <- ggplot(qPCR.variables, aes(Days, (Control_A.Acer*100), colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 1), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                   position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+
+logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none")
+
+```
+
+## 4. Separate Blastate from blade samples
+
+```{r Relative to control}
+
+qPCR.blastate<-qPCR.variables[((qPCR.variables$Date=="2018-02-05") |
+                                 (qPCR.variables$Date=="2018-03-08")), ]
+  
+qPCR.razor <- droplevels(qPCR.variables[!rownames(qPCR.variables) %in% rownames(qPCR.blastate), ])  
+
+write.csv(qPCR.razor, "Acer_Razor_qPCR.csv")
+write.csv(qPCR.blastate, "Acer_Blastate_qPCR.csv")
+
+
+logSHTreatment <- ggplot(qPCR.razor, aes(Days, (Control_A.Acer*100), colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 1), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                   position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+
+logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none") +
+      facet_wrap(~Colony)
+
+
+```
+
+## 5. remove the lonley corals??
+
+```{r Relative to control}
+
+#   qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "F"), ]
+#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "Yellow"), ]
+#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "Red and Yellow"), ]
+# 
+# logSHTreatment <- ggplot(qPCR.razor, aes(Days, (Control_A.Acer*100), colour=factor(Treatment))) +
+#        # geom_jitter(aes(colour=factor(Replicate))) +
+#        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+#                     position = position_dodge(width = 1), width = 0.2 )+
+#       stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+#                    position = position_dodge(width = 1)) +
+#        stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+#        theme_gdocs() 
+# 
+# logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +  
+#       theme(axis.title.y=element_text(size=12), legend.position="none")
+
+
+```
+
+
+# 6. Model selection 
+
+```{r StatsForTreattmentandTime}
+# Libraries 
+     library(ggplot2)
+     library(ggthemes)
+     library(lme4)
+     library(emmeans)
+```
+
+
+```{r Only_nutrients}
+############################
+# Only nutrients
+
+qPCR.nutrients<-subset(qPCR.variables, qPCR.variables$Days<80)
+qPCR.nutrients<-subset(qPCR.nutrients, qPCR.variables$logA.SH>-2.5)
+qPCR.nutrients<-subset(qPCR.nutrients, !(Genotype=="F"))
+qPCR.nutrients<-subset(qPCR.nutrients, !(Genotype=="Yellow"))
+qPCR.nutrients_wide<-YII.Wide<- reshape(qPCR.nutrients, idvar = "Fragment", timevar = "Days", direction = "wide")
+
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "F"), ]
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "Yellow"), ]
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "Red and Yellow"), ]
+
+qPCR.nutrients_wide<-qPCR.nutrients_wide[complete.cases(qPCR.nutrients_wide), ]
+
+# qPCR.nutrients.complete<-melt(qPCR.nutrients_wide, id.vars = c("Sample"))
+# qPCR.nutrients$Mortality[((is.na(qPCR.nutrients$logA.SH)) & (qPCR.nutrients$Days>74))]<-"Died"
+ 
+logSHTreatment <- ggplot(qPCR.nutrients, aes(Days, (Control_A.Acer*100), colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 1), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                   position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+
+logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none")
+                       
+
+logSHColony <- ggplot(qPCR.nutrients, aes(Date, logA.SH, colour=factor(Genotype))) +
+       geom_point() +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+       stat_summary(fun.y=mean, geom="line") +
+       theme_gdocs() + facet_grid(~Treatment)
+logSHColony
+
+logSHColony <- ggplot(qPCR.nutrients, aes(Date, logA.SH, colour=factor(Fragment))) +
+       geom_point() +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+       stat_summary(fun.y=mean, geom="line") +
+       theme_gdocs() + facet_grid(Genotype~Treatment)
+logSHColony
+
+logSHTreatment <- ggplot(qPCR.nutrients, aes(Days, logA.SH, colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 1), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                   position = position_dodge(width = 1)) +
+       stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+
+logSHTreatment + ylab("log10 (A/H)") + xlab("Days in nutrient treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none")
+
+
+
+# Day as contin.
+    LM_1 <- lmerTest::lmer(logA.SH ~ Treatment * Days * Replicate + (1|Colony/Fragment),                    REML=TRUE, data= qPCR.nutrients)
+    
+    step(LM_1)
+    
+    LM_1 <-lmer(logA.SH ~ Treatment + (1 | Colony), REML=TRUE, data= qPCR.nutrients)
+    
+    summary(LM_1)
+    A.H.emm<-emmeans(LM_1, ~Treatment)
+    emmip(LM_1, ~Treatment, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
+    pairs(A.H.emm)
+
+# Day as factor
+
+LM_Acer.qpCR<-lmer(logA.SH ~ Treatment * DaysF * Replicate + (1 | Colony), data= qPCR.nutrients)
+
+step(LM_Acer.qpCR)
+
+summary(LM_Acer.qpCR)
+ 
+Acer.YII.emm<-emmeans(LM_Acer.qpCR, ~Treatment * DaysF* Replicate)
+    # contrast(Acer.YII.emm, "tukey")
+      # Effect plot options
+emmip(LM_Acer.qpCR, ~Treatment|DaysF, CIs = TRUE, aes(Colony=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
+
+    
+    # Pairwise comparisons
+    pairs(Acer.YII.emm) # same than contrast(Acer.YII.emm, "tukey")
+    plot(emmeans(LM_Acer.qpCR, ~Treatment|DaysF), comparisons = TRUE) +
+        theme_gdocs() # Tukey comparission (do not trust CI to compare EMMs)
+    
+    plot(emmeans(LM_Acer.qpCR, ~Treatment|DaysF), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~DaysF) +
+      theme_gdocs()
+    
+    cld(Acer.YII.emm, by=NULL) # compact-letter display
+    
+```
+
