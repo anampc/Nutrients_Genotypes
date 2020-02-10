@@ -23,11 +23,25 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
         library(ggplot2)
         library(ggthemes)
         library(lme4)
-library(lmerTest)
+        library(lmerTest)
         library(emmeans)
         library(scales)
         library(skimr)
 
+
+# Default ggplot settings
+
+Fill.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+
+    ggthe_bw<-theme(plot.background=element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.box.background = element_rect(),
+          panel.background =element_rect(fill = NA, color = "black")
+          )+
+    theme_bw()
 ```
 
 #---------------------------------------------------------------------------------
@@ -45,7 +59,7 @@ qPCR.variables  <- Acer[, c("Sample", "Treatment", "Replicate", "Genotype", "Fra
 str(qPCR.variables)
   qPCR.variables$Colony<-as.factor(qPCR.variables$Genotype)
   qPCR.variables$DaysF<-as.factor(qPCR.variables$Days)
-  
+
   summary(qPCR.variables)
   skim(qPCR.variables)
 
@@ -79,16 +93,27 @@ logSHTreatment + facet_wrap(~Genotype)
     qPCR.variables_2<-subset(qPCR.variables_2, Date!="2017-12-14")
     qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-01")
     qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-02")
-    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-03")
+    #qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-03")
     qPCR.variables_2<-subset(qPCR.variables_2, Colony!="F")
-    qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
+    #qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
+    
+    ## Genotype information
+    MOTE<-read.csv("Genotype_Info.csv", header = TRUE)
+    qPCR.variables_2<-merge(qPCR.variables_2, MOTE, 
+                            by="Genotype", all.x=TRUE)
+    
+    qPCR.variables_2$MoteGen<-factor(as.character(
+      qPCR.variables_2$MoteGen), 
+                             levels=c("G_48", "G_62","G_31", 
+                                      "G_08","G_07", "G_50"))  # D dominance order
+
 
 logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Treatment))) +
   geom_jitter(alpha=0.3)+
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
   stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
   stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
-logSH_Colony + facet_wrap (~Colony)
+logSH_Colony + facet_wrap (~MoteGen)
 
 logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Colony))) +
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
@@ -137,7 +162,8 @@ logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment))
   ggsave(file="5.3A_AH_NoColony.svg", plot=logSHTreatment, width=3.0, height=3)
 
   
-  # NOT log 10
+ 
+ # NOT log 10
   
   SHTreatment_2 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment)) +  theme_bw() + ggtitle("A.")+
     theme(plot.background=element_blank(), 
@@ -176,10 +202,64 @@ logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment))
   
   ggsave(file="5.3A_AH_2.svg", plot=SHTreatment_2, width=3.0, height=6)
   ggsave(file="5.3A_AH_NoColony_2.svg", plot=SHTreatment_2, width=3.0, height=3)
+  
+```
 
-# 
+Figure 4 
+
+```{r}
+ # NOT log 10
   
+Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
+                                          shape=Treatment)) + 
+    ggthe_bw + Fill.colour+ ggtitle("a.")+
+    theme(legend.position=c(0.2, 0.3),
+        legend.title = element_blank()) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+     
+        
+      annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
+      annotate("text", x = 99, y = 0.02, label = "H", size=3)+
   
+    scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+                       #limits = c(0,0.5),
+                       expand = c(0.01,0.01),
+                   name=("Symbiont to host cell ratio  (S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) +
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 2 )+
+      stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                   position = position_dodge(width = 2)) +
+       stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 2))
+
+Figure4
+
+Figure4 + scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+                       limits = c(0,0.6),
+                       expand = c(0.01,0.01),
+                        name=("Symbiont to host cell ratio  (S/H)")) +
+                       facet_grid (~MoteGen)
+  
+  SHTreatment_2
+  
+  ggsave(file="Fig_SH_2.svg", plot=Figure4, width=3.5, height=3)
+  ggsave(file="5.3A_AH_NoColony_2.svg", plot=SHTreatment_2, width=3.0, height=3)
+
+```
+
+
+```{r}
+ 
   
   
   
@@ -222,6 +302,11 @@ emmip(LM_Acer.qpCR, ~DaysF|Treatment, CIs = TRUE, aes(Colony=factor(Treatment)))
     EMM_AH<-cld(Acer.YII.emm, by=NULL) # compact-letter display
     write.csv(EMM_AH, "EMM_AH.csv")  
     
+```
+
+```{r}
+ 
+  
 ```
 
 

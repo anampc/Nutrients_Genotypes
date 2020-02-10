@@ -78,12 +78,12 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.data$Days<-(as.numeric(YII.data$Date) -17485)
       
       YII.data$Spp <- as.factor(YII.data$Spp)
-      YII.data$Treatment[YII.data$Treatment == "Control"] <- "Ambient"
+      YII.data$Treatment[YII.data$Treatment == "Control"] <- "A"
       YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
       YII.data$Treatment <- as.factor(YII.data$Treatment)
       YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
-                             levels=c("Ac_48", "Ac_62","Ac_31", 
-                                      "Ac_08","Ac_07", "Ac_50", 
+                             levels=c("G_48", "G_62","G_31", 
+                                      "G_08","G_07", "G_50", 
                              "Of_31","Of_6","Of_20","Of_34", 
                              "Ss_30","Ss_20","Ss_24",
                              "Ss_28","Ss_22","Ss_23","Ss_27"))  # D dominance order
@@ -129,12 +129,12 @@ YII_Colony<- ggplot(YII.data, aes (Days, YII, colour=Genotype)) +
         stat_summary(fun.y=mean, geom="line", alpha=0.6) +   theme_bw()
       YII_Colony + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
       
-      YII_Fragment<- ggplot(YII.data, aes (Days, YII, colour=factor(Fragment))) +
+YII_Fragment<- ggplot(YII.data, aes (Days, YII, colour=factor(Fragment))) +
         stat_summary(fun.y=mean, geom="line", alpha=0.6) +  
         theme_bw() + theme(legend.position = "none")
       YII_Fragment + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
       
-      YII_Frag_Gen<- ggplot(YII.data, aes (Days, YII, colour=Genotype, shape=Fragment)) +
+YII_Frag_Gen<- ggplot(YII.data, aes (Days, YII, colour=Genotype, shape=Fragment)) +
         stat_summary(fun.y=mean, geom="line", alpha=0.5) +  
         theme_bw() + theme(legend.position = "bottom",
                            legend.title = element_blank())
@@ -173,13 +173,15 @@ YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=f
         ggthe_bw + Fill.colour+
         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                      position = position_dodge(1) )+
-        stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+        stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                     linetype=1, alpha=1) + 
          stat_summary(fun.y=mean, geom="point", size =1,
                    position=position_dodge(width=1), alpha=0.8)  +
-        theme(legend.position="bottom", 
-              legend.title = element_blank(),
-              strip.background = element_rect(fill="white"))+
-        scale_y_continuous(limits = c(0.1, 0.7),
+        theme(legend.position=c(0.2, 0.5),
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA)) +
+      
+    scale_y_continuous(limits = c(0.1, 0.7),
                            breaks = seq(0.1, 0.6, 0.1),  
                            expand = c(0, 0),
                            name=expression(~italic("Fv / Fm"))) +
@@ -187,19 +189,19 @@ YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=f
                            limits = c(-1,113),
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
-        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.13,
-                  colour = "gray90", linetype=2)+
-        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.25,
-                  colour = "gray90", linetype=4)+
-        annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.25,
-                  colour = "gray90", linetype=3)
+        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
+                  colour = "gray90", linetype=1)
         
       
       Figure3<-YII_Treat_BW + #facet_grid (Spp~.)+
-        annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.2, label = "Heat", size=3)
+        annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
 Figure3
-#ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=3.5, height=6)
+#ggsave(file="Acer_YII_Treat.svg", plot=Figure3, width=3.5, height=3)
 ```
 
 ```{r}
@@ -221,11 +223,11 @@ YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=f
                            limits = c(-1,113),
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
-  annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.13,
+  annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
                   colour = "gray90", linetype=2)+
-  annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.25,
+  annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
                   colour = "gray90", linetype=4)+
-  annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.25,
+  annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.20,
                   colour = "gray90", linetype=3)
         
       
@@ -240,10 +242,39 @@ Figure3
 
 ```{r FigureSupple,  fig.height = 7, fig.width = 8}
 
-Figure3b<-YII_Treat_BW +facet_wrap (~Genotype, ncol = 6)
-Figure3b
+Figure3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
+        ggthe_bw + Fill.colour+
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
+                     position = position_dodge(1) )+
+        stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                     linetype=1, alpha=1) + 
+         stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.5)  +
+        theme(axis.title.y=element_text(size=12), 
+          legend.position="bottom",
+          legend.title = element_blank()) + ggtitle("b") +
+      
+    scale_y_continuous(limits = c(0.0, 0.7),
+                           breaks = seq(0.0, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
+                  colour = "gray90", linetype=1)+
+        annotate("text", x = 45, y = 0.05, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.05, label = "H", size=3) +
+  facet_grid(~Genotype)
+Figure3_genotype
+  
 
-#ggsave(file="5.3_YII_Treat.svg", plot=YII_Treat, width=4.0, height=6)
+#ggsave(file="S2b_YII_Treat_Colo.svg", plot=Figure3_genotype, width=6.0, height=3.5)
 ```
 
 # YII GLMs
@@ -272,7 +303,7 @@ Figure3b
 
 ```{r Acer_models}
   LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment), 
-                               data=subset(YII.data, Spp=="A.cer"), na.action=na.omit)
+                               data=subset(YII.data, Spp=="Ac"), na.action=na.omit)
       summary(LME_Acer)
       
       Step.LME_Acer<-step (LME_Acer)

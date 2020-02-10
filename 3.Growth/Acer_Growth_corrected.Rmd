@@ -69,17 +69,17 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     BW.Tall$TimePoint[BW.Tall$Day=="113"]<-"22"
     
     BW.Tall$Treatment <- as.character(BW.Tall$Treatment)
-    BW.Tall$Treatment[BW.Tall$Treatment == "Control"] <- "Ambient"
+    BW.Tall$Treatment[BW.Tall$Treatment == "Control"] <- "A"
     BW.Tall$Treatment[BW.Tall$Treatment == "NP"] <- "N+P"
     BW.Tall$Treatment <- as.factor(BW.Tall$Treatment)
     
     BW.Tall$Colony <- as.factor(BW.Tall$Gen)
     BW.Tall$MoteGen<-factor(BW.Tall$MoteGen, 
-                                   levels=c("Ac_48", "Ac_62","Ac_31", "Ac_08","Ac_07", "Ac_50"))
+                                   levels=c("G_48", "G_62","G_31", "G_08","G_07", "G_50"))
     BW.Tall$SampleID <- paste("Ac", BW.Tall$Fra, BW.Tall$TimePoint, sep = "_")
   
     BW.Initial<-subset(BW.Tall, Initial.Date=="2017-08-30")
-    BW.Control<-subset(BW.Tall, Treatment=="Ambient")
+    BW.Control<-subset(BW.Tall, Treatment=="A")
     BW.Control<-subset(BW.Control, Days<80)
     BW.nutrients<-subset(BW.Tall, Days>-10)
     BW.nutrients<-subset(BW.nutrients, Days<113)
@@ -154,14 +154,14 @@ BW_Colony<- ggplot(BW.Tall, aes (Days, dAW.gd, shape=factor(Treatment),
       ylab("Growth (mg/ g d)") +
       
       scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
+                         breaks = seq(0, 115, by=30)) +
     theme(legend.position="bottom",
         legend.title = element_blank(), 
         strip.background =element_rect(fill=NA))
 
 #BW_Colony + facet_grid(MoteGen~.)
 #BW_Colony + facet_grid(~MoteGen)
-BW_Colony <- BW_Colony + facet_wrap(MoteGen~.)
+BW_Colony <- BW_Colony + facet_grid(~MoteGen)
 BW_Colony
 # ggsave(file="Figure2_BW_corrected_genotype.svg", plot=BW_Colony, dpi = 300, units="in", width=5, height=5)
 
@@ -205,21 +205,39 @@ BW_Colony_Control
 
 ```
 
-Data after nutrients (no baseline)
+Supplementary information per colony
 
 ```{r}
-BW <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment))) +
-          stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
-          stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
-          stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
-          ggthe_bw + Fill.colour
-  BW + ylab("Growth (mg/ g d) ") + 
-    xlab("Days in the experiment") +
+ BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment))) +
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.5) +
+           stat_summary(fun.y=mean, geom="line", size =1, 
+                        position=position_dodge(width=5), linetype=1) + 
+           ggthe_bw + Fill.colour + ggtitle("a") +
+   scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+  
+    ylab("Growth (mg/ g d) ") + 
     theme(axis.title.y=element_text(size=12), 
-          legend.position="bottom",
-          legend.title = element_blank()) +
-    facet_grid(~MoteGen)
+           legend.position="bottom",
+           legend.title = element_blank()) +
+     
+     annotate("segment", x = 2, xend = 91, y = -1, yend = -1,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 79, xend = 91, y = -1, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 91, xend = 110, y = -0.5, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
+     annotate("text", x = 99, y = -1.5, label = "H", size=3) +
+     facet_grid(~MoteGen)
+BW_Col
 
+#ggsave(file="S2a_Growth_genotype.svg", plot=BW_Col, width=6.0, height=3.5)
 
 ```
 
