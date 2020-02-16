@@ -5,7 +5,7 @@
 #/*.Rcheck/
 # RStudio files
 **/.Rproj.user
-#**/.Rproj
+**/.Rproj
 **/.RData
 **/.Ruserdata
 # produced vignettes

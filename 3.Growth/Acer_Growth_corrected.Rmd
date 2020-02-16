@@ -1,11 +1,11 @@
 ---
-title: "Growth rates in Acer under elevated N and N+P"
+title: "Growth rates in A. cervicornis under elevated N and N+P and subsequent heat stress"
 author: "Ana Palacio"
-date: "July 26, 2017"
+date: "Feb 13, 2020"
 output:
   html_document:
     fig_height: 3.5
-    fig_width: 3.5
+    fig_width: 6
     df_print: paged
     toc: yes
 editor_options:
@@ -41,6 +41,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
           )+
     theme_bw()
 ```
+
+# Import and clean growth data
 
 ```{r}
 # Import data: 
@@ -78,10 +80,14 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
                                    levels=c("G_48", "G_62","G_31", "G_08","G_07", "G_50"))
     BW.Tall$SampleID <- paste("Ac", BW.Tall$Fra, BW.Tall$TimePoint, sep = "_")
   
-    BW.Initial<-subset(BW.Tall, Initial.Date=="2017-08-30")
-    BW.Control<-subset(BW.Tall, Treatment=="A")
+  ## Data subsets  
+    BW.Initial<-subset(BW.Tall, Initial.Date=="2017-08-30") # Only baseline
+   
+    BW.Control<-subset(BW.Tall, Treatment=="A") # Only Ambient
     BW.Control<-subset(BW.Control, Days<80)
-    BW.nutrients<-subset(BW.Tall, Days>-10)
+    BW.Control<-subset(BW.Control, Initial.Date!="2017-10-18")
+    
+    BW.nutrients<-subset(BW.Tall, Days>-10) # Remove baseline
     BW.nutrients<-subset(BW.nutrients, Days<113)
     
   ## Remove recovery data points
@@ -92,15 +98,15 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
 
-# Growth over time by treatment
+# Growth over time (during Control and Heat stress) by nutrient treatment
 
-## Figure 2
+## Figure 3a
 
-```{r}
+```{r, fig.height=3.5, fig.width=3.5}
 # Treatment effect over time
     BW_Treat<- ggplot(BW.Tall, aes (Days, dAW.gd, shape=factor(Treatment),
                                     colour=factor(Treatment))) + 
-      ggthe_bw + Fill.colour+
+      ggthe_bw + Fill.colour + ggtitle("a")+
       stat_summary(fun.data = "mean_cl_boot", geom = "errorbar",
                    position=position_dodge(width=5))+
       stat_summary(fun.y=mean, geom="line", 
@@ -119,96 +125,30 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
         legend.title = element_blank(), 
         strip.background =element_rect(fill=NA)) +
 
-    annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-              colour = "gray90")+
-    annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
-  
-    annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-              colour = "gray90")+
-    annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-  
-    annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-              colour = "gray90")+
-  
-    annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-              colour = "gray90")+
-    annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
+      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+                colour = "gray90")+
+      annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+                colour = "gray90")+
+      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
+    
+      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
+                colour = "gray90")+
+      annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
   BW_Treat
   
-# ggsave(file="Figure2_BW_corrected.svg", plot=BW_Treat, dpi = 300, units="in", width=3.5, height=3.0)
+# ggsave(file="Figure3_BW_corrected.svg", plot=BW_Treat, dpi = 300, units="in", width=3.5, height=3.0)
 ```
 
-## Supplement: All genotypes by treatment over time
+## Figure S2a: All genotypes by nutrient treatment over time
 
-Including baseline
 
 ```{r, echo =FALSE}
-BW_Colony<- ggplot(BW.Tall, aes (Days, dAW.gd, shape=factor(Treatment),
-                                    colour=factor(Treatment))) + ggthe_bw + Fill.colour+
-      stat_summary(fun.data = "mean_cl_boot", geom = "errorbar",
-                   position=position_dodge(width=5))+
-      stat_summary(fun.y=mean, geom="line", 
-                   position=position_dodge(width=5), linetype=1) +
-      stat_summary(fun.y=mean, geom="point", size =2,alpha=0.8,
-                   position=position_dodge(width=5))  + 
-      ylab("Growth (mg/ g d)") +
-      
-      scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=30)) +
-    theme(legend.position="bottom",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA))
-
-#BW_Colony + facet_grid(MoteGen~.)
-#BW_Colony + facet_grid(~MoteGen)
-BW_Colony <- BW_Colony + facet_grid(~MoteGen)
-BW_Colony
-# ggsave(file="Figure2_BW_corrected_genotype.svg", plot=BW_Colony, dpi = 300, units="in", width=5, height=5)
-
-
-BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=MoteGen)) +   
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
-  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (~Treatment)  
-BW_ColonyT
-
-BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +    stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (MoteGen~Treatment)+  geom_point()+ theme(legend.position = "none")
-BW_ColonyT
-
-```
-
-Initial performance vs control per genotype: some genotypes declined in growth even without nutrients
-
-```{r, echo =FALSE}
-BW_Init<- ggplot(BW.Initial, aes (MoteGen, dAW.gd)) +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name="Change in buoyant weight (mg/day*initial weight)",
-                     limits = c(1,6),
-                     breaks = seq(1, 6, by=1))
-BW_Init
-
-BW_Colony_Control<- ggplot(BW.Control, aes (Days, dAW.gd, colour=MoteGen)) +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-               width = 0.2, position=position_dodge(width=5)) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5,
-               position=position_dodge(width=5)) +
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw #+ ggthe_bw + geom_jitter()
-BW_Colony_Control
-
-BW_Colony_Control<-ggplot(BW.Control, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +   
-  #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
-  #stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw + 
-  facet_wrap (~MoteGen)+  geom_point()+ theme(legend.position = "none")
-BW_Colony_Control
-
-```
-
-Supplementary information per colony
-
-```{r}
- BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment))) +
+BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment))) +
            stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                         position=position_dodge(width=5), width = 10)+
            stat_summary(fun.y=mean, geom="point", size =2,
@@ -241,7 +181,82 @@ BW_Col
 
 ```
 
-# Model selection and Pair-wise comparisons
+## Other interesting figures
+
+Compare individual genotypes inside each nutrient treatment
+* Growth declined in G50, G07 and G08 in A, but increased in G48, G62 and G31
+
+```{r}
+BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=MoteGen)) +   
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
+   ylab("Growth (mg/ g d)") +
+  
+     annotate("segment", x = 2, xend = 91, y = -1, yend = -1,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 79, xend = 91, y = -1, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 91, xend = 110, y = -0.5, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
+     annotate("text", x = 99, y = -1.5, label = "H", size=3)+
+  stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (~Treatment)  
+BW_ColonyT
+```
+
+Compare individual fragments inside each nutrient treatment
+
+```{R}
+BW_ColonyTF<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +    stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (MoteGen~Treatment)+  geom_point()+ theme(legend.position = "none")
+BW_ColonyTF
+
+```
+
+Initial performance vs ambient per genotype: some genotypes declined in growth even without nutrients
+
+```{r, , fig.height=4, fig.width=6}
+
+library(gridExtra)
+BW_Init<- ggplot(BW.Initial, aes (MoteGen, dAW.gd, colour=MoteGen)) +
+   ggtitle("a. All fragments Baseline")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                     limits = c(0,6),
+                     breaks = seq(1, 6, by=1))+
+   ylab("Growth (mg/ g d) ")+
+  theme(legend.position=c(0.7, 0.3),
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA))
+
+BW_Colony_Control<- ggplot(BW.Control, aes (Days, dAW.gd, colour=MoteGen)) +
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+               width = 0.2, position=position_dodge(width=5)) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5,
+               position=position_dodge(width=5)) +
+  stat_summary(fun.y=mean, geom="line") + ggthe_bw + # ggthe_bw + geom_jitter()
+   ggtitle("b. All fragments in Ambient overtime") +
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                     limits = c(0,6),
+                     breaks = seq(1, 6, by=1))+
+  theme(legend.position="none")
+
+Captivityeffect<-grid.arrange(BW_Init,BW_Colony_Control, nrow=1)
+
+
+```
+
+```{r}
+BW_Colony_Control<-ggplot(BW.Control, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +   
+  #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
+  #stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
+  stat_summary(fun.y=mean, geom="line") + ggthe_bw + 
+  facet_wrap (~MoteGen)+  geom_point()+ theme(legend.position = "none")
+BW_Colony_Control
+```
+
+
+# LMER model selection and pairwise comparisons
 
 ```{r}
 # Complex to simple models 
@@ -257,7 +272,7 @@ BW_Col
  
 
 # Select model
-  AIC(LM_1, LM_2, LM_3) # 1=2, but 3 has higher AIC
+  AIC(LM_1, LM_2, LM_3) # 1=2, but 3 has lower AIC
   
   anova(LM_1, LM_2, refit=FALSE)
   anova(LM_2, LM_3, refit=FALSE)
@@ -265,13 +280,13 @@ BW_Col
  
 # Final model 
   LM_Treatment_Days<-lmer(dAW.gd ~ Treatment * Day +
-                             (Treatment|Colony),  data= BW.Tall)
+                             (1|Colony),  data= BW.Tall)
   isSingular(LM_Treatment_Days)
   
   anova(LM_Treatment_Days)
   summary(LM_Treatment_Days)
   
-# Pair-wise comparisons
+# Pairwise comparisons
   BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment*Day)
   BW_groups<-cld(BW.emmc)
     #BW_groups<-as.data.frame(BW_groups[complete.cases(BW_groups),])
@@ -281,3 +296,4 @@ BW_Col
   write.csv(BW_groups, "BW_groups_corrected.csv", row.names = F)
 
 ```
+
