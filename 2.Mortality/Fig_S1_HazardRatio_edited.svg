@@ -38,12 +38,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1849"
-     inkscape:window-height="1172"
+     inkscape:window-width="1529"
+     inkscape:window-height="872"
      id="namedview182"
      showgrid="false"
      inkscape:zoom="1.42"
-     inkscape:cx="117.02669"
+     inkscape:cx="159.08451"
      inkscape:cy="156.56018"
      inkscape:window-x="1991"
      inkscape:window-y="0"
@@ -473,7 +473,7 @@
      textLength="20.02"
      lengthAdjust="spacingAndGlyphs"
      id="text110"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.11841,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">136.3</text>
   <text
@@ -483,7 +483,7 @@
      textLength="17.790001"
      lengthAdjust="spacingAndGlyphs"
      id="text112"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.132588,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">76.2</text>
   <text
@@ -493,7 +493,7 @@
      textLength="17.790001"
      lengthAdjust="spacingAndGlyphs"
      id="text114"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.131919,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">64.5</text>
   <text
@@ -503,7 +503,7 @@
      textLength="15.57"
      lengthAdjust="spacingAndGlyphs"
      id="text116"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.133027,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">3.0</text>
   <text
@@ -513,7 +513,7 @@
      textLength="15.57"
      lengthAdjust="spacingAndGlyphs"
      id="text118"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.152298,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">1.1</text>
   <text
@@ -533,7 +533,7 @@
      textLength="52.48"
      lengthAdjust="spacingAndGlyphs"
      id="text122"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.125828,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">(27.87 - 666.6)</text>
   <text
@@ -543,7 +543,7 @@
      textLength="52.48"
      lengthAdjust="spacingAndGlyphs"
      id="text124"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.125828,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">(17.41 - 333.9)</text>
   <text
@@ -553,7 +553,7 @@
      textLength="52.48"
      lengthAdjust="spacingAndGlyphs"
      id="text126"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.125828,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">(13.17 - 316.0)</text>
   <text
@@ -563,7 +563,7 @@
      textLength="45.799999"
      lengthAdjust="spacingAndGlyphs"
      id="text128"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.125271,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">( 1.15 - 7.7)</text>
   <text
@@ -573,7 +573,7 @@
      textLength="45.799999"
      lengthAdjust="spacingAndGlyphs"
      id="text130"
-     transform="translate(-82,-11)"
+     transform="matrix(0.95,0,0,1,-73.125271,-11)"
      inkscape:export-xdpi="299.11099"
      inkscape:export-ydpi="299.11099">( 0.49 - 2.4)</text>
   <text

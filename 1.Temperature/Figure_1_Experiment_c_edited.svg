@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -40,8 +40,8 @@
      inkscape:window-height="872"
      id="namedview1624"
      showgrid="false"
-     inkscape:zoom="3"
-     inkscape:cx="153.17877"
+     inkscape:zoom="2"
+     inkscape:cx="96.012103"
      inkscape:cy="104.59266"
      inkscape:window-x="1991"
      inkscape:window-y="0"
@@ -63,16 +63,11 @@
   </defs>
   <rect
      width="100%"
-     height="100%"
-     style="stroke: none; fill: #FFFFFF;"
-     id="rect6" />
-  <rect
-     x="55.100658"
-     y="0"
-     width="232.89934"
-     height="180"
-     style="fill:#ffffff;stroke:#ffffff;stroke-width:0.96221405;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-     id="rect8" />
+     height="101.38889%"
+     style="fill:#ffffff;stroke:none;stroke-width:1.00692046;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+     id="rect6"
+     x="0"
+     y="0" />
   <defs
      id="defs13">
     <clipPath
@@ -114,12 +109,15 @@
        id="text19">Nutrient treatments (<tspan
    style="font-weight:bold"
    id="tspan6189">A</tspan>
+
 , <tspan
    style="font-weight:bold"
    id="tspan6191">N</tspan>
+
 , <tspan
    style="font-weight:bold"
    id="tspan6193">N+P</tspan>
+
 )</text>
   </g>
   <g
@@ -3730,7 +3728,7 @@
      style="fill:#ffffff;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
      clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
      id="circle1443"
-     transform="translate(6.064999,-31.040097)" />
+     transform="translate(6.0649986,-38.799344)" />
   <circle
      cx="46.740002"
      cy="95.139999"
@@ -3738,48 +3736,28 @@
      style="fill:#ffffff;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
      clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
      id="circle1445"
-     transform="translate(6.064999,-33.040096)" />
-  <line
-     x1="44.25"
-     y1="97.629997"
-     x2="49.220001"
-     y2="92.650002"
-     style="fill:none;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-     clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
-     id="line1447"
-     transform="translate(6.07,-33.040096)" />
-  <line
-     x1="44.25"
-     y1="92.650002"
-     x2="49.220001"
-     y2="97.629997"
-     style="fill:none;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
-     clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
-     id="line1449"
-     transform="translate(6.07,-33.040096)" />
+     transform="translate(6.0649986,-21.040096)" />
   <g
-     clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
-     id="g1453"
-     transform="matrix(0.8,0,0,0.8,17.700812,-11.26002)">
-    <text
-       x="62.07"
-       y="105.96"
-       style="font-size:8.53999996px;font-family:Arial"
-       textLength="92.529999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text1451">Non-sacrificial samples</text>
-  </g>
-  <g
-     clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
-     id="g1457"
-     transform="matrix(0.8,0,0,0.8,14.117664,-14.780019)">
-    <text
-       x="66.830002"
-       y="98.360001"
-       style="font-size:8.53999996px;font-family:Arial"
-       textLength="74.519997"
-       lengthAdjust="spacingAndGlyphs"
-       id="text1455">Sacrificial samples</text>
+     id="g1655"
+     transform="translate(-3.6621093e-7,12)">
+    <line
+       transform="translate(6.07,-33.040096)"
+       id="line1447"
+       clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
+       style="fill:none;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+       y2="92.650002"
+       x2="49.220001"
+       y1="97.629997"
+       x1="44.25" />
+    <line
+       transform="translate(6.07,-33.040096)"
+       id="line1449"
+       clip-path="url(#cpMzguMjR8MjgyLjUyfDE0OC4zM3w1LjQ4)"
+       style="fill:none;stroke:#000000;stroke-width:0.70999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+       y2="97.629997"
+       x2="49.220001"
+       y1="92.650002"
+       x1="44.25" />
   </g>
   <rect
      x="38.240002"
@@ -4174,7 +4152,7 @@
          x="51.8419"
          y="31.50371"
          style="fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" /></flowRegion><flowPara
-       id="flowPara6142"></flowPara></flowRoot>  <text
+       id="flowPara6142" /></flowRoot>  <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.33333302px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      x="84.066933"
@@ -4196,4 +4174,37 @@
        x="84.066933"
        y="49.944824"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.66666651px;font-family:Arial;-inkscape-font-specification:Arial">Replicate 2</tspan></text>
+  <flowRoot
+     xml:space="preserve"
+     id="flowRoot1623"
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:bold;font-size:9.33333333px;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;text-align:center;-inkscape-font-specification:'sans-serif Bold';font-stretch:normal;font-variant:normal"><flowRegion
+       id="flowRegion1625"><rect
+         id="rect1627"
+         width="10.333333"
+         height="10.333333"
+         x="-19.333334"
+         y="-21.666666"
+         style="fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10" /></flowRegion><flowPara
+       id="flowPara1629"></flowPara></flowRoot>  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.33333302px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="91.338547"
+     y="65.666664"
+     id="text1633"><tspan
+       sodipodi:role="line"
+       id="tspan1631"
+       x="91.338547"
+       y="65.666664"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.83066654px;font-family:Arial;-inkscape-font-specification:Arial">Biopsy samples</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.33333302px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="105.61691"
+     y="76.392677"
+     id="text1633-2"><tspan
+       sodipodi:role="line"
+       id="tspan1631-2"
+       x="105.61691"
+       y="76.392677"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.83066654px;font-family:Arial;-inkscape-font-specification:Arial">Whole fragment samples</tspan></text>
 </svg>

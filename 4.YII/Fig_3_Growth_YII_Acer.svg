@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1849"
-     inkscape:window-height="1025"
+     inkscape:window-width="1529"
+     inkscape:window-height="872"
      id="namedview580"
      showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="32.880664"
+     inkscape:zoom="1.51"
+     inkscape:cx="-52.869336"
      inkscape:cy="88"
-     inkscape:window-x="71"
-     inkscape:window-y="27"
+     inkscape:window-x="1991"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g173" />
+     inkscape:current-layer="svg578" />
   <defs
      id="defs4">
     <style
@@ -3548,7 +3548,7 @@
          id="tspan1535"
          x="144.14124"
          y="170.66765"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.53333378px;font-family:Arial;-inkscape-font-specification:Arial">Nutrient treatments</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.53333378px;font-family:Arial;-inkscape-font-specification:Arial">Nutrients</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.33333302px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -4040,7 +4040,7 @@
        id="tspan2539"
        x="-228.88136"
        y="-3.2748044"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;font-family:Arial;-inkscape-font-specification:Arial;">a</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.66666698px;font-family:Arial;-inkscape-font-specification:'Arial Bold'">a</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.33333302px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
@@ -4051,7 +4051,7 @@
        id="tspan2539-8"
        x="35.280319"
        y="-2.2852211"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;font-family:Arial;-inkscape-font-specification:Arial;">b</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.66666698px;font-family:Arial;-inkscape-font-specification:'Arial Bold'">b</tspan></text>
   <g
      transform="translate(-9.72652,-0.20339)"
      clip-path="url(#cpMC4wMHwyNTIuMDB8MjE2LjAwfDAuMDA=-3-8)"
@@ -4074,5 +4074,5 @@
        id="tspan1535-88"
        x="120.17291"
        y="172.64764"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.53333378px;font-family:Arial;-inkscape-font-specification:Arial">Nutrient treatments</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.53333378px;font-family:Arial;-inkscape-font-specification:Arial">Nutrients</tspan></text>
 </svg>
