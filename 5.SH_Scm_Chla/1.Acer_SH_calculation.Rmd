@@ -24,11 +24,10 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
         library(reshape2)
         library(ggplot2)
         library(ggthemes)
-        library(lme4)
-        library(emmeans)
+        library(skimr)
 ```
 
-# 1. Calculate qPCR RATIOS (Symbiont/Coral) 
+## 1. Calculate qPCR RATIOS (Symbiont/Coral) 
 
 Get the raw data for Acer R.Cunning steponeR function:
 
@@ -38,8 +37,6 @@ Get the raw data for Acer R.Cunning steponeR function:
 
 * Extract the results
 
-# Get all the data in one file
-
  
 ```{r CalculateRatios}
 
@@ -48,12 +45,6 @@ Get the raw data for Acer R.Cunning steponeR function:
   # Acer.plates
 
   # Run stepone function to get Ratios
-  
-  # Acer.Out <- steponeR(files=Acer.plates, target.ratios=c("A.Acer","B.Acer","C.Acer","D.Acer"), 
-                      # fluor.norm=list(A=0, B=0, C=0, D=0, Acer=0),
-                      # copy.number=list(A=1, B=1, C=1, D=1, Acer=1),
-                      # ploidy=list(A=1, Acer=2),
-                      # extract=list(A=0.813, B=0.813, C=0.813, D=0.813, Acer=0.982))
   
   Acer.Out <- steponeR(files=Acer.plates, target.ratios=c("A.Acer"), 
                        fluor.norm=list(A=0, Acer=0),
@@ -85,7 +76,7 @@ Get the raw data for Acer R.Cunning steponeR function:
 
 ```{r GetLabelsAndSampleInfo}
 
-# Get the sample informaton 
+# Get the sample information 
   SampleName<-read.csv("Sample_Plates.csv") 
 
 # Create unique sample ID+FileName to relabel samples  
@@ -111,7 +102,7 @@ rownames(SampleName) <- SampleName$Sample.Plate
 Acer$Sample<-paste(Acer$Fragment, Acer$Date, sep='_') 
 
   
-# Correct blastate samples for extraction efficeincy of 95.5%
+# Correct blastate samples for extraction efficiency of 95.5%
   
   Acer.Blast<-subset(Acer, Acer$Type=="Slice/Blastate")
   Acer.Blast$A.Acer2<-(Acer.Blast$A.Acer)*0.828/0.97
@@ -168,27 +159,27 @@ Acer$logA.SH <- log10(Acer$A.Acer)
   Acer <- droplevels(Acer[!rownames(Acer) %in% rownames(StDe1.5), ])
    # ToRe_Run2<-anti_join (StDe1.5, Acer, by=c("Sample.Name", "Time"))
   
-  Histo_Acer_CT<-qplot(Acer.CT.mean, data=Acer, binwidth=0.15)
-  Histo_Acer_CT + facet_wrap(~Date)
+  #Histo_Acer_CT<-qplot(Acer.CT.mean, data=Acer, binwidth=0.15)
+  #Histo_Acer_CT + facet_wrap(~Date)
   
   LateCoral<-Acer[which(Acer$Acer.CT.mean>27), ]
   Acer <- droplevels(Acer[!rownames(Acer) %in% rownames(LateCoral), ])
   
-  HigtSH<-Acer[which(Acer$A.Acer>0.9), ]
-  Acer <- droplevels(Acer[!rownames(Acer) %in% rownames(HigtSH), ])
+  HighSH<-Acer[which(Acer$A.Acer>0.9), ]
+  Acer <- droplevels(Acer[!rownames(Acer) %in% rownames(HighSH), ])
 
   # Samples to Re-run    
   ToRe_Run1<-rbind(NoHSratio, Rerun.A)
   ToRe_Run1<-rbind(ToRe_Run1, ReRun.Coral)   
   ToRe_Run1<-rbind(ToRe_Run1, StDe1.5)
   ToRe_Run1<-rbind(ToRe_Run1, LateCoral)
-  ToRe_Run1<-rbind(ToRe_Run1, HigtSH) 
+  ToRe_Run1<-rbind(ToRe_Run1, HighSH) 
   ToRe_Run1<-anti_join (ToRe_Run1, Acer, by=c("Sample"))
   
 ```
     
 
-### 6. Quality control: Check CTs in plates, smpling points, etc...
+### 6. Quality control: Check CTs in plates, sampling points, etc...
 
 ```{R check quality}
 
@@ -238,7 +229,7 @@ logSHTreatment + facet_grid(Genotype~.)
 
 ```    
 
-#### 7. Chose bw samples ran more than once
+## 7. Chose bw samples ran more than once
 
 ```{r remove duplicates}
 
@@ -246,7 +237,7 @@ logSHTreatment + facet_grid(Genotype~.)
  n_RunA <- data.frame(table(Acer$Sample))
  colnames(n_RunA)<-c("Sample","RanA")
  Acer<-join(Acer, n_RunA, type = "left")
-# 
+
 DuplicatesA <- Acer[(Acer$RanA>1),]
 
 Duplicates<-ggplot(DuplicatesA, aes(Date, logA.SH, colour=factor(File.Name))) +
@@ -256,33 +247,30 @@ Duplicates
 #  write.csv(DuplicatesA, file = 'DuplicatesA.csv')
 ```
 
-#### 8. Remove duplicates
+## 8. Remove duplicates
 
 ```{r remove duplicates2}
-    ToRem1<-read.csv("ToRemove1.csv")
+ToRem1<-read.csv("ToRemove1.csv")
 #     # 05/04/2018
    Acer<-Acer[!(Acer$Sample.Plate %in% ToRem1$Sample.Plate),]
-# 
+
 # # Check for replicates again--should have none
-# 
+
   n_RunB <- data.frame(table(Acer$Sample))
   colnames(n_RunB)<-c("Sample","RanB")
   Acer<-join(Acer, n_RunB, type = "left")
 
-# 
-# # List of dupplicated samples, should have 0 rows now -->
+
+# # List of duplicated samples, should have 0 rows now -->
    DuplicatesB <- Acer[(Acer$RanB>1),]
 # # write.csv(DuplicatesB, file = 'DuplicatesB.csv')
 ```
 
-#### 9. Check the data!
+## 9. Check and export S/H cell ratio data!
 
 ```{r} 
 qPCRsummary<-summary(Acer)
-skim(Acer)
-capture.output(qPCRsummary, file = "qPCRsummary.txt")
-
-# Comparission bw MM and SYBR
+capture.output(qPCRsummary, file = "Outputs/qPCRsummary.txt")
 
 Acer %>%
   group_by(Treatment) %>%
@@ -290,5 +278,7 @@ Acer %>%
           SDA = mean(A.CT.sd), SdAcer = mean(Acer.CT.sd), 
           maxA = max(A.CT.mean), maxAcer = max(Acer.CT.mean), 
           minA = min(A.CT.mean), minAcer = min(Acer.CT.mean), n = n())
+
+write.csv(Acer, "Outputs/SH_cell_ratio.csv", row.names = F)
 
 ```

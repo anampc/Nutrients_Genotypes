@@ -5,13 +5,20 @@ library(GGally)
 library(ggthemes)
 
 # Read data
-data<-read.csv("Ofav_Blast.csv")
-summary (data)
+  data<-read.csv("3.All_Blast.csv")
+  summary (data)
+  
+# Organize factors  
+  data$Colony <- as.factor(paste(data$Spp, data$Colony, sep = "_"))
+  data$Core <- as.factor(paste(data$Spp, data$Core, sep = "_"))
+  data$Treatment <- as.factor(data$Treatment)
+  data$Rep <- as.factor(data$Rep)
+  data$Date<-as.Date(data$Date, "%Y-%m-%d")
+  data$Days<-(as.numeric(data$Date) -17485)
+  summary (data)
 
-data$Colony <- as.factor(data$Colony)
-data$Core <- as.factor(data$Core)
-data$Treatment <- as.factor(data$Treatment)
-data$Rep <- as.factor(data$Rep)
+# Remove the sick guy
+data <- data[!(data$Date == "2018-02-15"), ]
 
 # Chl by Symbiont
 
@@ -37,7 +44,7 @@ Chl.S<-ggplot(data, aes(Colony, Chl.Sym, colour=factor(Treatment))) +
 Chl.S
 
   Chl.Sym<- ggplot(data, aes(factor(Treatment), Chl.Sym))
-  Chl.Sym + geom_boxplot(aes(fill=factor(Treatment)))+ facet_grid(Species~.)
+  Chl.Sym + geom_boxplot(aes(fill=factor(Treatment)))+ facet_grid(Spp~.)
 
 dataB<-data
   dataB$Spp<- NULL 
@@ -54,7 +61,7 @@ ggpairs(dataB)
 
 # Symbiont density 
 
-    SYM.CM<-lmer::lme4(Sym.cm2~ Treatment * Date + (1 + Treatment|Colony), REML=TRUE, data= data))
+    SYM.CM<-lmerTest::lmer(Sym.cm2~ Treatment * Date + (1|Colony), REML=TRUE, data= data)
     
     
     SYM.CM_1 <- lmer(Sym.cm2 ~ Treatment  * Date + 

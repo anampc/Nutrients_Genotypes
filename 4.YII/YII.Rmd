@@ -51,7 +51,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.Acer<-subset(YII.Acer , Treatment!="Dead")
       YII.Acer$Spp<-"Ac"
     ## Genotype information
-      MOTE<-read.csv("Genotypes_mote.csv", header = TRUE)
+      MOTE<-read.csv("YII_Data/Genotypes_mote.csv", header = TRUE)
       YII.Acer<-merge(YII.Acer, MOTE, by="Colony", all.x=TRUE)
 
 # Ofav    
@@ -113,7 +113,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       Spp.fragments<-YII.data %>% 
         group_by(Spp, Genotype, Treatment, Replicate) %>% count(Fragment)
       Spp.fragments
-      #write.csv(Spp.fragments, "Meassurments_perFragments.csv", row.names = F)
+      #write.csv(Spp.fragments, "Outputs/Meassurments_perFragments.csv", row.names = F)
 
 # Subset data before heat stress (Only nutrients)
       YII.nutrients<-subset(YII.data, Days<80)
@@ -331,7 +331,7 @@ Figure3_genotype
       
       # EMMs
       Acer.YII.emm<-emmeans(LME_Acer1, ~Treatment * DaysF)
-      # contrast(Acer.YII.emm, "tukey")
+      contrast(Acer.YII.emm, "tukey")
       
       # Effect plot options
       emmip(LME_Acer, ~DaysF|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions

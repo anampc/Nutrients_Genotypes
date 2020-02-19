@@ -81,10 +81,10 @@ Try survival package
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
            risk.table.title="Number of fragments at risk")
     Treatment_Only
-    ggsave("Fig_2_Surv_Treatment.svg", 
-           Treatment_Only$plot, width=4, height=3.5,dpi = 300)
-    ggsave("Fig_2_Surv_Treatment.pdf", print(Treatment_Only),
-           width=5, height=6,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Treatment.svg", 
+     #      Treatment_Only$plot, width=4, height=3.5,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Treatment.pdf", print(Treatment_Only),
+     #      width=5, height=6,dpi = 300)
 
 
 # Treatment and genotype model 1 
@@ -169,16 +169,16 @@ Do not run
     coxfit0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2, ties = 'exact')
   # Plot the survival model
     Genotype_only2<-ggsurvplot(fit0_2, data = Survival.data2, pval = TRUE,
-               risk.table=F, tables.height=0.4, conf.int = T, n.risk = TRUE,
+               risk.table=T, tables.height=0.4, conf.int = T, n.risk = TRUE,
                #risk.table.y.text = FALSE, 
                break.time.by=15, xlim=c(0,115), 
            risk.table.title="Number of A. cervicornis at risk")
     Genotype_only2
     
-    ggsave("Fig_2_Surv_Genotype.svg", 
-           Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
-    ggsave("Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
-           width=4.5, height=4.5,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Genotype.svg", 
+    #       Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
+    #       width=4.5, height=4.5,dpi = 300)
 
 # Only treatment model
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
@@ -221,8 +221,7 @@ fit.coxph0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
 HazardRatio<-ggforest(fit.coxph0_2, data = Survival.data2)
 fit.coxph0_2
 
-    ggsave("Fig_S1_HazardRatio.svg", 
-           HazardRatio, width=6, height=4,dpi = 300)
+#ggsave("Outputs/Fig_S1_HazardRatio.svg", HazardRatio, width=6, height=4,dpi = 300)
     
 fit.coxph1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
 ggforest(fit.coxph1_2, data = Survival.data2)
