@@ -50,7 +50,7 @@ Try survival package
     summary(Survival.data)
     summary(Survival.data$Genotype)
     Survival.data$Genotype<-factor(Survival.data$Genotype, 
-                                   levels=c("Ac_48", "Ac_62","Ac_31", "Ac_08","Ac_07", "Ac_50"))
+                                   levels=c("G_48", "G_62","G_31", "G_08","G_07", "G_50"))
     summary(Survival.data$Genotype)
 ```
 
@@ -149,7 +149,7 @@ Do not run
     summary(Survival.data2)
     summary(Survival.data2$Genotype)
     Survival.data2$Genotype<-factor(Survival.data2$Genotype, 
-                                   levels=c("Ac_48", "Ac_62","Ac_31", "Ac_08","Ac_07", "Ac_50"))
+                                   levels=c("G_48", "G_62","G_31", "G_08","G_07", "G_50"))
     summary(Survival.data2$Genotype)
     summary(Survival.data2$Treatment)
     Survival.data2$Treatment<-factor(Survival.data2$Treatment, 
