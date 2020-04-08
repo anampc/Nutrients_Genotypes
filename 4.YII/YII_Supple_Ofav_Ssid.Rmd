@@ -1,0 +1,922 @@
+---
+title: "Changes in Fv/Fm in elevated nutrients and heat stress (Only *O.fav* and *S.sid*)"
+author: "Ana Palacio"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+bibliography: packages.bib
+nocite: '@*'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fig.height=7)
+```
+
+
+# General project set-up 
+
+```{r libraries, results="hide"}
+
+# Load libraries and sources required to run the script
+    library(tidyverse)
+    library(ggthemes)
+    library(lmerTest)
+    library(emmeans)
+    library(multcomp)
+    library(effects)
+
+# Default ggplot settings
+
+    Fill.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+
+    ggthe_bw<-theme(plot.background=element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.box.background = element_rect(),
+          panel.background =element_rect(fill = NA, color = "black")
+          )+
+    theme_bw()
+```
+
+# Data
+
+```{r}
+ # Experiment time points (metadata) 
+    TimePoints<-read.csv("YII_Data/Time_Points.csv")
+    TimePoints$Date<-as.Date(TimePoints$Date, "%m/%d/%y")
+
+ #Ofav    
+    YII.Ofav<-read.csv("YII_Data/YII_Nutrients_Ofav.csv")
+      YII.Ofav$Fragment<-as.character(YII.Ofav$Fragment) 
+      YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
+                            levels=c("34","20", "6", "31"))  # D dominance order
+      YII.Ofav$Genotype<-paste("Of", YII.Ofav$Colony, sep = "_")
+      YII.Ofav$Spp<-"Of"
+      YII.Ofav$Initial_Sym<-NULL
+      
+      YII.Ofav$Initial_Sym[YII.Ofav$Genotype=="Of_31"]<-"B"
+      YII.Ofav$Initial_Sym[YII.Ofav$Genotype!="Of_31"]<-"D"
+
+            
+# Ssid      
+    YII.Ssid<-read.csv("YII_Data/YII_Nutrients_Ssid.csv")
+      YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
+                                 levels=c("22","23","27", "28",
+                                          "20", "24","30") )  # D dominance order
+      YII.Ssid$Genotype<-paste("Ss", YII.Ssid$Colony, sep = "_")
+      YII.Ssid$Spp<-"Ss"
+      
+      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_22"|
+                           YII.Ssid$Genotype=="Ss_23"|
+                           YII.Ssid$Genotype=="Ss_27"]<-"D"
+      
+      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_20"|
+                           YII.Ssid$Genotype=="Ss_28"]<-"C1"
+      
+      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_24"|
+                           YII.Ssid$Genotype=="Ss_30"]<-"C3"
+
+  # Pool all species the data
+      YII.data<-dplyr::bind_rows(list(YII.Ofav,YII.Ssid))
+      YII.data<-YII.data[,-1]
+
+        
+      
+      summary(YII.data)
+      
+# Organize data type
+      YII.data$Date<-as.Date(YII.data$Date, "%m/%d/%y")
+      YII.data$Days<-(as.numeric(YII.data$Date) -17485)
+      
+      YII.data$Spp <- as.factor(YII.data$Spp)
+      YII.data$Treatment <- as.character(YII.data$Treatment)
+      YII.data$Treatment[YII.data$Treatment == "Control"] <- "A"
+      YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
+      YII.data$Treatment <- as.factor(YII.data$Treatment)
+      YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
+                             levels=c(
+                            "Of_34","Of_20","Of_6", "Of_31",
+                            "Ss_22","Ss_23","Ss_27", "Ss_28",
+                            "Ss_20", "Ss_24","Ss_30"
+                             ))  # D dominance order
+      YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
+      
+   # Add timepoints
+      YII.data<-left_join(YII.data, TimePoints, by="Date")
+      YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time_Point, sep = "_")
+      
+# Check the data
+      str(YII.data)
+      summary(YII.data)
+      # YII.data<-YII.data[order(
+      #   YII.data$Spp, YII.data$Treatment, YII.data$Replicate,
+      #   YII.data$Fragment, YII.data$Date),]
+      YII.data<-YII.data[order(
+        YII.data$Spp, YII.data$Date, YII.data$Treatment, YII.data$Replicate,
+        YII.data$Fragment),]
+      #write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
+    
+    # Remove baseline values
+      YII.data<-subset(YII.data, Days>-1)
+    # Remove recovery values
+      YII.data<-subset(YII.data, Days<112)
+      # write.csv(YII.data, "Outputs/Experiment_YII_data.csv", row.names = F)  
+    # YII.Wide<- reshape(YII.data, idvar = "Fragment", timevar = "Days", direction = "wide")
+      
+      #Spp.fragments<-YII.data %>% 
+        #group_by(Spp, Genotype, Treatment, Replicate) %>% count(Fragment)
+      #Spp.fragments
+      #write.csv(Spp.fragments, "Outputs/Meassurments_perFragments.csv", row.names = F)
+
+```
+
+# Figure S4 (Only *O.fav* and *S.sid*)
+
+### Raw data 
+
+```{r Figure, fig.height =6, fig.width = 8}
+YII_Treat_OfSs<- ggplot(data=subset(YII.data, Spp!="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) + ggtitle("b") +
+        ggthe_bw + Fill.colour+
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                     position = position_dodge(1) )+
+        stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                     linetype=1, alpha=1) + 
+         stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+        theme(legend.position=c(0.2, 0.5),
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA)) + # geom_smooth()+
+      
+    scale_y_continuous(limits = c(0.1, 0.7),
+                           breaks = seq(0.1, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
+                  colour = "gray90", linetype=1)
+        
+      
+      FigureS4<-YII_Treat_OfSs + #facet_grid (Spp~.)+
+        annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
+    FigureS4+facet_wrap(Initial_Sym~Spp)
+
+```
+
+### Smoothed data 
+
+```{r}
+YII_Treat_Spp_Sym<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(Treatment))) +
+         ggthe_bw + Fill.colour + geom_smooth()+
+  #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+  #                  position = position_dodge(1) )+
+  #stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+  #stat_summary(fun.y=mean, geom="point", size =1,
+  #                 position=position_dodge(width=1), alpha=0.8)  +
+  theme(legend.position="bottom", 
+              legend.title = element_blank(),
+              strip.background = element_rect(fill="white"))+
+  scale_y_continuous(limits = c(0.2, 0.6),
+                           breaks = seq(0.1, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+  scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+  annotate("segment", x = 2, xend = 91, y = 0.21, yend = 0.21,
+                  colour = "gray90", linetype=2)+
+  annotate("segment", x = 79, xend = 91, y = 0.21, yend = 0.28,
+                  colour = "gray90", linetype=4)+
+  annotate("segment", x = 91, xend = 110, y = 0.28, yend = 0.28,
+                  colour = "gray90", linetype=3)
+
+        
+FigureS4b<-YII_Treat_Spp_Sym + facet_wrap (Initial_Sym~Spp)+
+        annotate("text", x = 45, y = 0.25, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.25, label = "Heat", size=3)
+FigureS4b
+
+#ggsave(file="Outputs/Fig_S4_Ofav-Ssid_YII_Treatb.svg", plot=FigureS4b, width=7, height=6)
+```
+
+```{r}
+YII_Treat_Sym_Spp<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(Initial_Sym))) +
+         ggthe_bw + geom_smooth()+
+  #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+  #                  position = position_dodge(1) )+
+  #stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+  #stat_summary(fun.y=mean, geom="point", size =1,
+  #                 position=position_dodge(width=1), alpha=0.8)  +
+  theme(legend.position="bottom", 
+              legend.title = element_blank(),
+              strip.background = element_rect(fill="white"))+
+  scale_y_continuous(limits = c(0.2, 0.6),
+                           breaks = seq(0.1, 0.6, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+  scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 15),  
+                           expand = c(0, 0))+
+  annotate("segment", x = 2, xend = 91, y = 0.21, yend = 0.21,
+                  colour = "gray90", linetype=2)+
+  annotate("segment", x = 79, xend = 91, y = 0.21, yend = 0.28,
+                  colour = "gray90", linetype=4)+
+  annotate("segment", x = 91, xend = 110, y = 0.28, yend = 0.28,
+                  colour = "gray90", linetype=3)
+
+        
+FigureS4c<-YII_Treat_Sym_Spp + facet_grid (Spp~Treatment)+
+        annotate("text", x = 45, y = 0.25, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.25, label = "Heat", size=3)
+FigureS4c
+
+```
+
+# YII GLMs
+
+Prepare data sets: 
+
+* Time as discrete
+
+
+```{r Acer_models}
+#Time as a factor, not as int
+      str(YII.data)
+      YII.data$DaysF<-as.factor(YII.data$Days)
+```
+  
+* Separate coral species
+
+* Separate phases:  
+    * BaseLine
+    * C (nutrients only)
+    * H (Heat challenge)
+
+Ofav: 
+
+```{r Ofav_data}
+
+YII.Ofav<-subset(YII.data, Spp=="Of")
+
+YII.Ofav.0<-subset(YII.Ofav, Days<2)
+YII.Ofav.C<-subset(YII.Ofav, Days<77)
+YII.Ofav.C.1<-subset(YII.Ofav.C, Days>2)
+YII.Ofav.H<-subset(YII.Ofav, Days>76)
+
+```
+
+Ssid 
+
+```{r Ssid_data}
+
+YII.Ssid<-subset(YII.data, Spp=="Ss")
+
+YII.Ssid.0<-subset(YII.Ssid, Days<2)
+YII.Ssid.C<-subset(YII.Ssid, Days<77)
+YII.Ssid.C.1<-subset(YII.Ssid.C, Days>2)
+YII.Ssid.H<-subset(YII.Ssid, Days>76)
+
+```
+
+
+## Baseline: effect of different Symbiodiniaceae taxa before treatments
+
+### Ofav (day 0)
+
+```{R}
+
+LME_Ofav0<-lmer(YII ~ Treatment + Initial_Sym + (1|Replicate), 
+                     data=YII.Ofav.0)
+     #step (LME_Ofav0) 
+     anova(LME_Ofav0) # Treatment not significant        
+     ranova(LME_Ofav0) #  Replicate is not significant         
+     
+
+LME_Ofav0<-lm(YII ~ Initial_Sym, data=YII.Ofav.0)
+     step (LME_Ofav0) 
+     anova(LME_Ofav0)         
+
+# EMMs
+    Ofav.YII.emm0<-emmeans(LME_Ofav0, ~ Initial_Sym)
+      # contrast(Ssid.YII.emm, "tukey")
+      
+      # Tukey comparison (do not trust CI to compare EMMs)
+      plot(emmeans(LME_Ofav0, ~Initial_Sym), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
+        theme_bw()
+      
+      Ofav.YII_groups0<-cld(Ofav.YII.emm0, by=NULL) # compact-letter display
+      Ofav.YII_groups0
+      # write.csv(Ofav.YII_groups0, "Outputs/Multicomp_OfavYII0.csv", row.names = F)
+
+```
+
+
+### Ssid (day 0)
+
+```{R}
+
+LME_Ssid0<-lmer(YII ~ Treatment + Initial_Sym +(1|Replicate), 
+                     data=YII.Ssid.0)
+     step (LME_Ssid0) #  Treatemnt and replicate are significant :/
+     anova(LME_Ssid0)         
+     ranova(LME_Ssid0)         
+     
+
+# EMMs
+      Ssid.YII.emm0<-emmeans(LME_Ssid0, ~ Initial_Sym)
+      # contrast(Ssid.YII.emm, "tukey")
+      
+      # Tukey comparison (do not trust CI to compare EMMs)
+      plot(emmeans(LME_Ssid0, ~Initial_Sym), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
+        theme_bw()
+      
+      Ssid.YII_groups0<-cld(Ssid.YII.emm0, by=NULL) # compact-letter display
+      Ssid.YII_groups0
+      # write.csv(Ssid.YII_groups0, "Outputs/Multicomp_SsidYII0.csv", row.names = F)
+
+```
+
+
+## C: Effect of nutrient treatments at control temperature
+
+### Ofav
+
+* C Days pooled (days 8-76)
+
+```{r}
+LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment), 
+                     data=YII.Ofav.C.1)
+     step (LME_Ofav1.1) #  Replicate is significant
+     anova(LME_Ofav1.1)         
+     ranova(LME_Ofav1.1)         
+     
+# EMMs
+    Ofav.YII.emm1.1<-emmeans(LME_Ofav1.1, ~ Initial_Sym|Treatment)
+    # contrast(Ssid.YII.emm, "tukey")
+      
+    # Tukey comparison (do not trust CI to compare EMMs)
+      plot(emmeans(LME_Ofav1.1, ~Treatment|Initial_Sym), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~Initial_Sym) +
+        theme_bw()
+      
+      Ofav.YII.emm1.1<-cld(Ofav.YII.emm1.1, by=NULL) # compact-letter display
+      Ofav.YII.emm1.1
+      #write.csv(Ofav.YII.emm1.1, "Outputs/Multicomp_OfavYII1.csv", row.names = F)
+
+```
+
+* Model for "Days" as continous variable (days 1-76)
+
+```{r Ofav_models}
+ 
+# 1. Ofav- Days 
+      LME_Ofav<-lmer(YII ~ Treatment * Days * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ofav.C, na.action=na.omit)
+      lmerTest::step (LME_Ofav) # Replicate is not significant
+      ranova(LME_Ofav)
+      
+      LME_Ofav1<-lmer(YII ~ Treatment * Days * Initial_Sym + 
+                        (1 | Genotype/Fragment),
+                      data=YII.Ofav.C, na.action=na.omit)
+      lmerTest::step (LME_Ofav1)
+      
+      
+      # 2. Predict values:
+    pred_Ofav1 <- predict(LME_Ofav1,re.form = NA)
+
+  #3. Bootstrap CI:
+    OF.boot1 <- bootMer(LME_Ofav1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(OF.boot1$t, 2, sd)
+    CI.lo_1 <- pred_Ofav1 - std.err*1.96
+    CI.hi_1 <- pred_Ofav1 + std.err*1.96
+
+  #Plot
+  Model_of_1b_plot<- ggplot(
+    YII.Ofav.C, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_Ofav1),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.5, 0.61), 
+                       breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment", limits = c(0, 78),
+                     breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                  linetype=1, alpha=1) + 
+    # stat_summary(fun.y=mean, geom="point", size =1,
+    #             position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_of_1b_plot + facet_grid(~Initial_Sym)
+  
+```
+
+* Model for "Days" as factor 
+
+```{r}
+# 1. Ofav- Days 
+      LME_Ofav<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ofav.C, na.action=na.omit)
+      lmerTest::step (LME_Ofav) # Replicate is not significant
+      ranova(LME_Ofav)
+      
+      LME_Ofav1.2<-lmer(YII ~ Treatment * DaysF * Initial_Sym + 
+                        (1|Fragment),
+                      data=YII.Ofav.C, na.action=na.omit)
+      lmerTest::step (LME_Ofav1.2)
+      
+      
+  # 2. Predict values:
+    pred_Ofav1.2 <- predict(LME_Ofav1.2,re.form = NA)
+
+  #3. Bootstrap CI:
+    OF.boot1.2 <- bootMer(LME_Ofav1.2, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(OF.boot1.2$t, 2, sd)
+    CI.lo_1 <- pred_Ofav1.2 - std.err*1.96
+    CI.hi_1 <- pred_Ofav1.2 + std.err*1.96
+
+  #Plot
+  Model_of_1.2_plot<- ggplot(
+    YII.Ofav.C, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_Ofav1.2),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.35, 0.61), 
+                       breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment", limits = c(0, 78),
+                     breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+      stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_of_1.2_plot + facet_grid(~Initial_Sym)
+  
+      # EMMs
+      Ofav.YII.emmC<-emmeans(LME_Ofav1.2, ~Treatment * DaysF * Initial_Sym)
+      #contrast(Ofav.YII.emm, "tukey")
+      
+      
+      # Ofav.YII_groupsC<-cld(Ofav.YII.emmC, by=NULL) # compact-letter display
+      # Ofav.YII_groupsC<-Ofav.YII_groupsC[order(
+      #   Ofav.YII_groupsC$Days,
+      #   Ofav.YII_groupsC$Treatment,
+      #   Ofav.YII_groupsC$Initial_Sym),]
+      # Ofav.YII_groupsC
+      # write.csv(Ofav.YII_groupsC, "Outputs/Multicomp_OfavYIIC.csv", row.names = F)
+```
+
+### Ssid
+
+* Days pooled (8-76 Days)
+
+```{r}
+LME_Ssid1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment), 
+                     data=YII.Ssid.C.1)
+     step (LME_Ssid1.1) #  Replicate is significant
+     anova(LME_Ssid1.1)         
+     ranova(LME_Ssid1.1)         
+     
+# EMMs
+    Ssid.YII.emm1.1<-emmeans(LME_Ssid1.1, ~ Initial_Sym|Treatment)
+    # contrast(Ssid.YII.emm, "tukey")
+      
+    # Tukey comparison (do not trust CI to compare EMMs)
+      plot(emmeans(LME_Ssid1.1, ~Treatment|Initial_Sym), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~Initial_Sym)+
+        theme_bw()
+      
+      Ssid.YII.Groups1.1<-cld(Ssid.YII.emm1.1, by=NULL) # compact-letter display
+      Ssid.YII.Groups1.1<- Ssid.YII.Groups1.1[order(
+        Ssid.YII.Groups1.1$Initial_Sym, 
+        Ssid.YII.Groups1.1$Treatment),]
+      Ssid.YII.Groups1.1
+     #write.csv( Ssid.YII.Groups1.1, "Outputs/Multicomp_SsidYII1.1.csv", row.names = F)
+
+```
+
+
+* Model for "Days" as continous variable (days 1-76)
+
+```{r}
+LME_Ssid<-lmer(YII ~ Treatment * Days * Initial_Sym +
+                       (1|Fragment) +(1|Replicate), 
+                     data=subset(YII.Ssid.C))
+     step (LME_Ssid) #  Replicate is not significant
+     anova(LME_Ssid)         
+     ranova(LME_Ssid)         
+     
+LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
+                       (1|Fragment),
+                     data=YII.Ssid.C, na.action=na.omit)
+
+
+# EMMs
+      Ssid.YII.emm1<-emmeans(LME_Ssid1, ~Treatment * Days * Initial_Sym)
+      # contrast(Ssid.YII.emm, "tukey")
+      
+      # Effect plot options
+      emmip(LME_Ssid1, ~Initial_Sym|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions
+
+```
+
+```{r}
+# 2. Predict values:
+    predSs1 <- predict(LME_Ssid1,re.form = NA)
+
+# 3. Bootstrap CI:
+    boot1Ss <- bootMer(LME_Ssid1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(boot1Ss$t, 2, sd)
+    CI.lo_1 <- predSs1 - std.err*1.96
+    CI.hi_1 <- predSs1 + std.err*1.96
+```
+
+```{R}
+# 4. Plot
+  Model1Ss_plot<- ggplot(
+    YII.Ssid.C, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = predSs1),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.5) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.3, 0.6), 
+                       breaks = seq(0.3, 0.6, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment (C phase)", limits = c(0, 78),
+                     breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                   linetype=1, alpha=0.5) + 
+    #stat_summary(fun.y=mean, geom="point", size =1,
+    #               position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw # + Fill.colour
+  
+  Model1Ss_plot + facet_grid(~Initial_Sym)
+```
+
+* Model for "Days" as factor 
+
+```{r}
+# 1. Ssid- Days 
+      LME_Ssid<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ssid.C, na.action=na.omit)
+      lmerTest::step (LME_Ssid) # Replicate is not significant
+      ranova(LME_Ssid)
+      
+      LME_Ssid1.2<-lmer(YII ~ Treatment * DaysF * Initial_Sym + 
+                        (1|Fragment),
+                      data=YII.Ssid.C, na.action=na.omit)
+      lmerTest::step (LME_Ssid1.2)
+```
+
+```{r}
+# 2. Predict values:
+    pred_Ssid1.2 <- predict(LME_Ssid1.2,re.form = NA)
+
+  #3. Bootstrap CI:
+    Ss.boot1.2 <- bootMer(LME_Ssid1.2, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(Ss.boot1.2$t, 2, sd)
+    CI.lo_1 <- pred_Ssid1.2 - std.err*1.96
+    CI.hi_1 <- pred_Ssid1.2 + std.err*1.96
+```
+
+```{r}
+# 4. Plot
+  Model_Ss_1.2_plot<- ggplot(
+    YII.Ssid.C, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_Ssid1.2),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.35, 0.6), 
+                       breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment", limits = c(0, 78),
+                     breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_Ss_1.2_plot + facet_grid(~Initial_Sym)
+```
+
+```{r}
+# 5. EMMs
+    Ssid.YII.emmC<-emmeans(LME_Ssid1.2, ~Treatment * DaysF * Initial_Sym)
+      #contrast(Ssid.YII.emm, "tukey")
+      
+      
+       Ssid.YII_groupsC<-cld(Ssid.YII.emmC, by=NULL) # compact-letter display
+       Ssid.YII_groupsC<-Ssid.YII_groupsC[order(
+         Ssid.YII_groupsC$DaysF,
+         Ssid.YII_groupsC$Initial_Sym,
+         Ssid.YII_groupsC$Treatment),]
+       Ssid.YII_groupsC
+       #write.csv(Ssid.YII_groupsC, "Outputs/Multicomp_SsidYIIC.csv", row.names = F)
+
+```
+
+
+## H: Effect of pre-exposure to nutrient treatments during heat challenge
+
+### Ofav
+
+* Model for "Days" as continous variable (days 84-110)
+
+```{r}
+# 1. Ofav- Days 
+      LME_Ofav.H<-lmer(YII ~ Treatment * Days * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ofav.H, na.action=na.omit)
+      lmerTest::step (LME_Ofav.H) # Replicate is not significant
+      ranova(LME_Ofav.H)
+      
+      LME_Ofav.H1<-lmer(YII ~ Treatment * Days + 
+                        (1 | Genotype/Fragment),
+                      data=YII.Ofav.H, na.action=na.omit)
+      lmerTest::step (LME_Ofav.H1)
+```
+
+```{r}
+# 2. Predict values:
+    pred_Ofav.H <- predict(LME_Ofav.H1,re.form = NA)
+
+#3. Bootstrap CI:
+    OF.bootH <- bootMer(LME_Ofav.H1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(OF.bootH$t, 2, sd)
+    CI.lo_H <- pred_Ofav.H - std.err*1.96
+    CI.hi_H <- pred_Ofav.H + std.err*1.96
+```
+
+```{r}
+ # 4 .Plot
+  Model_of_H_plot<- ggplot(
+    YII.Ofav.H, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_Ofav.H),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_H, ymax = CI.hi_H),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.25, 0.58), 
+                       breaks = seq(0.3, 0.5, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment (H phase)", limits = c(80, 112),
+                     breaks = seq(80, 110, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                   linetype=1, alpha=1) + 
+    stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_of_H_plot
+  Model_of_H_plot+ facet_grid(Initial_Sym~.)
+  
+```
+
+* Model for "Days" as factor (daysF 84-110)
+
+```{r}
+# 1. Ofav- Days 
+      LME_Ofav.HF<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ofav.H, na.action=na.omit)
+      lmerTest::step (LME_Ofav.HF) # Replicate is not significant
+      ranova(LME_Ofav.HF)
+      
+      LME_Ofav.HF.1<-lmer(YII ~ Treatment + DaysF + Initial_Sym + (1 | Fragment) +
+                      Treatment:DaysF + DaysF:Initial_Sym,
+                      data=YII.Ofav.H, na.action=na.omit)
+      lmerTest::step (LME_Ofav.HF.1)
+```
+
+```{r}
+# 2. Predict values:
+    pred_OfavHF <- predict(LME_Ofav.HF.1,re.form = NA)
+
+# 3. Bootstrap CI:
+    OF.bootHF <- bootMer(LME_Ofav.HF.1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(OF.bootHF$t, 2, sd)
+    CI.lo_HF <- pred_OfavHF - std.err*1.96
+    CI.hi_HF <- pred_OfavHF + std.err*1.96
+```
+
+```{r}
+# 4. Plot
+  Model_of_HF_plot<- ggplot(
+    YII.Ofav.H, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_OfavHF),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_HF, ymax = CI.hi_HF),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")), 
+                       limits = c(0.25, 0.55), 
+                       breaks = seq(0.3, 0.5, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment (H phase)", limits = c(80, 112),
+                     breaks = seq(80, 110, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="point", size =1,
+                   position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_of_HF_plot
+  Model_of_HF_plot + facet_grid(Initial_Sym~.)
+```
+
+```{r}
+# 5. EMMs
+      Ofav.YII.emmH<-emmeans(LME_Ofav.HF.1, ~ Treatment:DaysF + DaysF:Initial_Sym)
+      #contrast(Ofav.YII.emmH, "tukey")
+      
+      Ofav.YII_groupsH<-cld(Ofav.YII.emmH, by=NULL) # compact-letter display
+      Ofav.YII_groupsH<-Ofav.YII_groupsH[order(
+        Ofav.YII_groupsH$Days,
+        Ofav.YII_groupsH$Treatment,
+        Ofav.YII_groupsH$Initial_Sym),]
+      Ofav.YII_groupsH
+      #write.csv(Ofav.YII_groupsH, "Outputs/Multicomp_OfavYIIH.csv", row.names = F)
+```
+
+### Ssid
+
+* Model for "Days" as continous variable (days 84-110)
+```{r}
+# 1. Ssid- Days 
+      LME_Ssid.H<-lmer(YII ~ Treatment * Days * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ssid.H, na.action=na.omit)
+      lmerTest::step (LME_Ssid.H) # Replicate is not significant
+      ranova(LME_Ssid.H)
+      
+      LME_Ssid.H1<-lmer(YII ~ Treatment * Days * Initial_Sym + 
+                        (1 | Genotype/Fragment),
+                      data=YII.Ssid.H, na.action=na.omit)
+      lmerTest::step (LME_Ssid.H1)
+      anova(LME_Ssid.H1)
+```
+
+```{r}
+# 2. Predict values:
+    pred_Ssid.H <- predict(LME_Ssid.H1,re.form = NA)
+
+#3. Bootstrap CI:
+    Ss.bootH <- bootMer(LME_Ssid.H1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.errSH <- apply(Ss.bootH$t, 2, sd)
+    CI.lo_SH <- pred_Ssid.H - std.errSH*1.96
+    CI.hi_SH <- pred_Ssid.H + std.errSH*1.96
+```
+
+```{r, fig.height= 6, fig.width = 8}
+ # 4 .Plot
+  Model_Ss_H_plot<- ggplot(
+    YII.Ssid.H, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_Ssid.H),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_SH, ymax = CI.hi_SH),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")),
+                       limits = c(0.1, 0.58), 
+                       breaks = seq(0.1, 0.5, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment (H phase)", limits = c(80, 112),
+                     breaks = seq(80, 110, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                   linetype=1, alpha=0.5) + 
+    #stat_summary(fun.y=mean, geom="point", size =1,
+    #               position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_Ss_H_plot+ facet_grid(~Initial_Sym)
+```
+
+* Model for "Days" as factor (daysF 84-110)
+
+```{r}
+# 1. Ssid- Days 
+      LME_Ssid.HF<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+                       (1|Genotype) + (1|Fragment) +(1|Replicate), 
+                        data=YII.Ssid.H, na.action=na.omit)
+      lmerTest::step (LME_Ssid.HF) # Replicate is not significant
+      ranova(LME_Ssid.HF)
+      
+      LME_Ssid.HF.1<-lmer(YII ~ Treatment * DaysF * Initial_Sym + (1 | Fragment),
+                      data=YII.Ssid.H, na.action=na.omit)
+      lmerTest::step (LME_Ssid.HF.1)
+      anova(LME_Ssid.HF.1)
+```
+
+```{r}
+# 2. Predict values:
+    pred_SsidHF <- predict(LME_Ssid.HF.1,re.form = NA)
+
+# 3. Bootstrap CI:
+    Ss.bootHF <- bootMer(LME_Ssid.HF.1, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(Ss.bootHF$t, 2, sd)
+    CI.lo_HF.S <- pred_SsidHF - std.err*1.96
+    CI.hi_HF.S <- pred_SsidHF + std.err*1.96
+```
+
+```{r}
+# 4. Plot
+  Model_Ss_HF_plot<- ggplot(
+    YII.Ssid.H, aes(x = Days, y = YII, colour = Treatment)) +
+    geom_line(aes(y = pred_SsidHF),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_HF.S, ymax = CI.hi_HF.S),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Fv / Fm")), 
+                       limits = c(0.1, 0.55), 
+                       breaks = seq(0.1, 0.5, by=0.1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment (H phase)", limits = c(80, 112),
+                     breaks = seq(80, 110, by=7), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    #stat_summary(fun.y=mean, geom="point", size =1,
+    #               position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_Ss_HF_plot + facet_grid(~Initial_Sym)
+```
+
+```{r}
+# 5. EMMs
+    Ssid.YII.emmH<-emmeans(LME_Ssid.HF.1, ~ Treatment*DaysF*Initial_Sym)
+      #contrast(Ssid.YII.emmH, "tukey")
+      
+      Ssid.YII_groupsH<-cld(Ssid.YII.emmH, by=NULL) # compact-letter display
+      Ssid.YII_groupsH<-Ssid.YII_groupsH[order(
+        Ssid.YII_groupsH$Days,
+        Ssid.YII_groupsH$Treatment,
+        Ssid.YII_groupsH$Initial_Sym),]
+      Ssid.YII_groupsH
+      #write.csv(Ssid.YII_groupsH, "Outputs/Multicomp_SsidYIIH.csv", row.names = F)
+```
+
+# Packages used
+
+```{r}
+# Creates bibliography 
+#knitr::write_bib(c(.packages()), "packages.bib")
+```

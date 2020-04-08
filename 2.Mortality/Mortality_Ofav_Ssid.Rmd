@@ -48,6 +48,7 @@ Try survival package
 
 ```{r}
 # Data
+
     Survival.Ss.data<-read.csv("Data/Ssid_Mortality.csv", header = TRUE)
     summary(Survival.Ss.data)
     Survival.Ss.data$Genotype<-factor(Survival.Ss.data$Colony, levels = c(
@@ -117,6 +118,7 @@ Try survival package
 ```{r}
 # Data
     Survival.Of.data<-read.csv("Data/Ofav_Mortality.csv", header = TRUE)
+
     summary(Survival.Of.data)
     Survival.Of.data$Genotype<-factor(Survival.Of.data$Colony, 
                                       levels = c("Of_34", "Of_20", "Of_6", "Of_31"))
@@ -208,7 +210,7 @@ fit.coxph1_3
 ```
 
 
-# 3. Suplementary plot
+# 3. Supplementary plot
 
 ```{r}
 SuplementatySurvivalA<-ggarrange(Genotype_only_OF$plot,Genotype_only_SS$plot,
@@ -230,4 +232,3 @@ SuplementatySurvivalB
 
 
 ```
-

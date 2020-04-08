@@ -1,3 +1,15 @@
+---
+title: "*A.cer* in nutrients and heat stress"
+author: "Ana Palacio, Caroline Dennison, Celia Leto, Prati Rosen"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+---
+
+# Collection and maintenance
+
 ## July 24, 2017
 
 #### Adapting *Acropora cervicornis* to laboratory conditions
@@ -11,6 +23,7 @@
 	- Green (30)
 	- Red and Orange (30)
 * corals were added to a tank with other *A. cervicornis* kept at 26-27ºC with two pumps and build my LED light at 100% intensity
+
 ----------
 
 ## July 25, 2017
@@ -31,6 +44,7 @@
 	- The fu*(&^% IPAM is not working  in 1/4 of the field
 	- Average YII values ~ 0.6, one genotype is slightly lower than 0.6
 * No pics taken
+
 ----------
 
 ## July 31, 2017
@@ -261,6 +275,7 @@
 * The corals look great! Ready to start the experiment!
 
 ----------
+
 ## Nov 10, 2017
 
 ### Buoyant weight before sampling
@@ -268,6 +283,7 @@
 * Data taken by CD and BG
 
 ----------
+
 ## Nov 15, 2017
 
 ### Tissue samples T=5
@@ -278,6 +294,7 @@
 
 
 ----------
+
 ## Nov 16, 2017
 
 ### IPAM T=5
@@ -290,9 +307,10 @@
 
 ----------
 
+# STARTED NUTRIENT ADDITION!!!
+
 ## Nov 17, 2017
 
-### STARTED NUTRIENT ADDITION!!!
 * To start concentrations: 
     - N: 1mL of NH4Cl [Stock 1 = 300mM] in 30L filtered sea water 
     - NP:1mL of NH4Cl [Stock 1 = 300mM] + 1mL  NaH2PO4 [Stock 1 = 30mM] in 30L filtered sea water
@@ -342,6 +360,7 @@
 * Opened the new water income and let it run for a long time. Then water was removed and added more stock 1 nutrients 
 
 ----------
+
 ## Nov 28, 2017
 
 ### Fed Acer
@@ -357,7 +376,7 @@
 
 ### Water change and vertical rotation
 
-# Water sample for nutrient analysis
+### Water sample for nutrient analysis
     * ~ 50 mL from each aquarium
         
 ----------
@@ -416,7 +435,9 @@
 ### Death
 
 * Fragment 237 in NP R2
+
 ----------
+
 }
 
 ## Dec 19, 2017
@@ -500,9 +521,11 @@
 ## Jan 08, 2018
 
 ### Water change with non filtered water
+
 * Added more stock 1 
 
 ### Organic Extraction samples from 11-15
+
 * All R1 and begging of R2 (Control and few N)
 * Samples 137-187
 * With S.D
@@ -696,6 +719,8 @@ Se
 
 ------ 
 
+# RAMPING UP 
+
 ## Feb 02, 2018
 
 ### Second EtOH precipitation of Acer (both replicates) from Jan 29
@@ -749,7 +774,7 @@ Se
 * Corals were at 29 degrees and temperature increased to 30 at the end of the day
 * So far no decline in YII values for Acer corals in any treatment
 
-## Water samples taken
+### Water samples taken
 * CD
 
 ------
@@ -855,7 +880,7 @@ Se
 
 ## Feb 18, 2018
 
-## Added fresh water to aquaria
+* Added fresh water to aquaria
 
 ~ 100mL of RO water was added to each one
 
@@ -863,9 +888,7 @@ Se
 
 ## Feb 19, 2018
 
-## Blasted 13 Acer fragments
-
-* CD, CL and AP
+* Blasted 13 Acer fragments (CD, CL and AP)
 
 ### Salinity and Temperature before WC
 * Control 1: 37.4 - 31.1
@@ -944,7 +967,7 @@ Se
 
 ## Feb 25, 2018
 
-## Added ~ 1 cup of RO water 
+* Added ~ 1 cup of RO water 
 
 ------
 
@@ -1000,6 +1023,7 @@ Se
 * Done by CD and AP
 
 ------
+
 ## Mar 01, 2018
 
 ### Water changes and feeding
