@@ -1,4 +1,15 @@
-# Orbicella faveolata and Siderastrea siderea cores in nutrients
+
+---
+title: "*Orbicella faveolata* and *Siderastrea siderea* cores in nutrients and heat stress"
+author: "Ana Palacio, Caroline Dennison, Celia Leto, Prati Rosen"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+---
+
+# Collection and maintenance
 
 ## Aug 31, 2017
 
@@ -83,6 +94,7 @@
 
 * Make stock solutions and started the pums. 
 * Took water samples for nutrient analysis day 1 
+
 ----------
 
 ## October 08, 2017
@@ -189,9 +201,11 @@
 * First Ssid R1 (48 samples) by AP
 
 ### 2nd EtOH last 19 samples in Ssid R2
+
 * Used the NaOH made yesterday and added a - control to the extraction 
 
 ----------
+
 ## Nov 06, 2017
 
 ### IPAM 3 for Ssid
@@ -200,6 +214,7 @@
 * min=0.47 (22-24), mean and median ~0.55, max 0.59 (28-23)
 
 ----------
+
 ## Nov 10, 2017
 
 ### Buoyant weight before sampling for Ssid R1 (Control and N)
@@ -207,6 +222,7 @@
 * Data taken by CD and BG
 
 ----------
+
 ## Nov 15, 2017
 
 ### Buoyant weight before sampling for Ssid R1 (NP) and R2
@@ -225,6 +241,7 @@
 
 
 ----------
+
 ## Nov 16, 2017
 
 ### IPAM T=4 for Ssid and Ofav
@@ -233,6 +250,8 @@
     -   It was maybe sampling/handeling?
     
 ----------
+
+# NUTRIENT ADDITION
 
 ## Nov 17, 2017
 
@@ -371,11 +390,13 @@
 
 ## Dec 13, 2017
 
-### 1st ETOH second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30s)
+### 1st ETOH 
+* second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30s)
 * CTAB by CD 
 * We ran these O.fav samples and they have late coral CTs, we do not know why!!!!
 
 ### IPAM time = 8 
+
 * CD and AP
 * Ssid values increased a bit, specially for N, Control looks lower 
 * Ofav values increased a bit, Control looks lower 
@@ -386,29 +407,33 @@
 
 ## Dec 14, 2017
 
-### 2nd ETOH second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30)
+### 2nd ETOH:
+*second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30)
 * by CD 
 
-### Organic Extraction and 1st ETOH second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-49, Nutrients and CO2) + Ofav CO2
+### Organic Extraction and 1st ETOH
+
+* second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-49, Nutrients and CO2) + Ofav CO2
 * by CD
-
-
 
 
 ### Ofav BW before samples
 * Data taken by CD and my mom
 
 ### Ssid tissue samples + Picture with color scale
+
 * Taken by CD
 
 ----------
 
 ## Dec 15, 2017
 
-### ETOH wash for second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30)
+### ETOH wash
+* second batch of Ssid (65 samples) + first batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-1 to 34-30)
 * by AP 
 
-### 2ndt ETOH second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-30 to 34-49, Nutrients and CO2) + Ofav CO2
+### 2ndt ETOH
+* second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-30 to 34-49, Nutrients and CO2) + Ofav CO2
 * by AP
 
 ### Ofav tissue samples (T=8) + Picture with color scale
@@ -423,8 +448,8 @@
 
 ## Dec 16, 2017
 
-### ETOH wash second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-30 to 34-49, Nutrients and CO2) + mess of Ofav in CO2 and Nutrients
-
+### ETOH wash
+* second batch of Ofav sampled in 11-15-2017 (Colony 34 from 34-30 to 34-49, Nutrients and CO2) + mess of Ofav in CO2 and Nutrients
 * by AP
 
 ### Feeding and cleaning 
@@ -514,6 +539,7 @@
 
 
 ### Fed corals + vertical rotation
+
 ------
 
 ## Dec 28, 2017
@@ -719,6 +745,8 @@
 * CD
 
 ------
+
+# RAMP UP 
 
 ## Feb 02, 2018
 
@@ -958,7 +986,7 @@
 
 ## Feb 25, 2018
 
-## Added ~ 1 cup of RO water 
+* Added ~ 1 cup of RO water 
 
 ------
 
@@ -987,8 +1015,9 @@
 * NP1: 35.0 - 31.6
 * NP2: 34.8 - 31.7
 
-### CTAB incubation, organic extraction, and 1st EtOH precipitation of Ofav and Ssid samples taken on Feb 23, 2018
-* Done by CD and SD
+### CTAB incubation, organic extraction, and 1st EtOH precipitation
+
+* Ofav and Ssid samples taken on Feb 23, 2018 (Done by CD and SD)
 
 ------
 
@@ -1006,6 +1035,7 @@
 * Done by AP and CD
 
 ------
+
 ## Mar 01, 2018
 
 ### Water changes and feeding
@@ -1031,7 +1061,7 @@
 * NP2: 36.3 - 31.6 (35.4)
 
 ### ProK incubation dying corals 
-* 
+
 ------
 
 ## Mar 05, 2018
@@ -1103,8 +1133,8 @@
 ### qPCR for Ssid samples
 * 27-87 to 30-38 from 12/14/17 the rest of the samples are from 2/1/17
 
-### CTAB incubation, organic extraction, and 1st EtOH precipitation for Ssid samples up to 30-21
-* done by CD and PR
+### CTAB incubation, organic extraction, and 1st EtOH precipitation
+* Ssid samples up to 30-21 (done by CD and PR)
 
 ------
 
@@ -1181,6 +1211,7 @@
 * Done by CD
 
 ------
+
 ## Mar 20, 2018
 
 ### Blasted all Ofav fragments collected on Mar 08 (bleaching)

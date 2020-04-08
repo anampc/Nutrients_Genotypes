@@ -86,9 +86,10 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
                              levels=c("G_48", "G_62","G_31", 
                                       "G_08","G_07", "G_50", 
-                             "Of_31","Of_6","Of_20","Of_34", 
-                             "Ss_30","Ss_20","Ss_24",
-                             "Ss_28","Ss_22","Ss_23","Ss_27"))  # D dominance order
+                            "Of_34","Of_20","Of_6", "Of_31",
+                            "Ss_22","Ss_23","Ss_27", "Ss_28",
+                            "Ss_20", "Ss_24","Ss_30"
+                             ))  # D dominance order
       YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
       YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time, sep = "_")
       
@@ -164,6 +165,8 @@ YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
         annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
 YII_Treat + facet_grid (~Spp) + geom_smooth()
 
+YII_Treat + facet_wrap (Genotype~Spp) + geom_smooth()
+
 ```
 
 # Figure 3b (Only A.cervicornis)
@@ -205,6 +208,7 @@ Figure3
 ```
 
 * Genotype G07 was especially unhappy in ambient nutrients... 
+
 ```{r}
 YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Genotype))) +
         ggthe_bw + 
@@ -304,14 +308,17 @@ Figure3_genotype
 ## A.cer model
 
 ```{r Acer_models}
-  LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF + 
+  
+# 1. Find the best model
+
+LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF + 
                              (1|Genotype) + (1|Replicate) +  (1|Fragment), 
                               data=subset(YII.data, Spp=="Ac"), na.action=na.omit)
       summary(LME_Acer)
       
-      Step.LME_Acer<-step (LME_Acer)
+      Step.LME_Acer<-step (LME_Acer) # Replicate is not significant
       anova(LME_Acer)
-      ranova(LME_Acer)
+      ranova(LME_Acer)# Replicate is not significant
       # Drop (1|Replicate)
       final_fm <- get_model(Step.LME_Acer)
       summary(final_fm)
@@ -327,9 +334,9 @@ Figure3_genotype
                               data=subset(YII.data, Spp=="Ac"), na.action=na.omit)
   ranova(LME_Acer2)    
   
-  anova(LME_Acer1, LME_Acer2)
-      
-      # EMMs
+  anova(LME_Acer1, LME_Acer2) # LME_Acer1 and LME_Acer2 are the same 
+  
+#2. Extract EMMs
       Acer.YII.emm<-emmeans(LME_Acer1, ~Treatment * DaysF)
       contrast(Acer.YII.emm, "tukey")
       
@@ -349,111 +356,3 @@ Figure3_genotype
       write.csv(Acer.YII_groups, "Outputs/Multicomp_AcerYII.csv", row.names = F)
 ```
 
-## O.fav model
-
-```{r Ofav_models}
-###### 
-      # Ofav 
-      LME_Ofav<-lmer(YII ~ Treatment * DaysF + (1|Genotype) + (1|Fragment) +(1|Replicate), 
-                     data=subset(YII.data, Spp=="Of"), na.action=na.omit)
-      lmerTest::step (LME_Ofav) # Replicate is not significant
-      
-      LME_Ofav1<-lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment), 
-                     data=subset(YII.data, Spp=="Of"), na.action=na.omit)
-      
-      LME_Ofav2<-lmer(YII ~ Treatment * DaysF + (1|Genotype) +(1|Fragment), 
-                     data=subset(YII.data, Spp=="Of"), na.action=na.omit)
-      
-      anova(LME_Ofav1, LME_Ofav2)
-      step(LME_Ofav2)
-      
-      # EMMs
-      Ofav.YII.emm<-emmeans(LME_Ofav1, ~Treatment * DaysF)
-      # contrast(Ofav.YII.emm, "tukey")
-      
-      # Effect plot options
-      emmip(LME_Ofav2, ~DaysF|Treatment, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
-      
-      # Pairwise comparisons
-      #pairs(Ofav.YII.emm) # same than contrast(Acer.YII.emm, "tukey")
-      
-      # Pairwise comparisons
-      plot(emmeans(LME_Ofav1, ~DaysF|Treatment), comparisons = TRUE) +
-        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
-        facet_wrap(~Treatment) +
-        theme_bw() # Tukey comparison (do not trust CI to compare EMMs)
-      
-      Ofav.YII_groups<-cld(Ofav.YII.emm, by=NULL) # compact-letter display
-      Ofav.YII_groups<-Ofav.YII_groups[order(Ofav.YII_groups$Day,Ofav.YII_groups$Treatment),]
-      Ofav.YII_groups
-      #write.csv(Ofav.YII_groups, "Outputs/Multicomp_OfavYII.csv", row.names = F)
-```
-
-## Ssid model
-
-```{r Ssid_models}
-LME_Ssid<-lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment) + (1|Replicate),
-                     REML=TRUE, data=subset(YII.data, Spp=="Ss"),
-                      na.action=na.omit)
-     step (LME_Ssid) #  Replicate is not significant
-      
-LME_Ssid1<-lmer(YII ~ Treatment * DaysF + (1|Genotype) + (1|Fragment),
-                     REML=TRUE, data=subset(YII.data, Spp=="Ss"),
-                      na.action=na.omit)
-      
-LME_Ssid2<-lmer(YII ~ Treatment * DaysF + (1|Genotype/Fragment),
-                     REML=TRUE, data=subset(YII.data, Spp=="Ss"),
-                      na.action=na.omit)
-anova(LME_Ssid1, LME_Ssid2)
-      
-      # EMMs
-      Ssid.YII.emm<-emmeans(LME_Ssid2, ~Treatment * DaysF)
-      # contrast(Ssid.YII.emm, "tukey")
-      
-      # Effect plot options
-      emmip(LME_Ssid2, ~DaysF|Treatment, CIs = TRUE) + theme_gdocs() # interaction plot of predictions
-      
-      # Pairwise comparisons
-      # pairs(Ssid.YII.emm) # same than contrast(Ssid.YII.emm, "tukey")
-      
-      # Tukey comparison (do not trust CI to compare EMMs)
-      plot(emmeans(LME_Ssid2, ~DaysF|Treatment), comparisons = TRUE) +
-        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_wrap(~Treatment) +
-        theme_gdocs()
-      
-      Ssid.YII_groups<-cld(Ssid.YII.emm, by=NULL) # compact-letter display
-      Ssid.YII_groups<-Ssid.YII_groups[order(Ssid.YII_groups$Day,Ssid.YII_groups$Treatment),]
-      Ssid.YII_groups
-      write.csv(Ssid.YII_groups, "Outputs/Multicomp_SsidYII.csv", row.names = F)
-```
-
-# Only nutrients 
-
-```{r N_models}
-############################################################          
- ################### ONLY NUTRIENT PHASE ##################
-############################################################
-          
-# Select data for Nutrient enrichment (26C) only
-      
-    # Raw YII data              
-    YII_Colony<- ggplot(YII.nutrients, aes (Days, YII, colour=Genotype)) +
-      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-      stat_summary(fun.y=mean, geom="line") + ggthe_bw
-    YII_Colony + ylim(0.0, 0.65) + facet_grid (Spp~Treatment)
-    
-    YII_Trea<- ggplot(YII.nutrients, aes (Days, YII, colour=factor(Treatment))) +
-      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar",
-                   position = position_dodge(width = 1), width = 0.2 )+
-      stat_summary(fun.y=mean, geom="point") +
-      facet_grid (~Spp) + theme_gdocs()+
-      scale_x_continuous(name="Days in nutrient treatment",
-                         breaks=c(seq(-30,76, by=15))) + ggthe_bw +
-      ylab("Fv/Fm") + ylim(0.01, 0.65) + geom_smooth()
-
-    YII_Trea + guides(colour=guide_legend("Treatment"))+
-      theme(legend.position=c(0.15, 0.3),
-            plot.background=element_blank(),
-            legend.box.background = element_rect())
-
-```
