@@ -1,0 +1,32 @@
+ Sample.Name         File.Name           A.CT.mean      Acer.CT.mean      A.CT.sd            Acer.CT.sd            A.reps 
+ Length:522         Length:522         Min.   :20.46   Min.   :18.96   Min.   :0.0007071   Min.   :0.0007071   Min.   :2  
+ Class :character   Class :character   1st Qu.:22.76   1st Qu.:20.89   1st Qu.:0.0509117   1st Qu.:0.0664680   1st Qu.:2  
+ Mode  :character   Mode  :character   Median :23.41   Median :22.43   Median :0.1032376   Median :0.1255115   Median :2  
+                                       Mean   :23.73   Mean   :22.32   Mean   :0.1486699   Mean   :0.1615373   Mean   :2  
+                                       3rd Qu.:24.53   3rd Qu.:23.70   3rd Qu.:0.1986970   3rd Qu.:0.2252135   3rd Qu.:2  
+                                       Max.   :34.54   Max.   :26.70   Max.   :1.4375481   Max.   :1.3583521   Max.   :2  
+                                                                                                                          
+   Acer.reps     A.Acer         Sample.Plate         Treatment   Replicate    Fragment                 Genotype  
+ Min.   :2   Min.   :0.001172   Length:522         Control:203   R1:277    Min.   :101.0   F               : 43  
+ 1st Qu.:2   1st Qu.:0.046598   Class :character   N      :159   R2:245    1st Qu.:150.0   Green           :127  
+ Median :2   Median :0.106085   Mode  :character   NP     :160             Median :188.5   Green and Orange:128  
+ Mean   :2   Mean   :0.157146                                              Mean   :199.1   Orange          : 60  
+ 3rd Qu.:2   3rd Qu.:0.219082                                              3rd Qu.:250.0   Red and Orange  : 97  
+ Max.   :2   Max.   :0.894741                                              Max.   :300.0   Red and Yellow  : 42  
+                                                                                           Yellow          : 25  
+      Date                 Days          qPCR_Date            Time_Point        Phase        Sample         
+ Min.   :2017-11-15   Min.   :  0.00   Min.   :2018-02-08   T9     :132   Baseline :127   Length:522        
+ 1st Qu.:2017-12-14   1st Qu.: 29.00   1st Qu.:2018-03-12   T5     :127   Heat     :120   Class :character  
+ Median :2018-01-29   Median : 75.00   Median :2018-03-23   T13    :124   Nutrients:275   Mode  :character  
+ Mean   :2018-01-06   Mean   : 52.09   Mean   :2018-03-22   T19    : 65                                     
+ 3rd Qu.:2018-02-05   3rd Qu.: 82.00   3rd Qu.:2018-04-24   T22    : 36                                     
+ Max.   :2018-03-06   Max.   :111.00   Max.   :2018-05-03   T14    : 19                                     
+                                                            (Other): 19                                     
+    logA.SH             RanA           RanB      
+ Min.   :-2.9313   Min.   :1.00   Min.   :1.000  
+ 1st Qu.:-1.3316   1st Qu.:1.00   1st Qu.:1.000  
+ Median :-0.9743   Median :1.00   Median :1.000  
+ Mean   :-0.9952   Mean   :1.04   Mean   :1.008  
+ 3rd Qu.:-0.6594   3rd Qu.:1.00   3rd Qu.:1.000  
+ Max.   :-0.0483   Max.   :2.00   Max.   :2.000  
+                                                 

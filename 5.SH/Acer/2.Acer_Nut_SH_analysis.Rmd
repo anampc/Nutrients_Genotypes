@@ -1,0 +1,358 @@
+---
+title: "Acer SH Nutrients"
+author: "Ana Palacio"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+editor_options:
+  chunk_output_type: console
+bibliography: packages.bib
+nocite: '@*'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+
+# General project set-up 
+
+```{r libraries , results="hide"}
+
+# Get all libraries and sources required to run the script
+        library(plyr)
+        library(dplyr)
+        library(reshape2)
+        library(ggplot2)
+        library(ggthemes)
+        library(lme4)
+        library(lmerTest)
+        library(emmeans)
+        library(scales)
+        library(skimr)
+
+# Default ggplot settings
+Fill.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+
+    ggthe_bw<-theme(plot.background=element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.box.background = element_rect(),
+          panel.background =element_rect(fill = NA, color = "black")
+          )+
+    theme_bw()
+```
+
+
+## 1. DATA Exploration
+
+Transform variables 
+
+```{r VariablesToUse}
+
+# Import S/H cell ratio data
+qPCR.variables<-read.csv("Outputs/Acer_SH_cell_ratio.csv")
+
+# Variable types 
+str(qPCR.variables)
+  qPCR.variables$Colony<-as.factor(qPCR.variables$Genotype)
+  qPCR.variables$DaysF<-as.factor(qPCR.variables$Days)
+
+  summary(qPCR.variables)
+  #skim(qPCR.variables)
+
+```
+  
+
+### 1.2. Exploratory graphs
+
+```{r}
+logSHTreatment <- ggplot(qPCR.variables, aes(Date, logA.SH, colour=factor(Treatment))) +
+       # geom_jitter(aes(colour=factor(Treatment))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+       stat_summary(fun.y=mean, geom="line", size =1) +
+       theme_bw() 
+logSHTreatment + facet_wrap(~Genotype)
+
+# Removing weird points (whole fragment samples, between bleaching) and colonies not used (F)
+    qPCR.variables_2<-subset(qPCR.variables, Date!="2018-02-05")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2017-12-14")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-01")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-02")
+    qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-03")
+    qPCR.variables_2<-subset(qPCR.variables_2, Colony!="F")
+    #qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
+    
+## Genotype information
+    MOTE<-read.csv("Genotype_Info.csv", header = TRUE)
+    qPCR.variables_2<-merge(qPCR.variables_2, MOTE, 
+                            by="Genotype", all.x=TRUE)
+    
+    qPCR.variables_2$MoteGen<-factor(as.character(
+      qPCR.variables_2$MoteGen), 
+                             levels=c("G_48", "G_62","G_31", 
+                                      "G_08","G_07", "G_50"))  # D dominance order
+    
+
+logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Treatment))) +
+  geom_jitter(alpha=0.3)+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+  stat_summary(fun.y=mean, geom="line") +   theme_bw()
+logSH_Colony + facet_grid (MoteGen~.)
+
+logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Colony))) +
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+  stat_summary(fun.y=mean, geom="line") +   theme_bw()
+logSH_Colony + facet_grid (Treatment~Replicate) +
+  theme(legend.position = "none")
+```
+
+### Subset data for models
+
+```{r}
+SH.0<-subset(qPCR.variables_2, Days<2)
+SH.C<-subset(qPCR.variables_2, Days<77)
+  SH.C<-subset(SH.C, Days>2)
+SH.H<-subset(qPCR.variables_2, Days>76)
+```
+
+# Figure 4a
+
+## Raw data
+
+* Raw data - All genotypes
+
+```{r}
+ # NOT log 10
+Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
+                                          shape=Treatment)) + 
+    ggthe_bw + Fill.colour+ ggtitle("a.")+
+    theme(legend.position=c(0.2, 0.3),
+        legend.title = element_blank()) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+     
+        
+      annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
+      annotate("text", x = 99, y = 0.02, label = "H", size=3)+
+  
+    scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+                       #limits = c(0,0.5),
+                       expand = c(0.01,0.01),
+                   name=("Symbiont to host cell ratio  (S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) +
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 2 )+
+    stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                   position = position_dodge(width = 2)) +
+    stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 2))
+
+Figure4
+
+#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.5, height=3)
+```
+
+* Raw data - by genotypes
+
+```{r}
+Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, logA.SH , colour=Treatment,
+                                          shape=Treatment)) + 
+    ggthe_bw + Fill.colour+ 
+    theme(legend.position="bottom",
+       legend.title = element_blank()) +
+        
+      annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
+      annotate("text", x = 99, y = 0.02, label = "H", size=3)+
+  
+    scale_y_continuous(breaks = seq(-2, -0.1, 0.25),
+                       limits = c(-2, -0.1),
+                       expand = c(0,0),
+                  name=("Symbiont to host cell ratio  - log 10(S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 30),  
+                         expand = c(0, 0)) +
+    stat_summary(fun.data = "mean_cl_boot", geom = "errorbar", width = 20, 
+                    position = position_dodge(width = 2))+
+    stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5, 
+                   position = position_dodge(width = 2)) +
+    stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 2))+
+  facet_grid(~MoteGen)
+
+Figure4_gen
+#ggsave(file="Outputs/Fig_S3_SH_Acer_Genotype.svg", plot=Figure4_gen, width=6.1, height=3.5)
+```
+
+# 2. LMER models
+
+## Baseline 
+
+```{r}
+LME_BaseLine<-lmer(logA.SH ~ Treatment + MoteGen + (1|Replicate), 
+                     data=SH.0)
+     step (LME_BaseLine) #  Treatement is not significant
+     anova(LME_BaseLine)         
+     ranova(LME_BaseLine) # Replicate is       
+     
+LME_BaseLine1<-lmer(logA.SH ~ Treatment + MoteGen + (1|Replicate), 
+                     data=SH.0)
+
+# Multicomp
+    Acer.SH.0.emm<-emmeans(LME_BaseLine1, ~MoteGen)
+      #contrast(Acer.SH.0.emm, "tukey")
+    Acer.SH.0_groups<-cld(Acer.SH.0.emm, by=NULL) # compact-letter display
+    Acer.SH.0_groups
+  #write.csv(Acer.SH.0_groups, "Outputs/Multicomp_AcerSH_0.csv", row.names = F)
+    
+# Effect plot
+  plot(emmeans(LME_BaseLine1, ~MoteGen), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+```
+
+## C: Effect of nutrient treatments at control temperature 
+
+```{r}
+LME_Acer.C<-lmer(logA.SH ~ Treatment +
+                   (1|Replicate) + (1|MoteGen), 
+                     data=SH.C)
+     step (LME_Acer.C) #  Treatement is ... almost significant?
+     anova(LME_Acer.C)         
+     ranova(LME_Acer.C) # Replicate is not       
+     
+LME_Acer.C1<-lmer(logA.SH ~ Treatment + (1|MoteGen), 
+                     data=SH.C)
+    anova(LME_Acer.C1)         
+    ranova(LME_Acer.C1)
+
+# Multicomp
+    Acer.SH.C.emm<-emmeans(LME_Acer.C1, ~Treatment)
+      #contrast(Acer.SH.0.emm, "tukey")
+    Acer.SH.C_groups<-cld(Acer.SH.C.emm, by=NULL) # compact-letter display
+    Acer.SH.C_groups
+  #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
+    
+# Effect plot
+  plot(emmeans(LME_Acer.C1, ~Treatment), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+```
+
+
+## H: Effect of pre-exposure to nutrient treatments during heat challenge
+
+```{r}
+LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF +
+                   (1|Replicate) + (1|MoteGen), 
+                     data=SH.H)
+     step (LME_Acer.H) #  Treatement is ... almost significant?
+     anova(LME_Acer.H)         
+     ranova(LME_Acer.H) # Replicate is not       
+     
+LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF + (1|MoteGen), 
+                     data=SH.H)
+    step (LME_Acer.H)
+    anova(LME_Acer.H)         
+    ranova(LME_Acer.H)
+
+# Multicomp
+  Acer.SH.H.emm<-emmeans(LME_Acer.H, ~Treatment* DaysF)
+      #contrast(Acer.SH.0.emm, "tukey")
+    Acer.SH.H_groups<-cld(Acer.SH.H.emm, by=NULL) # compact-letter display
+    Acer.SH.H_groups<-Acer.SH.H_groups[order(
+        Acer.SH.H_groups$DaysF,
+        Acer.SH.H_groups$Treatment),]
+    Acer.SH.H_groups
+  #write.csv(Acer.SH.H_groups, "Outputs/Multicomp_AcerSH_H.csv", row.names = F)
+    
+# Effect plot
+  #plot(emmeans(LME_Acer.H, ~Treatment|DaysF), comparisons = TRUE) +
+   #   coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+```
+
+## All phases
+
+```{r}
+LM_Acer.qpCR<-lmer (logA.SH ~ Treatment * DaysF +
+                  (1|Replicate) + (1|Fragment/MoteGen), data= qPCR.variables_2)
+step(LM_Acer.qpCR)
+anova(LM_Acer.qpCR)
+ranova(LM_Acer.qpCR)
+
+LM_Acer.qPCR2<-lmer(logA.SH ~Treatment * DaysF + (1|MoteGen),
+                      data= qPCR.variables_2)
+step(LM_Acer.qPCR2)
+anova(LM_Acer.qPCR2)
+
+# Multicomp
+Acer.SH.emm<-emmeans(LM_Acer.qPCR2, ~Treatment * DaysF)
+      #contrast(Acer.SH.emm, "tukey")
+      #pairs(Acer.SH.emm) # same than contrast(Acer.YII.emm, "tukey")
+    Acer.SH_groups<-cld(Acer.SH.emm, by=NULL) # compact-letter display
+    Acer.SH_groups<-Acer.SH_groups[order(Acer.SH_groups$Day, Acer.SH_groups$Treatment), ]
+    Acer.SH_groups
+#write.csv(Acer.SH_groups, "Outputs/Multicomp_AcerSH.csv", row.names = F)
+      
+      
+# Effect plot options
+emmip(LM_Acer.qPCR2, ~DaysF|Treatment, 
+      CIs = TRUE, aes(Colony=factor(Treatment))) + theme_bw() # interaction plot of predictions
+
+
+```
+
+* By genotype
+
+```{r}
+LM_Acer.qpCR<-lmer (logA.SH ~ Treatment * MoteGen * DaysF +
+                  (1|Replicate) + (1|Fragment), data= qPCR.variables_2)
+step(LM_Acer.qpCR)
+anova(LM_Acer.qpCR)
+ranova(LM_Acer.qpCR)
+
+LM_Acer.qPCR2<-lm(logA.SH ~Treatment * MoteGen * DaysF,
+                      data= qPCR.variables_2)
+step(LM_Acer.qPCR2)
+anova(LM_Acer.qPCR2)
+
+# Multicomp
+Acer.SH.emm<-emmeans(LM_Acer.qPCR2, ~Treatment + DaysF)
+      #contrast(Acer.SH.emm, "tukey")
+      #pairs(Acer.SH.emm) # same than contrast(Acer.YII.emm, "tukey")
+    Acer.SH_groups<-cld(Acer.SH.emm, by=NULL) # compact-letter display
+    Acer.SH_groups<-Acer.SH_groups[order(Acer.SH_groups$Day, Acer.SH_groups$Treatment), ]
+    Acer.SH_groups
+#write.csv(Acer.SH_groups, "Outputs/Multicomp_AcerSH.csv", row.names = F)
+      
+      
+# Effect plot options
+emmip(LM_Acer.qPCR2, ~DaysF|Treatment|MoteGen, CIs = TRUE,  aes(colour=factor(Treatment))) + theme_bw() + facet_grid(MoteGen~Treatment)
+
+```
+
+# 3. Packages used
+
+```{r}
+# Creates bibliography 
+#knitr::write_bib(c(.packages()), "packages.bib")
+```

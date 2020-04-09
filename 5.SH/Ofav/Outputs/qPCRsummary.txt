@@ -1,0 +1,48 @@
+ Sample.Name         File.Name           B.CT.mean       C.CT.mean        D.CT.mean      Ofav.CT.mean      B.CT.sd       
+ Length:270         Length:270         Min.   :26.59   Min.   : 2.024   Min.   :21.85   Min.   :18.66   Min.   :0.00151  
+ Class :character   Class :character   1st Qu.:27.44   1st Qu.:28.543   1st Qu.:24.79   1st Qu.:20.33   1st Qu.:0.05008  
+ Mode  :character   Mode  :character   Median :27.89   Median :29.524   Median :25.89   Median :21.05   Median :0.16250  
+                                       Mean   :28.40   Mean   :29.839   Mean   :26.66   Mean   :21.34   Mean   :0.17582  
+                                       3rd Qu.:28.44   3rd Qu.:31.871   3rd Qu.:27.13   3rd Qu.:22.18   3rd Qu.:0.30070  
+                                       Max.   :38.28   Max.   :34.879   Max.   :34.47   Max.   :26.37   Max.   :0.49553  
+                                       NA's   :209     NA's   :184      NA's   :10                      NA's   :211      
+    C.CT.sd          D.CT.sd           Ofav.CT.sd            B.reps           C.reps           D.reps        Ofav.reps     B.Ofav       
+ Min.   :0.1309   Min.   :0.000201   Min.   :0.0009967   Min.   :0.0000   Min.   :0.0000   Min.   :0.000   Min.   :2   Min.   :0.00000  
+ 1st Qu.:0.3265   1st Qu.:0.076151   1st Qu.:0.0609470   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:2.000   1st Qu.:2   1st Qu.:0.00000  
+ Median :0.8326   Median :0.147763   Median :0.1610091   Median :0.0000   Median :0.0000   Median :2.000   Median :2   Median :0.00000  
+ Mean   :1.2241   Mean   :0.240144   Mean   :0.2069994   Mean   :0.4444   Mean   :0.4111   Mean   :1.874   Mean   :2   Mean   :0.01503  
+ 3rd Qu.:1.4342   3rd Qu.:0.318154   3rd Qu.:0.2801322   3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:2.000   3rd Qu.:2   3rd Qu.:0.00000  
+ Max.   :3.7295   Max.   :2.040049   Max.   :1.5682040   Max.   :2.0000   Max.   :2.0000   Max.   :2.000   Max.   :2   Max.   :0.29127  
+ NA's   :245      NA's   :24                                                                                                            
+     C.Ofav              D.Ofav         Sample.Plate          TotalSH             logB.SH           logC.SH          logD.SH       
+ Min.   :0.000e+00   Min.   :0.000000   Length:270         Min.   :0.0005283   Min.   :-5.0873   Min.   :-4.793   Min.   :-3.8557  
+ 1st Qu.:0.000e+00   1st Qu.:0.007764   Class :character   1st Qu.:0.0180985   1st Qu.:-1.4502   1st Qu.:-3.855   1st Qu.:-1.9304  
+ Median :0.000e+00   Median :0.023198   Mode  :character   Median :0.0365641   Median :-1.2373   Median :-3.539   Median :-1.5535  
+ Mean   :3.488e-05   Mean   :0.048380                      Mean   :0.0634471   Mean   :-1.3024   Mean   :-3.658   Mean   :-1.6234  
+ 3rd Qu.:0.000e+00   3rd Qu.:0.058180                      3rd Qu.:0.0739358   3rd Qu.:-1.0599   3rd Qu.:-3.352   3rd Qu.:-1.2076  
+ Max.   :1.641e-03   Max.   :0.526423                      Max.   :0.5264227   Max.   :-0.5357   Max.   :-2.785   Max.   :-0.2787  
+                                                                               NA's   :211       NA's   :245      NA's   :24       
+     logSH           Treatment  Replicate     Colony        Genotype              Core       Fragment              Date           
+ Min.   :-3.2771   Control:91   R1:137    Min.   : 6.00   Length:270         20-17  :  5   Length:270         Min.   :2017-11-15  
+ 1st Qu.:-1.7424   N      :90   R2:133    1st Qu.: 6.00   Class :character   20-19  :  5   Class :character   1st Qu.:2017-12-15  
+ Median :-1.4370   NP     :89             Median :20.00   Mode  :character   20-2   :  5   Mode  :character   Median :2018-01-26  
+ Mean   :-1.4289                          Mean   :21.78                      20-29  :  5                      Mean   :2018-01-11  
+ 3rd Qu.:-1.1312                          3rd Qu.:31.00                      20-3   :  5                      3rd Qu.:2018-02-23  
+ Max.   :-0.2787                          Max.   :34.00                      20-34  :  5                      Max.   :2018-03-06  
+                                                                             (Other):240                                          
+      Days        Time_Point       Phase        Sample               RanA            RanB       D.Prp            C.Prp         
+ Min.   :  0.00   T12:72     Baseline : 46   Length:270         Min.   :1.000   Min.   :1   Min.   :0.0000   Min.   :0.000000  
+ 1st Qu.: 30.00   T14:10     Heat     : 71   Class :character   1st Qu.:1.000   1st Qu.:1   1st Qu.:0.9863   1st Qu.:0.000000  
+ Median : 72.00   T19:40     Nutrients:153   Mode  :character   Median :1.000   Median :1   Median :1.0000   Median :0.000000  
+ Mean   : 57.69   T22:31                                        Mean   :1.504   Mean   :1   Mean   :0.8008   Mean   :0.001162  
+ 3rd Qu.:100.00   T5 :46                                        3rd Qu.:2.000   3rd Qu.:1   3rd Qu.:1.0000   3rd Qu.:0.000000  
+ Max.   :111.00   T9 :71                                        Max.   :3.000   Max.   :1   Max.   :1.0000   Max.   :0.038931  
+                                                                                                                               
+     B.Prp        Community
+ Min.   :0.0000   B: 54    
+ 1st Qu.:0.0000   D:216    
+ Median :0.0000            
+ Mean   :0.1981            
+ 3rd Qu.:0.0000            
+ Max.   :1.0000            
+                           
