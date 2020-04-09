@@ -418,15 +418,16 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
     #scale_color_manual(values=my_colours) +
     #scale_fill_manual(values=my_colours) +
     scale_y_continuous(name=expression(~italic("Fv / Fm")),
-                       limits = c(0.35, 0.61), 
-                       breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+                      limits = c(0.35, 0.61), 
+                      breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
     scale_x_continuous("Days in the experiment", limits = c(0, 78),
                      breaks = seq(0, 76, by=7), expand = c(0,0))+
     
      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                    position = position_dodge(1) )+
     stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
-                  linetype=1, alpha=0.5) + 
+                linetype=1, alpha=0.5) + 
+
     # stat_summary(fun.y=mean, geom="point", size =1,
     #             position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
@@ -563,6 +564,7 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     CI.hi_1 <- predSs1 + std.err*1.96
 ```
 
+<<<<<<< HEAD
 ```{R, fig.height = 6, fig.width = 8}
 # 4. Plot
   Model1Ss_plot<- ggplot(
