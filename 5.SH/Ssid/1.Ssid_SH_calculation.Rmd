@@ -1,0 +1,389 @@
+---
+title: "SH cell ratio Ssid_Nutrients"
+author: "Ana Palacio"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE,}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+General project set-up 
+
+```{r libraries , results="hide"}
+# Get all libraries and sources required to run the script
+        library(steponeR)
+        library(plyr)
+        library(dplyr)
+        library(reshape2)
+        library(ggplot2)
+        library(lme4)
+        library(ggthemes)
+      
+```
+
+## 1. Calculate qPCR RATIOS (Symbiont/Coral) 
+
+Get the raw data for Ssid R.Cunning steponeR function:
+
+* Get list of plate files to read
+* Calculate the ratios
+* Extract the results
+
+```{r CalculateRatios}
+
+  Ssid.plates <- list.files(path="qPCR-Raw", pattern=".csv", 
+                           full.names=TRUE, recursive = TRUE)
+  # Ssid.plates
+
+  # Run stepone function to get Ratios
+  
+  Ssid.Out <- steponeR(files=Ssid.plates, target.ratios=c("C.Ssid", "D.Ssid"), 
+                       fluor.norm=list(C=7.1, D=3, Ssid=0),
+                       copy.number=list(C=23, D=2, Ssid=1),
+                       ploidy=list(C=1, D=1, Ssid=2),
+                       extract=list(C=0.813, D=0.813, Ssid=0.982))
+  
+  # Target ratio results
+  Ssid<-Ssid.Out$result
+  
+```
+
+## 2. Data CLEANING A
+
+```{r DataCleaning}
+  # 1. Check and remove NTC wells
+    ntc <- Ssid[which(Ssid$Sample.Name=="NTC"|Ssid$Sample.Name=="-"), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(ntc), ])
+    
+  # 2. Check and remove + Control wells
+    Positive <- Ssid[which(Ssid$Sample.Name=="+"), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(Positive), ])
+    
+  # 3. Create unique sample ID+FileName to relabel samples  
+    Ssid$Sample.Plate<-paste(Ssid$Sample.Name,Ssid$File.Name, sep="_")
+
+  # 4.If Clade only detected in one technical replicate, set its ratio to NA ann make them =0
+    One.C<- Ssid[which(Ssid$C.reps==1),]
+    Ssid$C.Ssid[which(Ssid$C.reps==1)] <- NA
+    
+    One.D<- Ssid[which(Ssid$D.reps==1),]
+    Ssid$D.Ssid[which(Ssid$D.reps==1)] <- NA
+    
+    Ssid$C.Ssid[is.na(Ssid$C.Ssid)] <- 0
+    Ssid$D.Ssid[is.na(Ssid$D.Ssid)] <- 0
+
+```
+    
+## 3. Get the cell ratios and log 10 transformations
+
+```{r}
+    # Total SH
+    Ssid$TotalSH<-(Ssid$C.Ssid + Ssid$D.Ssid)
+    
+    # Log 10
+        Ssid$logC.SH <- log10(Ssid$C.Ssid)
+        Ssid$logD.SH <- log10(Ssid$D.Ssid)
+        Ssid$logSH<-log10(Ssid$TotalSH)
+        
+        Ssid$logC.SH[which(Ssid$C.Ssid==0)] <- NA
+        Ssid$logD.SH[which(Ssid$D.Ssid==0)] <- NA
+  
+```    
+
+## 4. Import the sample information
+
+```{r Samples}
+# Get the sample informaton 
+  SampleName<-read.csv("Sample_Plates.csv") 
+
+# Create unique sample ID+FileName to relabel samples  
+   Ssid$Sample.Plate<-paste(Ssid$Sample.Name, Ssid$File.Name, sep="_")
+   
+# Replace Sample.Names in qPCR data 
+
+rownames(SampleName) <- SampleName$Sample.Plate
+    Ssid$Treatment<-SampleName[as.character(Ssid$Sample.Plate), "Treatment"]
+    Ssid$Replicate<-SampleName[as.character(Ssid$Sample.Plate), "Rep"]
+    Ssid$Colony<-SampleName[as.character(Ssid$Sample.Plate), "Colony"]
+      Ssid$Genotype<-paste("Ss", Ssid$Colony, sep = "_" )    
+    Ssid$Core<-SampleName[as.character(Ssid$Sample.Plate), "Core"]
+      Ssid$Fragment<-paste("Ss", Ssid$Core, sep = "_" )
+    Ssid$Date<-SampleName[as.character(Ssid$Sample.Plate), "Date"]
+          Ssid$Date<-as.Date(Ssid$Date, format="%Y/%m/%d")
+          Ssid$Days<-as.numeric(Ssid$Date -17485)
+          
+# Get timePoint inf
+  TimePoints<-read.csv("Time_Points.csv") 
+  TimePoints$Date<-as.Date(TimePoints$Date, format="%m/%d/%y")
+  Ssid<-left_join(Ssid, TimePoints, by = "Date")
+
+# Creates a unique ID for a core-sampling time 
+  Ssid$Sample<-paste(Ssid$Fragment, Ssid$Time_Point, sep='_') 
+```
+
+## 5. Data CLEANING B
+
+* Fucked up samples
+
+```{r DataCleaningB}
+
+# 5. Remove (-) control
+    NegControl <- Ssid[which(Ssid$Sample=="Ss_NA_NA"|Ssid$Sample=="Ss_-_T9"), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(NegControl), ])
+
+# 6.If coral detected in one technical replicate, remove the sample
+    ReRun.Coral <- Ssid[which(Ssid$Ssid.reps==1), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(ReRun.Coral), ])
+    
+    NoHSratio <- Ssid[which(Ssid$TotalSH==0), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(NoHSratio), ])
+    
+# 7. High ST    
+    StDe1.5 <- Ssid[which((Ssid$Ssid.CT.sd>1.5)|(Ssid$C.CT.sd>1.5)|(Ssid$D.CT.sd>1.5)), ]
+    Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(StDe1.5), ])
+     # ToRe_Run2<-anti_join (StDe1.5, Acer, by=c("Sample.Name", "Time"))
+  
+# 8.Suspiciusly late coral
+    Histo_Ssid_CT<-qplot(Ssid.CT.mean, data=Ssid, binwidth=0.15)
+    Histo_Ssid_CT 
+  
+  LateCoral<-Ssid[which(Ssid$Ssid.CT.mean>25), ]
+  Ssid <- droplevels(Ssid[!rownames(Ssid) %in% rownames(LateCoral), ])
+  
+    
+# Samples to Re-run    
+  ToRe_Run1<-rbind(ReRun.Coral, NoHSratio)
+  ToRe_Run1<-rbind(ToRe_Run1, ReRun.Coral)   
+  ToRe_Run1<-rbind(ToRe_Run1, StDe1.5)
+  ToRe_Run1<-rbind(ToRe_Run1, LateCoral)
+  ToRe_Run1<-anti_join (ToRe_Run1, Ssid, by=c("Sample"))
+```
+  
+* Chose bw samples ran more than once
+
+```{r remove duplicates}
+ ReRunA <- Ssid[duplicated(Ssid$Sample),] 
+  n_RunA <- data.frame(table(Ssid$Sample))
+  colnames(n_RunA)<-c("Sample","RanA")
+  Ssid<-join(Ssid, n_RunA, type = "left")
+# 
+  DuplicatesA <- Ssid[(Ssid$RanA>1),]
+  #write.csv(DuplicatesA, "DuplicatesA.csv")
+```
+
+* Remove duplicates
+
+```{r remove duplicates2}
+  ToRem1<-read.csv("ToRemove.csv")
+    # 10/24/2018
+   Ssid<-Ssid[!(Ssid$Sample.Plate %in% ToRem1$Sample.Plate),]
+ 
+# Check for replicates again--should have none
+ 
+  n_RunB <- data.frame(table(Ssid$Sample))
+  colnames(n_RunB)<-c("Sample","RanB")
+  Ssid<-join(Ssid, n_RunB, type = "left")
+
+
+# List of dupplicated samples, should have 0 rows now -->
+   DuplicatesB <- Ssid[(Ssid$RanB>1),]
+#  write.csv(DuplicatesB, file = 'DuplicatesB.csv')
+```
+
+## 6. Calculate genus proportions
+    
+```{R Proportions}
+
+# D Proportion
+    Ssid$D.Prp<-(Ssid$D.Ssid/Ssid$TotalSH)
+  
+    
+ # Core clasification by clade Proportion 
+    Ssid[,Ssid$Community]<-NULL
+    
+    Ssid$Community[which(Ssid$D.Prp>=0.5)] <- "D"
+    Ssid$Community[which(Ssid$D.Prp<0.5)] <- "C"
+    
+  Ssid$Community<-factor(as.character(Ssid$Community), levels=c("C","D"))
+  
+  Ssid<-subset(Ssid, File.Name!="Plate26.csv")
+  summary(Ssid)
+  
+```
+
+## 7. Check and export S/H cell ratio data!
+
+```{r}
+qPCRsummary<-summary(Ssid)
+#capture.output(qPCRsummary, file = "Outputs/qPCRsummary.txt")
+
+# ITS2
+  Ssid$Community2[Ssid$Genotype == "Ss_20" & Ssid$Community== "C"] <- "C1"
+  Ssid$Community2[Ssid$Genotype == "Ss_28" & Ssid$Community== "C"] <- "C1"
+  Ssid$Community2[Ssid$Genotype == "Ss_22" & Ssid$Community== "C"] <- "C1"
+  # Ssid$Community2[Ssid$Genotype == "Ss_23" & Ssid$Community== "C"] <- "C1"
+  Ssid$Community2[Ssid$Genotype == "Ss_24" & Ssid$Community== "C"] <- "C3"
+  Ssid$Community2[Ssid$Genotype == "Ss_30" & Ssid$Community== "C"] <- "C3"
+  Ssid$Community2[Ssid$Community== "D"] <- "D"
+
+
+Ssid.export<-Ssid %>% select(Treatment, Replicate, Fragment, Genotype,
+                             Date, Days, Time_Point, Phase, Sample, 
+                             C.Ssid, D.Ssid, TotalSH, 
+                             logC.SH, logD.SH, logSH, 
+                             D.Prp, Community2)
+
+Ssid.export$Treatment <- as.character(Ssid.export$Treatment)
+      Ssid.export$Treatment[Ssid$Treatment == "Control"] <- "A"
+      Ssid.export$Treatment[Ssid$Treatment == "NP"] <- "N+P"
+
+Ssid.export$Genotype<-factor(Ssid.export$Genotype, 
+                                   levels=c( "Ss_22", "Ss_23", "Ss_27", "Ss_28",
+                                             "Ss_24", "Ss_30", "Ss_20"))
+
+Ssid.export<-Ssid.export[order(
+        Ssid.export$Date, Ssid.export$Treatment, Ssid.export$Replicate,
+        Ssid.export$Genotype, Ssid.export$Fragment),]
+
+# write.csv(Ssid.export, "Outputs/Ssid_SH_cell_ratio.csv", row.names = F)
+```
+
+```{r}
+Ssid.metadata<-Ssid %>% select(Sample, TotalSH, D.Prp, Community2)
+
+# write.csv(Ssid.metadata, "Outputs/Ssid_SH_metadata.csv", row.names = F)
+```
+
+## 8. Data Exploration
+
+* Select qPCR info
+
+```{r}
+qPCR.variables<-Ssid.export
+qPCR.variables$Community<-qPCR.variables$Community2
+
+library("ggthemes")
+library("scales")   
+
+```
+
+```{r}
+   HistoL_SH<-qplot(logSH, data=qPCR.variables, binwidth=0.15)
+   HistoL_SH + facet_grid(Treatment~Genotype)
+   
+   HistoL_CH<-qplot(logC.SH, data=qPCR.variables, binwidth=0.15)
+   HistoL_CH + facet_grid(Treatment~Genotype)
+
+   HistoL_DH<-qplot(logD.SH, data=qPCR.variables, binwidth=0.15)
+   HistoL_DH + facet_grid(Genotype~Replicate)
+```
+
+* Log SH by fragment
+
+```{r}
+logSHTreatment <- ggplot(qPCR.variables, aes(Days, logSH)) +
+        geom_line(aes(colour=Fragment))+ 
+        geom_point(aes(shape=factor(Community), colour=factor(Community)))+
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+        stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+        stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+
+logSHTreatment + ylab("Relative log10 (S:H)") + xlab("Treatment") +  
+  theme(axis.title.y=element_text(size=12), legend.position="none") +
+  facet_wrap(~Genotype)
+
+logSHTreatment <- ggplot(qPCR.variables, aes(Days, logSH)) +
+  geom_line(aes(colour=Fragment))+geom_point(aes(shape=factor(Community)))+
+  # geom_jitter(aes(colour=factor(Replicate))) +
+      # stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+      #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+      # stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+      facet_grid(Genotype~Treatment) +
+      theme_bw() +
+      theme(legend.position = "none" )
+
+logSHTreatment + ylab("Relative log10 (S:H)") + xlab("Treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none")
+
+logSHTreatment <- ggplot(qPCR.variables, aes(Days, logSH, colour=Treatment)) +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+        stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+        stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+       theme_gdocs() 
+logSHTreatment
+logSHTreatment + ylab("Relative log10 (S:H)") + xlab("Treatment") +  
+  theme(axis.title.y=element_text(size=12), legend.position="none") +
+  facet_wrap(~Genotype)
+
+```
+
+* Log C
+
+```{r}
+logC_Treatment <- ggplot(qPCR.variables, aes(Days, logC.SH, colour=factor(Treatment))) +
+         #geom_jitter(aes(colour=factor(Replicate))) +
+         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         facet_grid(~Community) +
+         theme_bw() 
+  logC_Treatment
+   
+logC_Frag <- ggplot(qPCR.variables, aes(Days, logC.SH, goup=Fragment,
+                                        colour=Treatment)) +
+         #geom_jitter(aes(colour=factor(Replicate))) +
+         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         facet_grid(Genotype~Community) +
+         theme_bw() + theme(legend.position = "none")
+  logC_Frag
+
+```
+
+* Log D
+
+```{r}
+logD_Treatment <- ggplot(qPCR.variables, aes(Days, logD.SH, colour=factor(Treatment))) +
+         #geom_jitter(aes(colour=factor(Replicate))) +
+         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         facet_grid(~Community) +
+         theme_bw() 
+  logD_Treatment
+  
+  logD_Frag <- ggplot(qPCR.variables, aes(Days, logD.SH, goup=Fragment,
+                                        colour=Treatment)) +
+         #geom_jitter(aes(colour=factor(Replicate))) +
+         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         facet_grid(Genotype~Community) +
+         theme_bw() + theme(legend.position = "none")
+  logD_Frag
+
+```
+
+```{r}
+  
+DPrp <- ggplot(qPCR.variables, aes(Days, D.Prp ,
+                colour=factor(Treatment))) +
+  #geom_line(aes(colour=Core)) +
+  geom_jitter(aes(colour=Replicate))+
+   stat_summary(fun.data = "mean_cl_boot",geom = "line", width = 0.2)+
+         #stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         facet_grid(Genotype~.) +
+         theme_gdocs() +
+  theme(legend.position = "none")
+DPrp
+
+#Checks<-subset(Ssid, Core=c("20-36"))
+
+```
