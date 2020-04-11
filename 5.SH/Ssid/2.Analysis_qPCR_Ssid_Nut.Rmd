@@ -1,8 +1,14 @@
 ---
 title: "Ssid SH Nutrients"
-author: "AnaPalacio"
-date: "Oct 10, 2018"
-output: html_document
+author: "Ana Palacio"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -14,42 +20,54 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 
 ```{r libraries , results="hide"}
 
-    getwd()
-
-    # Get all libraries and sources required to run the script
+# Get all libraries and sources required to run the script
         library(plyr)
         library(dplyr)
         library(reshape2)
+
         library(ggplot2)
         library(ggthemes)
+        library(scales)
+
         library(lme4)
         library(lmerTest)
         library(emmeans)
-        library(scales)
+    
         library(skimr)
 
+# Default ggplot settings
+
+    Fill.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+
+    ggthe_bw<-theme(plot.background=element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.box.background = element_rect(),
+          panel.background =element_rect(fill = NA, color = "black")
+          )+
+    theme_bw()
 ```
 
+## 1. DATA Exploration
 
-## 1. Calculate qPCR RATIOS (Symbiont/Coral)
+### 1. Select qPCR info and define factors
  
-
 ```{r VariablesToUse}
 
-qPCR.variables  <- Ssid[, c("Sample", "Treatment", "Replicate", "Colony", "Core", "Date", 
-                            "C.Ssid", "D.Ssid", "TotalSH", "logC.SH", "logD.SH", "logSH",
-                             "D.Prp", "Community", "File.Name")]
+# Import the data
+  qPCR.variables  <- read.csv("Outputs/Ssid_SH_cell_ratio.csv", header = T)
 
-qPCR.variables<-subset(qPCR.variables, Date!="2018-02-05")
+# Remove blastate samples
+  qPCR.variables<-subset(qPCR.variables, Date!="2018-02-05")
     
-qPCR.variables$Days <- as.numeric(qPCR.variables$Date -17485)
-
-
+ 
 # Variable types 
 str(qPCR.variables)
-  qPCR.variables$Colony<-factor(qPCR.variables$Colony, 
-                                   levels=c("30", "20", "24", "28",
-                                            "27", "23", "22"))
+  qPCR.variables$Genotype<-factor(qPCR.variables$Genotype, 
+                                   levels=c("Ss_22","Ss_23","Ss_27", "Ss_28",
+                                          "Ss_20", "Ss_24","Ss_30"))
   qPCR.variables$DaysF<-as.factor(qPCR.variables$Days)
   
   summary(qPCR.variables)
@@ -59,55 +77,162 @@ str(qPCR.variables)
 
 ### 2. Exploratory graphs
 
-```{r Histograms}
+* Histograms
 
-   HistoL_SH<-qplot(logSH, data=qPCR.variables, binwidth=0.15)
+```{r }
+  HistoL_SH<-qplot(logSH, data=qPCR.variables, binwidth=0.15)
    HistoL_SH + facet_grid(Treatment~Date)
-  # 
+   
   ggplot(qPCR.variables, aes(logSH, fill = Treatment , colour = Treatment)) +
-   geom_density(alpha = 0.1) + facet_wrap(~Date)
-  # 
-  
+   geom_density(alpha = 0.1) + facet_wrap(~Date) + ggthe_bw
+
 ```
 
-#### 2.2 Mean -+ SD
+* Log SH
 
 ```{r}
+
+logSHGenotype <- ggplot(qPCR.variables, aes(Days, logSH)) +
+  geom_line(aes(colour=Fragment))+geom_point(aes(shape=factor(Community), colour=factor(Community)))+
+  # geom_jitter(aes(colour=factor(Replicate))) +
+      # stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+      #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
+      # stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+      facet_grid(Treatment~Genotype) +
+      ggthe_bw +theme(legend.position = "none" )
+
+logSHGenotype + ylab("Relative log10 (S:H)") + xlab("Treatment") +  
+      theme(axis.title.y=element_text(size=12), legend.position="none")
+
+
 logSHTreatment <- ggplot(qPCR.variables, aes(Date, logSH, colour=factor(Treatment))) +
        # geom_jitter(aes(colour=factor(Treatment))) +
        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
        stat_summary(fun.y=mean, geom="line", size =1) +
        theme_gdocs() 
-logSHTreatment + facet_wrap(~Colony)
+logSHTreatment + facet_wrap(~Genotype)
 
-logSH_Colony<- ggplot(qPCR.variables, aes (Date, logSH, colour=Treatment, 
-                      shape=Replicate) )+
+logSH_Replicate<- ggplot(qPCR.variables, aes (Days, logSH, 
+                                             colour=factor(Replicate))) +
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
   stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") +   theme_gdocs()+
-  geom_jitter(aes(colour=File.Name))
-logSH_Colony + facet_grid (Treatment~Colony)
+  stat_summary(fun.y=mean, geom="line") + facet_grid (~Treatment) + ggthe_bw
+logSH_Replicate 
+logSH_Replicate+ facet_grid(~Community)
 
-logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logSH, 
-                                             colour=factor(Colony))) +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") +   theme_gdocs()
-logSH_Colony + facet_grid (Treatment~Replicate) +
-  theme(legend.position = "none" )
+logSHTreatment <- ggplot (qPCR.variables, aes(Days, logSH, colour=Treatment)) + 
+  ggtitle("A.") +  # geom_point(alpha=0.3) +
+  ggthe_bw +  theme(legend.position="bottom") +
+  
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 5), width = 0.2 )+
+  #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+       #            position = position_dodge(width = 1)) +
+  stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
 
+  scale_y_continuous(breaks = seq(-5, 0.5, 0.5),
+                    expand = c(0,0),
+                  name=("log 10 (Total S/H cell ratio")) +
+  scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) +  
+ 
+      annotate("segment", x = 2, xend = 91, y = -3.5, yend = -3.5,
+                colour = "gray90")+
+      annotate("segment", x = 79, xend = 90, y = -3.5, yend = -3,
+                colour = "gray90")+
+      annotate("segment", x = 91, xend = 110, y = -3, yend = -3,
+                colour = "gray90")
+logSHTreatment
+
+#logSHTreatment + facet_wrap(~Genotype)
+logSHTreatment + facet_wrap(~Community)
+```
+
+* Log C
+
+```{r}
+logC_Treatment <- ggplot(qPCR.variables,
+                         aes(Days, logC.SH, colour=factor(Fragment))) +
+     geom_line()+ 
+     #geom_jitter(aes(colour=factor(Replicate))) +
+         #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         #stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         ggthe_bw +  theme(legend.position = "none" )
+logC_Treatment
+logC_Treatment + facet_grid(Genotype~Treatment)
+logC_Treatment + facet_grid(Community~Treatment)
+```
+
+
+* Log D
+
+```{r}
+logD_genotype <- ggplot(qPCR.variables,
+                         aes(Days, logD.SH, colour=factor(Fragment))) +
+     geom_line()+ 
+     #geom_jitter(aes(colour=factor(Replicate))) +
+         #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+         #stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+         ggthe_bw +  theme(legend.position = "none" )
+logD_genotype
+logD_genotype + facet_grid(Genotype~Treatment)
+
+logD_Treat <- ggplot(qPCR.variables,
+                         aes(Days, logD.SH, colour=factor(Treatment))) +
+     #geom_jitter(aes(colour=factor(Replicate))) +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
+        stat_summary(fun.y=mean, geom="line", size =1, alpha=0.5) + 
+        ggthe_bw +  theme(legend.position = "none" )
+logD_Treat
+logD_Treat + facet_grid(Community~Treatment)
+
+```
+
+*D proportion
+
+```{r}
+D.PTreatment <- ggplot(qPCR.variables, aes(Days, D.Prp, colour=Fragment)) +
+        ggthe_bw +  theme(legend.position="none") +  
+        geom_jitter(aes(shape=factor(Replicate)), alpha=0.5) +
+        geom_line() + facet_grid (Genotype~Treatment) +
+  
+      annotate("segment", x = 2, xend = 91, y = 0, yend = 0,
+                colour = "gray90")+
+      #annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
+    
+      annotate("segment", x = 79, xend = 90, y = 0, yend = 0.3,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y = 0.3, yend = 0.3,
+                colour = "gray90")+
+      #annotate("text", x = 99, y = 0.3, label = "Heat", size=3)+
+
+      scale_y_continuous(breaks = seq(0, 1, 0.3),
+                     name=("Durusdinium proportion (D/H)/(S/H)")) +
+      scale_x_continuous(name="Days in the experiment",
+                           limits = c(-2,113),
+                         breaks = seq(0, 110, 45),  
+                         expand = c(0, 0))
+D.PTreatment
+```
+
+# 2. Data cleaning? 
+
+```{r}
 # Removing weird points and colonies not used 
-  qPCR.variables_2<-subset(qPCR.variables, Date!="2018-02-05")
-  qPCR.variables_2<-subset(qPCR.variables_2, Date!="2017-12-14")
+  qPCR.variables_2<-subset(qPCR.variables, Date!="2017-12-14")
   qPCR.variables_2<-subset(qPCR.variables_2, TotalSH<0.8)
  
   
-logSH_Colony<- ggplot(qPCR.variables_2, aes (Days, logSH, 
-                     colour=factor(Core))) +
-  theme_gdocs() + geom_line()+ facet_grid (Colony~Treatment)#+
-logSH_Colony + theme(legend.position = "none" ) + geom_point()
+logSH_Genotype<- ggplot(qPCR.variables_2, aes (Days, logSH, 
+                     colour=factor(Fragment))) +
+  theme_gdocs() + geom_line()+ facet_grid (Genotype~Treatment)#+
+logSH_Genotype + theme(legend.position = "none" ) + geom_point()
 
 ```
+
 
 ```{r}
 logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment)) +  theme_bw() + ggtitle("A.")+
@@ -137,13 +262,13 @@ logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment)) 
                          limits = c(-2,113),
                          breaks = seq(0, 110, 15),  
                          expand = c(0, 0)) # +
-  #facet_wrap (~Colony)
+  #facet_wrap (~Genotype)
 
 
   logSHTreatment
   
   ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
-  ggsave(file="5.3A_AH_NoColony.svg", plot=logSHTreatment, width=3.0, height=3)
+  ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.0, height=3)
 
   
   # NOT log 10
@@ -172,26 +297,26 @@ logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment)) 
                          limits = c(-2,113),
                          breaks = seq(0, 110, 15),  
                          expand = c(0, 0))
-  # facet_grid (Colony~Community)
+  # facet_grid (Genotype~Community)
 
   SHTreatment_2
   
   #ggsave(file="5.3A_AH_2.svg", plot=SHTreatment_2, width=3.0, height=6)
-  ggsave(file="5.3C_SH_NoColony_2.svg", plot=SHTreatment_2, width=3.0, height=3)
+  ggsave(file="5.3C_SH_NoGenotype_2.svg", plot=SHTreatment_2, width=3.0, height=3)
 
 # Day as factor
 
-LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF + (1|Replicate) + (1|Colony/Core), data= qPCR.variables_2)
+LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF + (1|Replicate) + (1|Genotype/Fragment), data= qPCR.variables_2)
 step(LM_Ssid.qpCR)
 summary(LM_Ssid.qpCR)
 
-LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF + Replicate + (1|Colony),
+LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF + Replicate + (1|Genotype),
                    data= qPCR.variables_2)
 step(LM_Ssid.qpCR)
 Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment * DaysF)
      contrast(Ssid.YII.emm, "tukey")
     # Effect plot options
-emmip(LM_Ssid.qpCR, ~DaysF|Treatment, CIs = TRUE, aes(Colony=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
+emmip(LM_Ssid.qpCR, ~DaysF|Treatment, CIs = TRUE, aes(Genotype=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
 
     
     # Pairwise comparisons
@@ -208,14 +333,14 @@ emmip(LM_Ssid.qpCR, ~DaysF|Treatment, CIs = TRUE, aes(Colony=factor(Treatment)))
     
   qPCR.variables_3<-subset(qPCR.variables, Date!="2018-02-23")   
   qPCR.variables_3<-subset(qPCR.variables_3, Sample!="22-18_2018-03-06")   
-  SampleSize <- data.frame(table(qPCR.variables_3$Core))
-  colnames(SampleSize)<-c("Core","Times")
+  SampleSize <- data.frame(table(qPCR.variables_3$Fragment))
+  colnames(SampleSize)<-c("Fragment","Times")
   qPCR.variables_3<-join(qPCR.variables_3, SampleSize, type = "left")
   qPCR.variables_3<-subset(qPCR.variables_3, Times>2)
   
   
 
-D.PTreatment <- ggplot(qPCR.variables_3, aes(Days, D.Prp, colour=Core)) + theme_bw() +
+D.PTreatment <- ggplot(qPCR.variables_3, aes(Days, D.Prp, colour=Fragment)) + theme_bw() +
             theme(plot.background=element_blank(), 
             panel.border = element_blank(),
             axis.line = element_line(colour = "black"),
@@ -237,7 +362,7 @@ D.PTreatment <- ggplot(qPCR.variables_3, aes(Days, D.Prp, colour=Core)) + theme_
                            limits = c(-2,113),
                          breaks = seq(0, 110, 45),  
                          expand = c(0, 0)) +
-      facet_grid (Treatment~Colony, labeller = labeller(Colony=c(
+      facet_grid (Treatment~Genotype, labeller = labeller(Genotype=c(
                                     `30` = "S.sid_30", 
                                     `20` = "S.sid_20",
                                    `24` = "S.sid_24", 
@@ -259,18 +384,18 @@ ggsave(file="D.PTreatment.svg", plot=D.PTreatment, width=6.0, height=4.0)
 ```{r Relative to control}
  # Claculate relative changes (1 - Control)
       
-          # Summary per colony per Treatment
+          # Summary per Genotype per Treatment
           library(plyr)
-          SH.Summary <- plyr::ddply (qPCR.variables, . (Colony, Treatment, Days),summarise, 
+          SH.Summary <- plyr::ddply (qPCR.variables, . (Genotype, Treatment, Days),summarise, 
                                                 A.H_mean = mean (A.Ssid , na.rm = F), 
                                                 A.H_sd = sd (A.Ssid, na.rm = F))
           
         SH.SummaryCon<-subset(SH.Summary, Treatment=="Control" )
-        SH.SummaryCon$Colony_Day<-paste(SH.SummaryCon$Colony, SH.SummaryCon$Days, sep = "_")
-        qPCR.variables$Colony_Day<-paste(qPCR.variables$Colony, qPCR.variables$Days, sep = "_")
+        SH.SummaryCon$Genotype_Day<-paste(SH.SummaryCon$Genotype, SH.SummaryCon$Days, sep = "_")
+        qPCR.variables$Genotype_Day<-paste(qPCR.variables$Genotype, qPCR.variables$Days, sep = "_")
           
         qPCR.variables$Control.A.H<- 
-                SH.SummaryCon[match(qPCR.variables$Colony_Day, SH.SummaryCon$Colony_Day),"A.H_mean"] 
+                SH.SummaryCon[match(qPCR.variables$Genotype_Day, SH.SummaryCon$Genotype_Day),"A.H_mean"] 
         qPCR.variables$Control_A.Ssid<-((qPCR.variables$A.Ssid)-qPCR.variables$Control.A.H)
           
         HistoL_SH<-qplot(Control_A.Ssid, data=qPCR.variables, binwidth=0.1)
@@ -315,7 +440,7 @@ logSHTreatment <- ggplot(qPCR.razor, aes(Days, (Control_A.Ssid*100), colour=fact
 
 logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +  
       theme(axis.title.y=element_text(size=12), legend.position="none") +
-      facet_wrap(~Colony)
+      facet_wrap(~Genotype)
 
 
 ```
@@ -324,9 +449,9 @@ logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +
 
 ```{r Relative to control}
 
-#   qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "F"), ]
-#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "Yellow"), ]
-#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Colony == "Red and Yellow"), ]
+#   qPCR.razor <- qPCR.razor[!(qPCR.razor$Genotype == "F"), ]
+#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Genotype == "Yellow"), ]
+#     qPCR.razor <- qPCR.razor[!(qPCR.razor$Genotype == "Red and Yellow"), ]
 # 
 # logSHTreatment <- ggplot(qPCR.razor, aes(Days, (Control_A.Ssid*100), colour=factor(Treatment))) +
 #        # geom_jitter(aes(colour=factor(Replicate))) +
@@ -361,13 +486,13 @@ logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +
 
 qPCR.nutrients<-subset(qPCR.variables, qPCR.variables$Days<80)
 qPCR.nutrients<-subset(qPCR.nutrients, qPCR.variables$logSH>-2.5)
-qPCR.nutrients<-subset(qPCR.nutrients, !(Colony=="F"))
-qPCR.nutrients<-subset(qPCR.nutrients, !(Colony=="Yellow"))
+qPCR.nutrients<-subset(qPCR.nutrients, !(Genotype=="F"))
+qPCR.nutrients<-subset(qPCR.nutrients, !(Genotype=="Yellow"))
 qPCR.nutrients_wide<-YII.Wide<- reshape(qPCR.nutrients, idvar = "Fragment", timevar = "Days", direction = "wide")
 
-    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "F"), ]
-    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "Yellow"), ]
-    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Colony == "Red and Yellow"), ]
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Genotype == "F"), ]
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Genotype == "Yellow"), ]
+    qPCR.nutrients <- qPCR.nutrients[!(qPCR.nutrients$Genotype == "Red and Yellow"), ]
 
 qPCR.nutrients_wide<-qPCR.nutrients_wide[complete.cases(qPCR.nutrients_wide), ]
 
@@ -387,19 +512,19 @@ logSHTreatment + ylab("Relative (A/H)") + xlab("Days in nutrient treatment") +
       theme(axis.title.y=element_text(size=12), legend.position="none")
                        
 
-logSHColony <- ggplot(qPCR.nutrients, aes(Date, logSH, colour=factor(Colony))) +
+logSHGenotype <- ggplot(qPCR.nutrients, aes(Date, logSH, colour=factor(Genotype))) +
        geom_point() +
        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
        stat_summary(fun.y=mean, geom="line") +
        theme_gdocs() + facet_grid(~Treatment)
-logSHColony
+logSHGenotype
 
-logSHColony <- ggplot(qPCR.nutrients, aes(Date, logSH, colour=factor(Fragment))) +
+logSHGenotype <- ggplot(qPCR.nutrients, aes(Date, logSH, colour=factor(Fragment))) +
        geom_point() +
        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
        stat_summary(fun.y=mean, geom="line") +
-       theme_gdocs() + facet_grid(Colony~Treatment)
-logSHColony
+       theme_gdocs() + facet_grid(Genotype~Treatment)
+logSHGenotype
 
 logSHTreatment <- ggplot(qPCR.nutrients, aes(Days, logSH, colour=factor(Treatment))) +
        # geom_jitter(aes(colour=factor(Replicate))) +
@@ -416,11 +541,11 @@ logSHTreatment + ylab("log10 (A/H)") + xlab("Days in nutrient treatment") +
 
 
 # Day as contin.
-    LM_1 <- lmerTest::lmer(logSH ~ Treatment * Days * Replicate + (1|Colony/Fragment),                    REML=TRUE, data= qPCR.nutrients)
+    LM_1 <- lmerTest::lmer(logSH ~ Treatment * Days * Replicate + (1|Genotype/Fragment),                    REML=TRUE, data= qPCR.nutrients)
     
     step(LM_1)
     
-    LM_1 <-lmer(logSH ~ Treatment + (1 | Colony), REML=TRUE, data= qPCR.nutrients)
+    LM_1 <-lmer(logSH ~ Treatment + (1 | Genotype), REML=TRUE, data= qPCR.nutrients)
     
     summary(LM_1)
     A.H.emm<-emmeans(LM_1, ~Treatment)
@@ -429,7 +554,7 @@ logSHTreatment + ylab("log10 (A/H)") + xlab("Days in nutrient treatment") +
 
 # Day as factor
 
-LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF * Replicate + (1 | Colony), data= qPCR.nutrients)
+LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF * Replicate + (1 | Genotype), data= qPCR.nutrients)
 
 step(LM_Ssid.qpCR)
 
@@ -438,7 +563,7 @@ summary(LM_Ssid.qpCR)
 Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment * DaysF* Replicate)
     # contrast(Ssid.YII.emm, "tukey")
       # Effect plot options
-emmip(LM_Ssid.qpCR, ~Treatment|DaysF, CIs = TRUE, aes(Colony=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
+emmip(LM_Ssid.qpCR, ~Treatment|DaysF, CIs = TRUE, aes(Genotype=factor(Treatment))) + theme_gdocs() # interaction plot of predictions
 
     
     # Pairwise comparisons

@@ -1,11 +1,13 @@
 ---
-title: "*A.cer* in nutrients and heat stress"
+title: '*A.cer* in nutrients and heat stress'
 author: "Ana Palacio, Caroline Dennison, Celia Leto, Prati Rosen"
 output:
+  pdf_document:
+    toc: yes
   html_document:
-    toc: true
     df_print: paged
     theme: united
+    toc: yes
 ---
 
 # Collection and maintenance
@@ -55,14 +57,14 @@ output:
 
 ----------
 
-## August 1, 2017
+## Aug 1, 2017
 
 #### New lights
 
 * All the A.cer, including the old fragments were fed moved to tank 1A with the new lights. 
 * Same HOBO to follow temps
 
-## August 11 and 12, 2017
+## Aug 11 and 12, 2017
 
 #### Death!
 
@@ -84,7 +86,7 @@ output:
 
 ----------
 
-## August 30, 2017
+## Aug 30, 2017
 
 #### IPAM Time 1
 * Data IPAM taken by CD, AP and Becca using the lab (fixed) machine
@@ -99,55 +101,55 @@ output:
 
 ----------
 
-## August 31, 2017
+## Aug 31, 2017
 
 ### Prok incubation of all samples T=1
 * 100uL aliquotes + 6uL of prok / 3 hours
 
 ----------
 
-## September 2-12, 2017
+## Sep 2-12, 2017
 ### IRMA!!
 * The corals were not cleaned or fed until 12th when Phil could get into RSMAS 
 
 ----------
 
-## September 18, 2017
+## Sep 18, 2017
 * Cleaned and fed all the Acer, they look ok in general
 
 ----------
 
-## September 19, 2017
+## Sep 19, 2017
 * Samples 136 and 145 had mortality on the base, they were cut and re-glued
 * Sample 192 fall and were re-glued
 
 ----------
 
-## October 05, 2017
+## Oct 05, 2017
 * Organic extraction and 1st EtOH from sample 101 to 236 by CD
 * New 10 gallon aquaria and pumps set up
 
 ----------
 
-## October 06, 2017
+## Oct 06, 2017
 * 2nd EtOH from sample 101 to 236 by AP and PR
 * Organic extraction and 1st EtOH from sample 236 to 300 by AP and PR
 
 ----------
 
-## October 07, 2017
+## Oct 07, 2017
 * 2nd EtOH from sample 237 to 300 by AP
 * Make stock solutions and started the pumps. 
 * Took water samples for nutrient analysis day 1 
 
 ----------
 
-## October 08, 2017
+## Oct 08, 2017
 * Took water samples for nutrient analysis day 2
 
 ----------
 
-## October 09, 2017
+## Oct 09, 2017
 * EtOH wash from sample 101 to 300 by AP and BG
     - 101 to 165 (BG)
     - 106 to 300 (AP)
@@ -659,7 +661,7 @@ Se
 * Corals in control(both replicates) had mesenterial filaments out
 * Another coral in Nitrogen R2 is showing signs of tissue loss
 
-## Temperature and Salinity measurements taken using YSI from Langdon Lab
+##· Temperature and Salinity measurements taken using YSI from Langdon Lab
 * Control
 ** R1: 26.1, 37.2 R2: 26.3, 36.9
 * Nitrogen

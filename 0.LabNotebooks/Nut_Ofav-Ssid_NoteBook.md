@@ -1,12 +1,15 @@
 
 ---
-title: "*Orbicella faveolata* and *Siderastrea siderea* cores in nutrients and heat stress"
+title: '*Orbicella faveolata* and *Siderastrea siderea* cores in nutrients and heat
+  stress'
 author: "Ana Palacio, Caroline Dennison, Celia Leto, Prati Rosen"
 output:
+  pdf_document:
+    toc: yes
   html_document:
-    toc: true
     df_print: paged
     theme: united
+    toc: yes
 ---
 
 # Collection and maintenance
@@ -38,19 +41,19 @@ output:
 
 ------
 
-## September 2-12, 2017
+## Sep 2-12, 2017
 ### IRMA!!
 * The corals were not cleaned or fed until 13th when AB and Maddie could get into RSMAS and clean them
 
 ------
 
-## September 18-19, 2017
+## Sep 18-19, 2017
 * Cleaned and fed 
 * Lots of mortality
 
 ------
 
-## September 21, 2017
+## Sep 21, 2017
 
 ### Ssid Tissue samples T= 0 for colonies Ssid 27 
 
@@ -59,7 +62,7 @@ output:
 
 ------
 
-## September 22, 2017
+## Sep 22, 2017
 
 ### Ssid Tissue samples T= 0 for colonies Ssid 30 
 
@@ -74,7 +77,7 @@ output:
 
 ------
 
-## September 26, 2017
+## Sep 26, 2017
 
 ### Ofav 33 colony moved to tank 5A
 
@@ -82,7 +85,7 @@ output:
 
 ------
 
-## September 29, 2017
+## Sep 29, 2017
 
 ### Ssid cores (8 per genotype) were selected to be used in the nutrient experiment
 
@@ -90,20 +93,20 @@ output:
 * Made new 7*8 eggcrates for them 
 ----------
 
-## October 07, 2017
+## Oct 07, 2017
 
 * Make stock solutions and started the pums. 
 * Took water samples for nutrient analysis day 1 
 
 ----------
 
-## October 08, 2017
+## Oct 08, 2017
 
 * Took water samples for nutrient analysis day 2
 
 ----------
 
-## October 09, 2017
+## Oct 09, 2017
 
 * Took water samples for nutrient analysis day 3
 
@@ -117,6 +120,7 @@ output:
 
 * All the Ssid cores were ok
 * Values are lower vs Sep 1st (IPAM 0)  
+
 ----------
 
 ## Oct 15, 2017
@@ -567,6 +571,7 @@ output:
 * SD and AP
 * All values declined for Ofav, except N R2
 * All values declined for Ssid. 
+
 ------
 
 ## Jan 04, 2018
@@ -584,6 +589,7 @@ output:
 ### New nutrient stock (1) and (2)
 
 * Replaced stock 2 in pumps 
+
 ------
 
 ## Jan 08, 2018
@@ -927,6 +933,7 @@ output:
 ### Water changes + Feeding
 * Vertical and horizontal shift of aquaria
 * Done by AP and PR
+
 ------
 
 ## Feb 20, 2018
