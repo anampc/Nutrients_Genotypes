@@ -1,16 +1,17 @@
 ---
 title: "Changes in Symbiodiniaceae/cm2 and Chl-a/cm2 in elevated nutrients and heat stress"
 author: "Ana Palacio"
-date: "02/13/2020"
+date: "`r Sys.Date()`"
 output:
-  html_document: default
-  pdf_document: default
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fig.height=7)
 ```
-
 
 # General project set-up 
 
@@ -18,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
 
 # Load libraries and sources required to run the script
     library(tidyverse)
+library(plyr)
 #library(plotly)
 #library(GGally)
     library(ggthemes)
@@ -54,8 +56,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
   summary (data)
   
 # Organize factors  
-  data$Colony <- as.factor(paste(data$Spp, data$Colony, sep = "_"))
-  data$Core <- as.factor(paste(data$Spp, data$Core, sep = "_"))
+  data$Genotype <- as.factor(paste(data$Spp, data$Colony, sep = "_"))
+  data$Fragment <- as.factor(paste(data$Spp, data$Core, sep = "_"))
   data$Rep <- as.factor(data$Rep)
   data$Date<-as.Date(data$Date, "%Y-%m-%d")
   data$Days<-(as.numeric(data$Date) -17485)
@@ -79,13 +81,19 @@ data <-droplevels(data)
 
 # Chl by Symbiont
 data$Chl.Sym<-((data$Chl_a)/(data$Sym.cm2))
+summary(data$Genotype)
 
-summary(data$Colony)
+# Subset data
+Acer.data<-filter(data, Spp=="A.cer")
+Ofav.data<-filter(data, Spp=="O.fav")
+Ssid.data<-filter(data, Spp=="S.sid")
 ```
 
 # Explore/Plots
 
-```{r }
+## Symbiodiniaceae
+
+```{r}
 # Graphs to initially explore data
 SymDen<- ggplot(data, aes(DaysF, Sym.cm2, colour=Treatment)) +
     #geom_jitter(aes(colour=factor(Treatment))) +
@@ -115,14 +123,17 @@ Sym_Treatment<- ggplot(data, aes (Days, Sym.cm2, colour=Treatment,
   ylab("Symbiodiniaceae (106 cells / cm2)")
 Sym_Treatment
 
-library(plyr)
 Sy.Summary <- plyr::ddply (data, . (Spp, Treatment, Days),
               summarise,
               Sy_mean = mean (Sym.cm2, na.rm = T),
               Sy_sd = sd (Sym.cm2, na.rm = T))
 Sy.Summary
 
+```
 
+## Chlorophyll-a
+
+```{r}
 Chl<-ggplot(data, aes(DaysF, Chl_a, colour=Treatment)) +
   #geom_jitter(aes(colour=factor(Treatment))) +
   geom_boxplot()+ Fill.colour+
@@ -148,6 +159,51 @@ Chl.Summary <- plyr::ddply (data, . (Spp, Treatment, Days),
               Chl_sd = sd (Chl_a, na.rm = T))
 Chl.Summary
 
+```
+
+## Only Acer plots (figure 4)
+
+```{r}
+AcerSym_Treatment<- ggplot(Acer.data, aes (Days, Sym.cm2, colour=Treatment,
+                                   shape=Treatment)) + ggthe_bw +
+    theme(legend.position = c(0.7, 0.8))+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+               position = position_dodge(width = 3), width = 0.2 )+
+  stat_summary(fun.y=mean, geom="line", 
+               position = position_dodge(width = 3)) + 
+  stat_summary(fun.y=mean, geom="point",
+               position = position_dodge(width = 3)) + 
+    scale_x_continuous(breaks=c(82, 113)) + Fill.colour +   
+    ylab("Symbiodiniaceae (106 cells / cm2)") +
+  ggtitle("b.")
+AcerSym_Treatment
+
+AcerChl_Treatment<- ggplot(Acer.data, aes (Days, Chl_a, colour=Treatment,
+                                   shape=Treatment)) + ggthe_bw +
+  theme(legend.position = c(0.7, 0.8))+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+               position = position_dodge(width = 3), width = 0.2 )+
+  stat_summary(fun.y=mean, geom="line", 
+               position = position_dodge(width = 3)) + 
+  stat_summary(fun.y=mean, geom="point",
+               position = position_dodge(width = 3)) + 
+    scale_x_continuous(breaks=c(82, 113)) + Fill.colour +   
+    ylab("Chlorophyll-a (ug / cm2)")+
+  ggtitle("c.")
+AcerChl_Treatment
+```
+
+```{r}
+#grid.arrange(AcerSym_Treatment,AcerChl_Treatment,ncol=2,nrow=1)
+
+ggsave(file="Outputs/Acer_Blastate.svg", plot=grid.arrange(AcerSym_Treatment,AcerChl_Treatment,ncol=2,nrow=1), width=3.5, height=3)
+
+#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.5, height=3)
+```
+
+
+```{r }
+
 grid.arrange(Sym_Treatment,Chl_Treatment,ncol=1,nrow=2)
 
 ggsave(file="Outputs/SBlastate.svg", plot=grid.arrange(Sym_Treatment,Chl_Treatment,ncol=1,nrow=2),
@@ -171,6 +227,13 @@ Chl.S
     Ch_a.Sym + facet_grid(~Date)
 
 ```
+
+
+```{r}
+Acer.data<-filter(data, Spp=="A.cer")
+```
+
+
 
 # Test normality 
 
@@ -404,6 +467,11 @@ summary(Acer.nutrients)
   ggplot() + geom_histogram(aes(x=Chl.sq), data=Acer.nutrients)
  
 ```
+
+```{r}
+
+```
+
 
 ```{r}
 
