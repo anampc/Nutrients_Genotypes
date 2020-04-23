@@ -195,22 +195,31 @@ logD_Treat + facet_grid(Community~Treatment)
 *D proportion
 
 ```{r}
+
+qPCR.variables$D.Prp[qPCR.variables$Sample=="Ss_22-18_T22"]<-NA
+qPCR.variables$Community[qPCR.variables$Sample=="Ss_22-18_T22"]<-"D"
+
+qPCR.variables$D.Prp[qPCR.variables$Sample=="Ss_23-80_T19"]<-NA
+qPCR.variables$Community[qPCR.variables$Sample=="Ss_23-80_T19"]<-"D"
+
 D.PTreatment <- ggplot(qPCR.variables, aes(Days, D.Prp, colour=Fragment)) +
         ggthe_bw +  theme(legend.position="none") +  
-        geom_jitter(aes(shape=factor(Replicate)), alpha=0.5) +
+        geom_jitter(aes(colour=factor(Fragment)), alpha=0.5, size=1) +
         geom_line() + facet_grid (Genotype~Treatment) +
   
       annotate("segment", x = 2, xend = 91, y = 0, yend = 0,
                 colour = "gray90")+
-      #annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
-    
+  
       annotate("segment", x = 79, xend = 90, y = 0, yend = 0.3,
                 colour = "gray90")+
-    
       annotate("segment", x = 91, xend = 110, y = 0.3, yend = 0.3,
                 colour = "gray90")+
-      #annotate("text", x = 99, y = 0.3, label = "Heat", size=3)+
-
+  
+        annotate("text", x = 8, y = 0.08, label = "(BL)", size=3, colour="gray")+
+        annotate("text", x = 45, y = 0.08, label = "(C)", size=3, colour="gray")+
+        annotate("text", x = 100, y = 0.08, label = "(H)", size=3, colour="gray")+  
+  
+      
       scale_y_continuous(breaks = seq(0, 1, 0.3),
                      name=("Durusdinium proportion (D/H)/(S/H)")) +
       scale_x_continuous(name="Days in the experiment",
@@ -218,6 +227,8 @@ D.PTreatment <- ggplot(qPCR.variables, aes(Days, D.Prp, colour=Fragment)) +
                          breaks = seq(0, 110, 45),  
                          expand = c(0, 0))
 D.PTreatment
+
+ggsave(file="Outputs/D.P_Treatment_Genotype.svg", plot=D.PTreatment, width=4.5, height=8)
 ```
 
 # 2. Subset data
@@ -479,7 +490,7 @@ logSHGenotypeC <- ggplot (SH.C, aes(Genotype, logSH, colour=Genotype)) +
   
   scale_y_continuous(breaks = seq(-2.5, 0, 0.5),
                     expand = c(0.1,0.1),
-                  name=("log 10 (Total S/H cell ratio"))
+                  name=("log 10 (C/H) cell ratio"))
     
 logSHGenotypeC
 
@@ -489,13 +500,13 @@ logSHGenotypeC
 
 
 ```{r}
-LME_Ssid.H<-lmer(logSH ~ Treatment + Community + DaysF+ (1|Replicate) + (1|Genotype), 
+LME_Ssid.H<-lmer(logSH ~ Treatment * Community * DaysF+ (1|Replicate) + (1|Genotype), 
                      data=SH.H)
      step (LME_Ssid.H) #  Remove Replicate
      anova (LME_Ssid.H)
      ranova (LME_Ssid.H)
      
-LME_Ssid.H<-lmer(logSH ~ Treatment + Community + DaysF+ (1|Genotype),
+LME_Ssid.H<-lmer(logSH ~ Treatment * Community * DaysF+ (1|Genotype),
                      data=SH.H)
      step (LME_Ssid.H) #  Remove replicate
      anova (LME_Ssid.H)
@@ -505,13 +516,17 @@ LME_Ssid.H<-lmer(logSH ~ Treatment + Community + DaysF+ (1|Genotype),
 
 ```{r}
 # Multicomp
-Ssid.SH.H.emm<-emmeans(LME_Ssid.H, ~Treatment)
+Ssid.SH.H.emm<-emmeans(LME_Ssid.H, ~Treatment*Community*DaysF)
       #contrast(Ssid.SH.H.emm, "tukey")
     Ssid.SH.H_groups<-cld(Ssid.SH.H.emm, by=NULL) # compact-letter display
+    Ssid.SH.H_groups<-Ssid.SH.H_groups[order(Ssid.SH.H_groups$Day,
+                           Ssid.SH.H_groups$Community, 
+                           Ssid.SH.H_groups$Treatment), ]
+    
     Ssid.SH.H_groups
     
 # Effect plot
-  plot(emmeans(LME_Ssid.H, ~Treatment), comparisons = TRUE) +
+  plot(emmeans(LME_Ssid.H, ~DaysF*Community|Treatment), comparisons = TRUE) +
       coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
 ```
 
@@ -533,6 +548,26 @@ logSHTreatmentH <- ggplot (SH.H, aes(Treatment, logSH, colour=Treatment, shape=T
 logSHTreatmentH
 logSHTreatmentH + facet_grid(~Community)
 logSHTreatmentH + facet_grid(DaysF~Community) #+  geom_jitter()
+
+
+logSHTreatmentH <- ggplot (SH.H, aes(DaysF, logSH)) + 
+  ggtitle("A.")+ Fill.colour +
+  ggthe_bw +  theme(legend.position="bottom") +
+  
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 5), width = 0.2 )+
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                  position = position_dodge(width = 1)) +
+  
+  scale_y_continuous(breaks = seq(-3, 0, 0.5),
+                    expand = c(0.1,0.1),
+                  name=("log 10 (Total S/H cell ratio"))
+    
+logSHTreatmentH
+logSHTreatmentH + facet_grid(~Community)
+logSHTreatmentH + facet_grid(Treatment~Community) #+  geom_jitter()
+
+
 
 logSHGenotypeH <- ggplot (SH.H, aes(Community, logSH, colour=Genotype)) + 
   ggthe_bw +  theme(legend.position="bottom") +
@@ -591,7 +626,7 @@ Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment*DaysF*Community)
       SH_Multicomp<-SH_Multicomp[order(SH_Multicomp$DaysF, 
                                        SH_Multicomp$Community,
                                        SH_Multicomp$Treatment), ]
-    write.csv(SH_Multicomp, "Ssid_SH_Multicomp.csv")  
+    #write.csv(SH_Multicomp, "Outputs/Ssid_SH_Multicomp.csv")  
 
 ```
 
@@ -625,7 +660,189 @@ Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment*DaysF*Community)
      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                    position = position_dodge(1) )+
     stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                  linetype=1, alpha=1)
+    # stat_summary(fun.y=mean, geom="point", size =1,
+    #             position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_Ss_1b_plot + facet_wrap(~Community)
+
+```
+
+
+* Days as continous
+
+```{r}
+    
+LM_Ssid.qpCR2<-lmer(logSH ~ Treatment * Days * Community + (1|Replicate) + (1|Genotype/Fragment), 
+                   data= qPCR.variables_2)
+    step(LM_Ssid.qpCR2)
+    anova(LM_Ssid.qpCR2)
+    ranova(LM_Ssid.qpCR2)
+
+LM_Ssid.qpCR2<-lmer(logSH ~Treatment + Days + Community + (1|Genotype) + Treatment:Days,
+                   data= qPCR.variables_2)
+      step(LM_Ssid.qpCR2)
+      anova(LM_Ssid.qpCR2)
+      ranova(LM_Ssid.qpCR2)
+      summary(LM_Ssid.qpCR2)
+    
+```
+
+```{r}
+ # 2. Predict values:
+    pred_Ssid1 <- predict(LM_Ssid.qpCR2,re.form = NA)
+
+  #3. Bootstrap CI:
+    Ss.boot1 <- bootMer(LM_Ssid.qpCR2, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(Ss.boot1$t, 2, sd)
+    CI.lo_1 <- pred_Ssid1 - std.err*1.96
+    CI.hi_1 <- pred_Ssid1 + std.err*1.96
+
+  #Plot
+  Model_Ss_1b_plot<- ggplot(
+    qPCR.variables_2, aes(x = Days, y = logSH, colour = Treatment)) +
+    geom_line(aes(y = pred_Ssid1),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    #scale_y_continuous(name=expression(~italic("Fv / Fm")),
+    #                   limits = c(0.5, 0.61), 
+    #                   breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+    #scale_x_continuous("Days in the experiment", limits = c(0, 78),
+    #                 breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
                   linetype=1, alpha=1) + 
+    # stat_summary(fun.y=mean, geom="point", size =1,
+    #             position=position_dodge(width=1), alpha=0.8)  +
+    ggthe_bw
+  
+  Model_Ss_1b_plot + facet_wrap(Genotype~Community)
+
+```
+
+
+## All phases, except baseline
+
+* Dasys as a factor
+
+```{r}
+qPCR.variables_3<-qPCR.variables_2[(qPCR.variables_2$DaysF!="0"), ]  
+
+Sy.Summary <- plyr::ddply (qPCR.variables_3, . (DaysF, Community, Treatment),
+              summarise,
+              Sy_mean = mean (TotalSH, na.rm = T),
+              Sy_sd = sd (TotalSH, na.rm = T))
+Sy.Summary
+write.csv(Sy.Summary, "Outputs/meanSH.csv")
+```
+
+```{r}
+
+Treatment<- ggplot(
+    qPCR.variables_3, aes(x = Days, y = logSH, 
+                          colour = Treatment, shape = Treatment)) +
+  Fill.colour+
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(3) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(3), 
+                  linetype=1, alpha=1)+
+     stat_summary(fun.y=mean, geom="point", size =1,
+                 position=position_dodge(3), alpha=0.8)  +
+    ggthe_bw + facet_grid(~Community) +
+   scale_y_continuous(breaks = seq(-5.5, 0.5, 0.5),
+                    expand = c(0.1,0.1),
+                  name=("log 10 (Total S/H cell ratio)")) +
+  scale_x_continuous(name="Days in the experiment",
+                         limits = c(75,113),
+                         breaks = seq(75, 110, 15),  
+                         expand = c(0, 0))  +
+  theme(legend.position = c(.80, 0.24))+
+    annotate("text", x = 78, y = -5, label = "(C)", size=3, colour="gray")+
+    annotate("text", x = 100, y = -5, label = "(H)", size=3, colour="gray")
+Treatment
+
+#ggsave(file="Outputs/TotSH_Community.svg", plot=Treatment, width=4.5, height=3.5)
+```
+
+```{r}
+
+
+LM_Ssid.qpCR<-lmer(logSH ~ Treatment * DaysF * Community + (1|Replicate) + (1|Genotype/Fragment), 
+                   data= qPCR.variables_3)
+    step(LM_Ssid.qpCR)
+    anova(LM_Ssid.qpCR)
+    ranova(LM_Ssid.qpCR)
+
+LM_Ssid.qpCR<-lmer(logSH ~ Treatment + DaysF + Community + 
+                     (1 | Replicate) + (1 | Genotype) + 
+                     Treatment:DaysF + DaysF:Community, data= qPCR.variables_3)
+      step(LM_Ssid.qpCR)
+      anova(LM_Ssid.qpCR)
+      ranova(LM_Ssid.qpCR)
+      summary(LM_Ssid.qpCR)
+```
+
+```{r}
+# Emmeans
+Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment*DaysF*Community)
+     #contrast(Ssid.YII.emm, "tukey")
+
+# Pairwise comparisons
+    #pairs(Ssid.YII.emm) # same than contrast(Ssid.YII.emm, "tukey")
+  plot(emmeans(LM_Ssid.qpCR, ~Treatment|DaysF), comparisons = TRUE) +
+        theme_bw() # Tukey comparission (do not trust CI to compare EMMs)
+    
+    plot(emmeans(LM_Ssid.qpCR, ~Treatment|DaysF|Community), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(Community~DaysF) +
+      theme_bw()
+  
+  #CLD  
+  SH_Multicomp<-cld(Ssid.YII.emm, by=NULL) # compact-letter display
+      SH_Multicomp<-SH_Multicomp[order(SH_Multicomp$DaysF, 
+                                       SH_Multicomp$Community,
+                                       SH_Multicomp$Treatment), ]
+    #write.csv(SH_Multicomp, "Outputs/Ssid_SH_Multicomp.csv")  
+
+```
+
+
+```{r}
+ # 2. Predict values:
+    pred_Ssid1 <- predict(LM_Ssid.qpCR, re.form = NA)
+
+  #3. Bootstrap CI:
+    Ss.boot1 <- bootMer(LM_Ssid.qpCR, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(Ss.boot1$t, 2, sd)
+    CI.lo_1 <- pred_Ssid1 - std.err*1.96
+    CI.hi_1 <- pred_Ssid1 + std.err*1.96
+
+  #Plot
+  Model_Ss_1b_plot<- ggplot(
+    qPCR.variables_3, aes(x = Days, y = logSH, colour = Treatment)) +
+    geom_line(aes(y = pred_Ssid1),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    #scale_y_continuous(name=expression(~italic("Fv / Fm")),
+    #                   limits = c(0.5, 0.61), 
+    #                   breaks = seq(0.4, 0.6, by=0.1), expand = c(0,0))+
+    #scale_x_continuous("Days in the experiment", limits = c(0, 78),
+    #                 breaks = seq(0, 76, by=7), expand = c(0,0))+
+    
+     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                  linetype=1, alpha=1)+
     # stat_summary(fun.y=mean, geom="point", size =1,
     #             position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw

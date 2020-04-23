@@ -247,11 +247,11 @@ Figure3
 ```
 
 
-# Figure S2b: Treatment effect by genotype
+# Figure S3b: Treatment effect by genotype
 
 ```{r FigureSupple,  fig.height = 7, fig.width = 8}
 
-Figure3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
+FigureS3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
         ggthe_bw + Fill.colour+
         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
                      position = position_dodge(1) )+
@@ -280,9 +280,9 @@ Figure3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (D
         annotate("text", x = 45, y = 0.05, label = "Nutrients", size=3)+
         annotate("text", x = 99, y = 0.05, label = "H", size=3) +
   facet_grid(~Genotype)
-Figure3_genotype
+FigureS3_genotype
   
-#ggsave(file="Outputs/S2b_YII_Treat_Colo.svg", plot=Figure3_genotype, width=6.0, height=3.5)
+#ggsave(file="Outputs/S3b_YII_Treat_Colo.svg", plot=Figure3_genotype, width=6.0, height=3.5)
 ```
 
 # YII GLMs
@@ -355,7 +355,7 @@ LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF +
       #  theme_gdocs() # Tukey comparison (do not trust CI to compare EMMs)
       
       Acer.YII_groups<-cld(Acer.YII.emm, by=NULL) # compact-letter display
-      Acer.YII_groups<-Acer.YII_groups[order(Acer.YII_groups$Day,Acer.YII_groups$Treatment),]
+      Acer.YII_groups<-Acer.YII_groups[order(Acer.YII_groups$Treatment, Acer.YII_groups$Day),]
       Acer.YII_groups
       write.csv(Acer.YII_groups, "Outputs/Multicomp_AcerYII.csv", row.names = F)
 ```

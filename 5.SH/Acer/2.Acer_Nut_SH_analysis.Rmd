@@ -85,6 +85,7 @@ logSHTreatment + facet_wrap(~Genotype)
     qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-02")
     qPCR.variables_2<-subset(qPCR.variables_2, Date!="2018-03-03")
     qPCR.variables_2<-subset(qPCR.variables_2, Colony!="F")
+    qPCR.variables_2<-subset(qPCR.variables_2, Sample!="145_T5")
     #qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
     
 ## Genotype information
@@ -113,6 +114,18 @@ logSH_Colony + facet_grid (Treatment~Replicate) +
   theme(legend.position = "none")
 ```
 
+Add survivorship categories 
+
+```{r}
+qPCR.variables_2$Survivorship[qPCR.variables_2$MoteGen=="G_48"|
+                              qPCR.variables_2$MoteGen=="G_62"|
+                              qPCR.variables_2$MoteGen=="G_31"]<-"Resistant"
+
+qPCR.variables_2$Survivorship[qPCR.variables_2$MoteGen=="G_08"|
+                              qPCR.variables_2$MoteGen=="G_07"|
+                              qPCR.variables_2$MoteGen=="G_50"]<-"Suceptible"
+```
+
 ### Subset data for models
 
 ```{r}
@@ -126,10 +139,17 @@ SH.H<-subset(qPCR.variables_2, Days>76)
 
 ## Raw data
 
-* Raw data - All genotypes
+```{r}
+Summary_GenetTreatment<-qPCR.variables_2 %>%
+        group_by(DaysF, MoteGen, Treatment) %>%
+        dplyr::summarise(total.count=n()) 
+Summary_GenetTreatment
+```
+
+* Raw data - Treatments (All genotypes pooled)
 
 ```{r}
- # NOT log 10
+
 Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                                           shape=Treatment)) + 
     ggthe_bw + Fill.colour+ ggtitle("a.")+
@@ -167,7 +187,87 @@ Figure4
 #ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.5, height=3)
 ```
 
-* Raw data - by genotypes
+* Raw data - Treatments (Genotypes pooled by survivorship)
+
+```{r}
+
+Figure4b <- ggplot (qPCR.variables_2, aes(Days, logA.SH, colour=Treatment,
+                                          shape=Treatment)) + 
+    ggthe_bw + Fill.colour+ ggtitle("a.")+
+    theme(legend.position=c(0.2, 0.3),
+        legend.title = element_blank()) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+     
+        
+      annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
+      annotate("text", x = 98, y = 0.02, label = "Heat", size=3)+
+  
+    scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+                       #limits = c(0,0.5),
+                       expand = c(0.01,0.01),
+                   name=("Symbiont to host cell ratio  (S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) +
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 2 )+
+    stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                   position = position_dodge(width = 2)) +
+    stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 2))
+
+Figure4b + facet_grid(~Survivorship)
+
+#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.5, height=3)
+```
+
+* Raw data - Genotypes (Treatment pooled)
+
+```{r}
+ # NOT log 10
+Figure4_g <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=MoteGen)) + 
+    ggthe_bw + ggtitle("(c)")+
+    theme(legend.position="none",
+        legend.title = element_blank()) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+     
+        
+      annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray90", linetype=1)+
+      annotate("text", x = 40, y = 0.02, label = "Nutrients", size=3)+
+      annotate("text", x = 98, y = 0.02, label = "H", size=3)+
+  
+    scale_y_continuous(breaks = seq(0, 0.4, 0.1),
+                       #limits = c(0,0.5),
+                       expand = c(0.01,0.01),
+                   name=("Symbiont to host cell ratio  (S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 30),  
+                         expand = c(0.01, 0.01)) +
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 2), width = 2 )+
+    stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                   position = position_dodge(width = 2)) +
+    stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 2)) + facet_grid(~MoteGen)
+Figure4_g
+
+#ggsave(file="Outputs/Fig_S3_SH_Acer_Genet.svg", plot=Figure4_g, width=6.1, height=3.2)
+```
+
+* Raw data - by Treatment and genotype
 
 ```{r}
 Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, logA.SH , colour=Treatment,
@@ -210,13 +310,13 @@ Figure4_gen
 ## Baseline 
 
 ```{r}
-LME_BaseLine<-lmer(logA.SH ~ Treatment + MoteGen + (1|Replicate), 
+LME_BaseLine<-lmer(logA.SH ~ Treatment + MoteGen + Survivorship + (1|Replicate) + (1|Survivorship), 
                      data=SH.0)
      step (LME_BaseLine) #  Treatement is not significant
      anova(LME_BaseLine)         
      ranova(LME_BaseLine) # Replicate is       
      
-LME_BaseLine1<-lmer(logA.SH ~ Treatment + MoteGen + (1|Replicate), 
+LME_BaseLine1<-lmer(logA.SH ~ MoteGen + (1|Replicate), 
                      data=SH.0)
 
 # Multicomp
@@ -231,78 +331,141 @@ LME_BaseLine1<-lmer(logA.SH ~ Treatment + MoteGen + (1|Replicate),
       coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
 ```
 
+* No differences among fragments asigned to each tratment. 
+* Significant differences among genets
+
 ## C: Effect of nutrient treatments at control temperature 
 
 ```{r}
-LME_Acer.C<-lmer(logA.SH ~ Treatment +
+LME_Acer.C<-lmer(logA.SH ~ Treatment * Survivorship +
                    (1|Replicate) + (1|MoteGen), 
                      data=SH.C)
      step (LME_Acer.C) #  Treatement is ... almost significant?
      anova(LME_Acer.C)         
      ranova(LME_Acer.C) # Replicate is not       
-     
-LME_Acer.C1<-lmer(logA.SH ~ Treatment + (1|MoteGen), 
-                     data=SH.C)
-    anova(LME_Acer.C1)         
-    ranova(LME_Acer.C1)
-
-# Multicomp
-    Acer.SH.C.emm<-emmeans(LME_Acer.C1, ~Treatment)
-      #contrast(Acer.SH.0.emm, "tukey")
-    Acer.SH.C_groups<-cld(Acer.SH.C.emm, by=NULL) # compact-letter display
-    Acer.SH.C_groups
-  #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
-    
-# Effect plot
-  plot(emmeans(LME_Acer.C1, ~Treatment), comparisons = TRUE) +
-      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
 ```
 
-
-## H: Effect of pre-exposure to nutrient treatments during heat challenge
+* No differences among fragments asigned to replicate
+* Sifferences among Treatments
+* Significant differences among survivorship/genets
 
 ```{r}
-LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF +
+# Treatment Model          
+  LME_Acer.C1<-lmer(logA.SH ~ Treatment * Survivorship + (1|MoteGen), 
+                       data=SH.C)
+      anova(LME_Acer.C1)         
+      ranova(LME_Acer.C1)
+      
+  # Multicomp
+      Acer.SH.C.emm<-emmeans(LME_Acer.C1, ~Treatment* Survivorship)
+        #contrast(Acer.SH.0.emm, "tukey")
+      Acer.SH.C_groups<-cld(Acer.SH.C.emm, by=NULL) # compact-letter display
+      Acer.SH.C_groups
+    #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
+      
+  # Effect plot
+    plot(emmeans(LME_Acer.C1, ~Treatment*Survivorship), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+
+```
+
+```{r}
+# Genet Model
+  LME_Acer.C2<-lm(logA.SH ~ Treatment + MoteGen, 
+                     data=SH.C)
+    anova(LME_Acer.C2)         
+
+    # Multicomp
+    Acer.SH.C2.emm<-emmeans(LME_Acer.C2, ~MoteGen)
+      #contrast(Acer.SH.0.emm, "tukey")
+    Acer.SH.C2_groups<-cld(Acer.SH.C2.emm, by=NULL) # compact-letter display
+    Acer.SH.C2_groups
+    #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
+    
+  # Effect plot
+    plot(emmeans(LME_Acer.C2, ~MoteGen), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+
+```
+
+## H: Effect of pre-exposure to nutrient treatments during heat challenge
+```{r}
+LME_Acer.H<-lmer(logA.SH ~ Treatment * Survivorship + DaysF +
                    (1|Replicate) + (1|MoteGen), 
                      data=SH.H)
      step (LME_Acer.H) #  Treatement is ... almost significant?
      anova(LME_Acer.H)         
-     ranova(LME_Acer.H) # Replicate is not       
-     
-LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF + (1|MoteGen), 
-                     data=SH.H)
-    step (LME_Acer.H)
-    anova(LME_Acer.H)         
-    ranova(LME_Acer.H)
+     ranova(LME_Acer.H) # Replicate is not   
+```
 
-# Multicomp
-  Acer.SH.H.emm<-emmeans(LME_Acer.H, ~Treatment* DaysF)
-      #contrast(Acer.SH.0.emm, "tukey")
-    Acer.SH.H_groups<-cld(Acer.SH.H.emm, by=NULL) # compact-letter display
-    Acer.SH.H_groups<-Acer.SH.H_groups[order(
-        Acer.SH.H_groups$DaysF,
-        Acer.SH.H_groups$Treatment),]
-    Acer.SH.H_groups
-  #write.csv(Acer.SH.H_groups, "Outputs/Multicomp_AcerSH_H.csv", row.names = F)
-    
-# Effect plot
-  #plot(emmeans(LME_Acer.H, ~Treatment|DaysF), comparisons = TRUE) +
-   #   coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+```{r}
+# Treatment model          
+  LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF + (1|MoteGen), 
+                       data=SH.H)
+      step (LME_Acer.H)
+      anova(LME_Acer.H)         
+      ranova(LME_Acer.H)
+  
+  # Multicomp
+    Acer.SH.H.emm<-emmeans(LME_Acer.H, ~Treatment* DaysF)
+        #contrast(Acer.SH.0.emm, "tukey")
+      Acer.SH.H_groups<-cld(Acer.SH.H.emm, by=NULL) # compact-letter display
+      Acer.SH.H_groups<-Acer.SH.H_groups[order(
+          Acer.SH.H_groups$DaysF,
+          Acer.SH.H_groups$Treatment),]
+      Acer.SH.H_groups
+    #write.csv(Acer.SH.H_groups, "Outputs/Multicomp_AcerSH_H.csv", row.names = F)
+      
+  # Effect plot
+    #plot(emmeans(LME_Acer.H, ~Treatment|DaysF), comparisons = TRUE) +
+     #   coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+
+```
+
+```{r}
+# Genet model          
+  LME_Acer.H2<-lmer(logA.SH ~ Treatment * DaysF * Survivorship + (1|MoteGen), 
+                       data=SH.H)
+  
+  LME_Acer.H2<-lm(logA.SH ~ Treatment + DaysF + MoteGen + Treatment:DaysF, 
+                       data=SH.H)
+      step (LME_Acer.H2)
+      anova(LME_Acer.H2)         
+  
+  
+  # Multicomp
+  Acer.SH.H2.emm<-emmeans(LME_Acer.H2, ~ Treatment + DaysF + MoteGen + Treatment:DaysF)
+        #contrast(Acer.SH.0.emm, "tukey")
+      Acer.SH.H2_groups<-cld(Acer.SH.H2.emm, by=NULL) # compact-letter display
+      Acer.SH.H2_groups<-Acer.SH.H2_groups[order(
+          Acer.SH.H2_groups$Treatment,
+          Acer.SH.H2_groups$DaysF,
+          Acer.SH.H2_groups$MoteGen),]
+      Acer.SH.H2_groups
+    #write.csv(Acer.SH.H_groups, "Outputs/Multicomp_AcerSH_H.csv", row.names = F)
+      
+  # Effect plot
+    #plot(emmeans(LME_Acer.H, ~Treatment|DaysF), comparisons = TRUE) +
+     #   coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+
 ```
 
 ## All phases
 
+* Day as factor
+
 ```{r}
 LM_Acer.qpCR<-lmer (logA.SH ~ Treatment * DaysF +
                   (1|Replicate) + (1|Fragment/MoteGen), data= qPCR.variables_2)
-step(LM_Acer.qpCR)
-anova(LM_Acer.qpCR)
-ranova(LM_Acer.qpCR)
+  step(LM_Acer.qpCR)
+  anova(LM_Acer.qpCR)
+  ranova(LM_Acer.qpCR)
 
 LM_Acer.qPCR2<-lmer(logA.SH ~Treatment * DaysF + (1|MoteGen),
                       data= qPCR.variables_2)
-step(LM_Acer.qPCR2)
-anova(LM_Acer.qPCR2)
+  step(LM_Acer.qPCR2)
+  anova(LM_Acer.qPCR2)
+  ranova(LM_Acer.qPCR2)
 
 # Multicomp
 Acer.SH.emm<-emmeans(LM_Acer.qPCR2, ~Treatment * DaysF)
@@ -317,8 +480,6 @@ Acer.SH.emm<-emmeans(LM_Acer.qPCR2, ~Treatment * DaysF)
 # Effect plot options
 emmip(LM_Acer.qPCR2, ~DaysF|Treatment, 
       CIs = TRUE, aes(Colony=factor(Treatment))) + theme_bw() # interaction plot of predictions
-
-
 ```
 
 * By genotype
