@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
     library(emmeans)
     library(multcomp)
     library(effects)
+    library(gridExtra)
 
 # Default ggplot settings
 
@@ -47,46 +48,25 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
 
 ##  1. Get the files with all the YII by species
 
-```{r data}
-# Acer
-    YII.Acer<-read.csv("YII_Data/YII_Nutrients_Acer.csv", header = T)
-      YII.Acer$Fragment<-as.character(YII.Acer$Fragment)  # Fragment ID to character
-      YII.Acer<-subset(YII.Acer, Colony!="F")
-      YII.Acer<-subset(YII.Acer , Treatment!="Dead")
-      YII.Acer$Spp<-"Ac"
-    ## Genotype information
-      MOTE<-read.csv("YII_Data/Genotypes_mote.csv", header = TRUE)
-      YII.Acer<-merge(YII.Acer, MOTE, by="Colony", all.x=TRUE)
+Metadata
 
-# Ofav    
-    YII.Ofav<-read.csv("YII_Data/YII_Nutrients_Ofav.csv")
-      YII.Ofav$Fragment<-as.character(YII.Ofav$Fragment) 
-      YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
-                            levels=c("31","6","20","34"))  # D dominance order
-      YII.Ofav$Genotype<-paste("Of", YII.Ofav$Colony, sep = "_")
-      YII.Ofav$Spp<-"Of"
+```{r, data}
+  YII.data<-read.csv("YII_Data/All_YII_data.csv", header = T)
+  summary(YII.data)
+      
+```
 
-            
-# Ssid      
-    YII.Ssid<-read.csv("YII_Data/YII_Nutrients_Ssid.csv")
-      YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
-                                 levels=c("30","20","24","28","22","23","27") )  # D dominance order
-      YII.Ssid$Genotype<-paste("Ss", YII.Ssid$Colony, sep = "_")
-      YII.Ssid$Spp<-"Ss"
-      
-# Pool all species the data
-      YII.data<-dplyr::bind_rows(list(YII.Acer,YII.Ofav,YII.Ssid))
-      YII.data<-YII.data[,-1]
-      summary(YII.data)
-      
+Merge/Transform
+
+```{r}
 # Organize data type
-      YII.data$Date<-as.Date(YII.data$Date, "%m/%d/%y")
+      YII.data$Date<-as.Date(YII.data$Date, "%Y-%m-%d")
       YII.data$Days<-(as.numeric(YII.data$Date) -17485)
       
       YII.data$Spp <- as.factor(YII.data$Spp)
-      YII.data$Treatment[YII.data$Treatment == "Control"] <- "A"
-      YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
+      
       YII.data$Treatment <- as.factor(YII.data$Treatment)
+      
       YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
                              levels=c("G_48", "G_62","G_31", 
                                       "G_08","G_07", "G_50", 
@@ -94,21 +74,15 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
                             "Ss_22","Ss_23","Ss_27", "Ss_28",
                             "Ss_20", "Ss_24","Ss_30"
                              ))  # D dominance order
-      YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
-      YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time, sep = "_")
       
 # Check the data
       str(YII.data)
       summary(YII.data)
-      # YII.data<-YII.data[order(
-      #   YII.data$Spp, YII.data$Treatment, YII.data$Replicate,
-      #   YII.data$Fragment, YII.data$Date),]
-      YII.data<-YII.data[order(
-        YII.data$Spp, YII.data$Date, YII.data$Treatment, YII.data$Replicate,
-        YII.data$Fragment),]
-      #write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
-    
-    # Remove baseline values
+```
+
+Remove / subset timepoints
+```{r}
+ # Remove baseline values
       YII.data<-subset(YII.data, Days>-1)
     # Remove recovery values
       YII.data<-subset(YII.data, Days<112)
@@ -120,9 +94,12 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
       Spp.fragments
       #write.csv(Spp.fragments, "Outputs/Meassurments_perFragments.csv", row.names = F)
 
-# Subset data before heat stress (Only nutrients)
+# Subset data 
       YII.nutrients<-subset(YII.data, Days<80)
+      YII.heat<-subset(YII.data, Days>75)
+
 ```
+
 
 ## 2. Exploratory graphs
 
@@ -147,8 +124,10 @@ YII_Frag_Gen<- ggplot(YII.data, aes (Days, YII, colour=Genotype, group=Fragment)
 
 ```{r treatmentcolours}
 YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
-        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2, position = position_dodge(1) )+ ggthe_bw+
-        stat_summary(fun.y=mean, geom="point")  +
+        #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+        #             width = 0.2, position = position_dodge(1) ) +
+        ggthe_bw+ Fill.colour +
+        # stat_summary(fun.y=mean, geom="point")  +
         theme(legend.position="bottom",
               strip.background = element_rect(fill="white"))+
         scale_y_continuous(limits = c(0, 0.7),
@@ -160,23 +139,29 @@ YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
         annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=2)+
         annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=2)+
         annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=2)+
         annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
-YII_Treat + facet_grid (~Spp) + geom_smooth()
+        annotate("text", x = 99, y = 0.15, label = "H", size=3)
+YII_Treat + facet_grid (~Spp) + geom_smooth(span=0.5)
 
-YII_Treat + facet_wrap (Genotype~Spp) + geom_smooth()
+All_SppFif<-YII_Treat + facet_wrap (Spp~Community) + geom_smooth(span=0.5)
+#YII_Treat + facet_wrap (Spp~InitialCommunity) + geom_smooth(span=0.5)
+
+#ggsave(file="Outputs/All_spp_YII_Treatb.svg", plot=All_SppFif, width=7, height=6)
 
 ```
 
 # Figure 3b (Only A.cervicornis)
 
 ```{r Figure, fig.height = 3, fig.width = 3.5}
-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) + ggtitle("b") +
+
+YII.Acer<-subset(YII.data, Spp=="Ac")
+
+YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) + ggtitle("b") +
         ggthe_bw + Fill.colour+
         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                      position = position_dodge(1) )+
@@ -214,13 +199,16 @@ Figure3
 * Genotype G07 was especially unhappy in ambient nutrients... 
 
 ```{r}
-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Genotype))) +
+YII.AcerB<-YII.Acer
+YII.AcerB<-subset(YII.AcerB, Sample!="Ac_103_T11")
+
+YII_Genotype_BW<- ggplot(data=YII.AcerB, aes (Days, YII, colour=factor(Genotype))) +
         ggthe_bw + 
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
-                     position = position_dodge(1) )+
-  stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
+                     position = position_dodge(1), alpha=0.5 )+
+  #stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
   stat_summary(fun.y=mean, geom="point", size =1,
-                   position=position_dodge(width=1), alpha=0.8)  +
+                   position=position_dodge(width=1), alpha=0.5)  +
   theme(legend.position="bottom", 
               legend.title = element_blank(),
               strip.background = element_rect(fill="white"))+
@@ -236,14 +224,14 @@ YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=f
                   colour = "gray90", linetype=2)+
   annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
                   colour = "gray90", linetype=4)+
-  annotate("segment", x = 91, xend = 110, y = 0.25, yend = 0.20,
-                  colour = "gray90", linetype=3)
-        
-      
-   Figure3<-YII_Treat_BW + facet_grid (~Treatment)+
-        annotate("text", x = 45, y = 0.2, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.2, label = "Heat", size=3)
-Figure3
+  annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
+                  colour = "gray90", linetype=3)+
+  facet_grid (~Treatment)+
+        annotate("text", x = 45, y = 0.21, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.21, label = "H", size=3)
+
+YII_Genotype_BW <- YII_Genotype_BW + geom_smooth(method = "loess", span=0.4, alpha=0.1, size=0.5)
+#ggsave(file="Outputs/Acer_YII_Treat_Genotype.svg", plot=YII_Genotype_BW, width=5.5, height=5)
 ```
 
 
@@ -311,13 +299,15 @@ FigureS3_genotype
 
 ## A.cer model
 
+### Only treatment
+
 ```{r Acer_models}
-  
 # 1. Find the best model
+YII.Acer$DaysF<-as.factor(YII.Acer$Days)
 
 LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF + 
                              (1|Genotype) + (1|Replicate) +  (1|Fragment), 
-                              data=subset(YII.data, Spp=="Ac"), na.action=na.omit)
+                              data=YII.Acer, na.action=na.omit)
       summary(LME_Acer)
       
       Step.LME_Acer<-step (LME_Acer) # Replicate is not significant
@@ -357,6 +347,195 @@ LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF +
       Acer.YII_groups<-cld(Acer.YII.emm, by=NULL) # compact-letter display
       Acer.YII_groups<-Acer.YII_groups[order(Acer.YII_groups$Treatment, Acer.YII_groups$Day),]
       Acer.YII_groups
-      write.csv(Acer.YII_groups, "Outputs/Multicomp_AcerYII.csv", row.names = F)
+      #write.csv(Acer.YII_groups, "Outputs/Multicomp_AcerYII.csv", row.names = F)
+```
+
+## Genotypic differences 
+
+* Subset data
+
+```{r}
+ ## Data subsets  
+summary(YII.Acer)
+    YII.0<-subset(YII.Acer, DaysF=="1") # Only baseline
+    YII.0<-droplevels(YII.0)
+   
+    YII.Control<-subset(YII.Acer, Treatment=="A") # Only Ambient
+    YII.Control<-subset(YII.Control, Days<77)
+    YII.Control<-droplevels(YII.Control)
+    summary(YII.Control)
+    
+    YII.FinalAC<-subset(YII.Control, DaysF=="76")
+    YII.FinalAC<-droplevels(YII.FinalAC)
+    
+    #BW.nutrients<-subset(BW.Tall, Days>-10) # Remove baseline
+    #BW.nutrients<-subset(BW.nutrients, Days<76)
+    YII.nutrients<-subset(YII.Acer, Days<76) # with baseline
+    YII.nutrients<-droplevels(YII.nutrients)
+    summary(YII.nutrients)
+```
+
+### Baseline
+
+```{r}
+YII_Init<- ggplot(YII.0, aes (Genotype, YII, colour=Genotype)) +
+   ggtitle("(a) Baseline")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
+  scale_y_continuous(name=("Fv/Fm"),
+                     limits = c(0.46, 0.62),
+                     breaks = seq(0.46, 0.62, by=0.02))+
+   theme(legend.position="none",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA))
+YII_Init
+```
+
+```{r}
+# ANOVA
+  LM_bl <- lm(YII ~ Genotype, data= YII.0)
+  anova(LM_bl)
+
+# Pairwise comparisons
+  BW_bl.emmc<-emmeans(LM_bl, ~ Genotype)
+  contrast(BW_bl.emmc, "tukey")
+  
+#Tukey groups
+  BW_bl_groups<-cld(BW_bl.emmc)
+  BW_bl_groups
+  #write.csv(BW_bl_groups, "Outputs/BW_baseline_groups.csv", row.names = F)
+
+# N fragments    
+  N0.fragments<-YII.0 %>% 
+     group_by(Genotype) %>% count(Genotype)
+  N0.fragments
+
+```
+
+
+### Ambient final day
+
+```{r}
+YII_76<- ggplot(YII.FinalAC, aes (Genotype, YII, colour=Genotype)) +
+   ggtitle("(b) Ambient (day 76)")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
+  scale_y_continuous(name=("Fv/Fm"),
+                     limits = c(0.46, 0.62),
+                     breaks = seq(0.46, 0.62, by=0.02))+
+   theme(legend.position="none",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA))
+YII_76
+```
+
+
+
+```{r}
+summary(BW.FinalAC)
+
+# Model
+  LM_A_C.75 <- lmer(dAW.gd ~ MoteGen + (1|Replicate), data= BW.FinalAC)
+  isSingular(LM_A_C.75)
+  anova(LM_A_C.75) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_A_C.75) # Replicate is not significant
+
+  LM_A_C.75 <-lm(dAW.gd ~ MoteGen , data=BW.FinalAC)
+  anova(LM_A_C.75) # Day alone is not significant, but Day:Genet is 
+  summary(LM_A_C.75)
+  
+# Pairwise comparisons
+  BW_A_C75.emmc<-emmeans(LM_A_C.75, ~MoteGen)
+  #contrast(BW_A_C.emmc, "tukey")
+  
+#Tukey groups
+  BW_A_C75_groups<-cld(BW_A_C75.emmc)
+  BW_A_C75_groups
+  #write.csv(BW_A_C75_groups, "Outputs/BW_A_C75_groups.csv", row.names = F)
+
+# N fragments    
+  N.fragments_A_C75<-BW.FinalAC %>% 
+     count(MoteGen)
+  N.fragments_A_C75
+
+```
+
+```{r}
+Captivityeffect<-grid.arrange(YII_Init,YII_76, nrow=1)
+#ggsave(file="Outputs/S_Genotypes.svg", plot=Captivityeffect, width=6, height=3.5)
+```
+
+
+* Ambient and Control evolution
+
+```{r}
+summary(YII.Control)
+
+# Model
+  LM_A_C <- lmer(YII ~ Genotype * DaysF + 
+                  (1|Fragment)+ (1|Replicate), data=YII.Control)
+  anova(LM_A_C) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_A_C) # Replicate is not significant
+  step(LM_A_C)
+
+# Pairwise comparisons
+  BW_A_C.emmc<-emmeans(LM_A_C, ~Genotype * DaysF)
+  #contrast(BW_A_C.emmc, "tukey")
+  
+#Tukey groups
+  BW_A_C_groups<-cld(BW_A_C.emmc)
+  BW_A_C_groups<-BW_A_C_groups[order(BW_A_C_groups$Genotype,BW_A_C_groups$Day),]
+  BW_A_C_groups
+  
+  #write.csv(BW_A_C_groups, "Outputs/BW_A_C_groups.csv", row.names = F)
+
+# N fragments    
+  N.fragments_A_C<-YII.Control %>% 
+     group_by(Genotype) %>% count(DaysF)
+  N.fragments_A_C
+
+```
+
+```{r}
+# 1. Model 
+  LM_A_C <- lmer(YII ~ Genotype * Days + 
+                  (1|Fragment)+ (1|Replicate), data=YII.Control)
+  anova(LM_A_C) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_A_C) # Replicate is not significant
+  step(LM_A_C)
+
+# 2. Predict values:
+  pred_ambient <- predict(LM_A_C,re.form = NA)
+
+#3. Bootstrap CI:
+  ambient.boot1 <- bootMer(LM_A_C, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(ambient.boot1$t, 2, sd)
+    CI.lo_1 <- pred_ambient - std.err*1.96
+    CI.hi_1 <- pred_ambient + std.err*1.96
+
+  #Plot
+  Model_ambients_plot<- ggplot(
+    YII.Control, aes(x = Days, y = YII, colour =Genotype)) +
+    geom_line(aes(y = pred_ambient),size=2) +
+    #geom_point(aes(fill=factor(Treatment)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_1, ymax = CI.hi_1),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("YII")),
+                      limits = c(0.45,0.65), 
+                      breaks = seq(0.45, 0.65, by=0.02), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment", limits = c(-0, 78),
+                     breaks = seq(-30, 76, by=15), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                linetype=1, alpha=0.5) + ggthe_bw
+  
+  Model_ambients_plot
+    
+  
 ```
 

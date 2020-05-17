@@ -40,6 +40,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
           panel.background =element_rect(fill = NA, color = "black")
           )+
     theme_bw()
+  
 ```
 
 Try survival package
@@ -54,11 +55,17 @@ Try survival package
     summary(Survival.data$Genotype)
 ```
 
+## 1. All data models
+
 ```{r}
 ## Add survival object (Fit survival data using the Kaplan-Meier method)
   surv_object <- Surv(time = Survival.data$Fu.time_texp, event = Survival.data$Fu.stat_exp)
   surv_object 
 
+```
+
+* Genotype
+```{r}
 # Only genotype model
   # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit0 <- survfit(surv_object ~ Genotype, conf.type = "log-log", data = Survival.data)
@@ -68,6 +75,11 @@ Try survival package
                risk.table=T, tables.height=0.4, conf.int = T, n.risk   = TRUE )
     Genotype_only
 
+```
+
+* Treatment
+```{r}
+
 # Only treatment model
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit1 <- survfit(surv_object ~ Treatment, data = Survival.data)
@@ -76,16 +88,24 @@ Try survival package
     #summary(coxfit)
 
     # Plot the survival model
-    Treatment_Only<-ggsurvplot(fit1, data = Survival.data, pval = TRUE, 
+    Ac_Treatment_Only<-ggsurvplot(fit1, data = Survival.data, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour,
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
-           risk.table.title="Number of fragments at risk")
-    Treatment_Only
-    #ggsave("Outputs/Fig_2_Surv_Treatment.svg", 
-     #      Treatment_Only$plot, width=4, height=3.5,dpi = 300)
-    #ggsave("Outputs/Fig_2_Surv_Treatment.pdf", print(Treatment_Only),
+           risk.table.title="Number of fragments at risk") + ggtitle("(a)")
+    Ac_Treatment_Only
+    
+    #ggsave("Outputs/Fig_Acer_Surv_Treatment.svg", 
+     #      Ac_Treatment_Only$plot, width=4, height=3.5,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Treatment.pdf", print(Ac_Treatment_Only),
      #      width=5, height=6,dpi = 300)
 
+    Acer.Probabilities<-Ac_Treatment_Only$data.survplot
+
+```
+
+* Genotype and treatment
+
+```{r}
 
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
@@ -96,17 +116,20 @@ Try survival package
            risk.table=T,  tables.height=0.5)
     GenTre_1
     
-    ggsurvplot_facet(fit2, data = Survival.data, facet.by="Genotype", 
-                     #risk.table=T, tables.height=0.5, 
-                 nrow = 6, alpha=1,
-                 palette=Fill.colour, linetype=1)
-
-
-    ggsurvplot_facet(fit2, data = Survival.data, 
+    Ac_facet_T<-ggsurvplot_facet(fit2, data = Survival.data, facet.by="Genotype", 
+                  #risk.table=T, tables.height=0.5, 
+                  nrow = 6, alpha=1,
+                  palette=Fill.colour, linetype=1)
+    Ac_facet_T
+    #ggsave("Outputs/Ac_facet_T.svg", Ac_facet_T, width=4, height=7,dpi = 300)
+      
+    Ac_facet_G<-ggsurvplot_facet(fit2, data = Survival.data, 
                  facet.by="Treatment", 
                  # risk.table=T, tables.height=0.5, 
                  nrow = 3, alpha=0.5,
                  linetype=1)
+    Ac_facet_G
+    #ggsave("Outputs/Ac_facet_G.svg", Ac_facet_G, width=4, height=6,dpi = 300)
     
 # Treatment and genotype model 2
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
@@ -158,7 +181,8 @@ Do not run
 
 ```{r}
 ## Add survival object (Fit survival data using the Kaplan-Meier method)
-  surv_object2 <- Surv(time = Survival.data2$Fu.time_texp, event = Survival.data2$Fu.stat_exp)
+  surv_object2 <- Surv(time = Survival.data2$Fu.time_texp, 
+                       event = Survival.data2$Fu.stat_exp)
   surv_object2 
 
 # Only genotype model
@@ -174,6 +198,8 @@ Do not run
                break.time.by=15, xlim=c(0,115), 
            risk.table.title="Number of A. cervicornis at risk")
     Genotype_only2
+    
+    Acer.Nut.Probabilities<-Genotype_only2$data.survplot
     
     #ggsave("Outputs/Fig_2_Surv_Genotype.svg", 
     #       Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)

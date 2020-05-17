@@ -55,6 +55,32 @@ Periods.days <- ddply (Temperature, .(Period, Treatment),summarise,
                 Dmin = min (Day, na.rm = F), 
                 Dmax = max (Day, na.rm = F))
 Periods.days
+
+Temperature.82<-subset(Temperature, Day=="82")
+Temperature.111<-subset(Temperature, Day=="111")
+
+Periods.82 <- ddply (Temperature.82, .(Treatment),summarise,
+                Tmean = mean (Temperature, na.rm = F), 
+                Tmin = min (Temperature, na.rm = F), 
+                Tmax = max (Temperature, na.rm = F))
+Periods.82
+
+Periods.82 <- ddply (Temperature.82, .(Day),summarise,
+                Tmean = mean (Temperature, na.rm = F), 
+                Tmin = min (Temperature, na.rm = F), 
+                Tmax = max (Temperature, na.rm = F))
+Periods.82
+
+Periods.82 <- ddply (Temperature.82, .(Day),summarise,
+                Tmean = mean (Temperature, na.rm = F), 
+                Tsd = sd (Temperature, na.rm = F))
+Periods.82
+
+Periods.110 <- ddply (Temperature.111, .(Day),summarise,
+                Tmean = mean (Temperature, na.rm = F), 
+                Tsd = sd (Temperature, na.rm = F))
+Periods.110
+
 ```
 
 # 3. Glance at temperature conditions during each period of the experiment:
@@ -113,7 +139,7 @@ Temperature_Experiment_Colours<- ggplot(Temperature, aes (
 
 ```{r}
   
-  Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
+Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
     ggthe_bw +
     scale_y_continuous(limits = c(23.9,32.1),
                        name=(expression("Temperature"~(degree*C))),

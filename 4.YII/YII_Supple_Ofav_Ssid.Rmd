@@ -46,93 +46,9 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
 # Data
 
 ```{r}
- # Experiment time points (metadata) 
-    TimePoints<-read.csv("YII_Data/Time_Points.csv")
-    TimePoints$Date<-as.Date(TimePoints$Date, "%m/%d/%y")
-
- #Ofav    
-    YII.Ofav<-read.csv("YII_Data/YII_Nutrients_Ofav.csv")
-      YII.Ofav$Fragment<-as.character(YII.Ofav$Fragment) 
-      YII.Ofav$Colony<-factor(as.character(YII.Ofav$Colony), 
-                            levels=c("34","20", "6", "31"))  # D dominance order
-      YII.Ofav$Genotype<-paste("Of", YII.Ofav$Colony, sep = "_")
-      YII.Ofav$Spp<-"Of"
-      YII.Ofav$Initial_Sym<-NULL
-      
-      YII.Ofav$Initial_Sym[YII.Ofav$Genotype=="Of_31"]<-"B"
-      YII.Ofav$Initial_Sym[YII.Ofav$Genotype!="Of_31"]<-"D"
-
-            
-# Ssid      
-    YII.Ssid<-read.csv("YII_Data/YII_Nutrients_Ssid.csv")
-      YII.Ssid$Colony<-factor(as.character(YII.Ssid$Colony), 
-                                 levels=c("22","23","27", "28",
-                                          "20", "24","30") )  # D dominance order
-      YII.Ssid$Genotype<-paste("Ss", YII.Ssid$Colony, sep = "_")
-      YII.Ssid$Spp<-"Ss"
-      
-      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_22"|
-                           YII.Ssid$Genotype=="Ss_23"|
-                           YII.Ssid$Genotype=="Ss_27"]<-"D"
-      
-      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_20"|
-                           YII.Ssid$Genotype=="Ss_28"]<-"C1"
-      
-      YII.Ssid$Initial_Sym[YII.Ssid$Genotype=="Ss_24"|
-                           YII.Ssid$Genotype=="Ss_30"]<-"C3"
-
-  # Pool all species the data
-      YII.data<-dplyr::bind_rows(list(YII.Ofav,YII.Ssid))
-      YII.data<-YII.data[,-1]
-
-        
-      
-      summary(YII.data)
-      
-# Organize data type
-      YII.data$Date<-as.Date(YII.data$Date, "%m/%d/%y")
-      YII.data$Days<-(as.numeric(YII.data$Date) -17485)
-      
-      YII.data$Spp <- as.factor(YII.data$Spp)
-      YII.data$Treatment <- as.character(YII.data$Treatment)
-      YII.data$Treatment[YII.data$Treatment == "Control"] <- "A"
-      YII.data$Treatment[YII.data$Treatment == "NP"] <- "N+P"
-      YII.data$Treatment <- as.factor(YII.data$Treatment)
-      YII.data$Genotype<-factor(as.character(YII.data$Genotype), 
-                             levels=c(
-                            "Of_34","Of_20","Of_6", "Of_31",
-                            "Ss_22","Ss_23","Ss_27", "Ss_28",
-                            "Ss_20", "Ss_24","Ss_30"
-                             ))  # D dominance order
-      YII.data$Fragment <- paste(YII.data$Spp, YII.data$Fragment, sep = "_")
-      
-   # Add timepoints
-      YII.data<-left_join(YII.data, TimePoints, by="Date")
-      YII.data$SampleID <- paste(YII.data$Fragment, YII.data$Time_Point, sep = "_")
-      
-# Check the data
-      str(YII.data)
-      summary(YII.data)
-      # YII.data<-YII.data[order(
-      #   YII.data$Spp, YII.data$Treatment, YII.data$Replicate,
-      #   YII.data$Fragment, YII.data$Date),]
-      YII.data<-YII.data[order(
-        YII.data$Spp, YII.data$Date, YII.data$Treatment, YII.data$Replicate,
-        YII.data$Fragment),]
-      #write.csv(YII.data, "Outputs/All_YII_data.csv", row.names = F)
-    
-    # Remove baseline values
-      YII.data<-subset(YII.data, Days>-1)
-    # Remove recovery values
-      YII.data<-subset(YII.data, Days<112)
-      # write.csv(YII.data, "Outputs/Experiment_YII_data.csv", row.names = F)  
-    # YII.Wide<- reshape(YII.data, idvar = "Fragment", timevar = "Days", direction = "wide")
-      
-      #Spp.fragments<-YII.data %>% 
-        #group_by(Spp, Genotype, Treatment, Replicate) %>% count(Fragment)
-      #Spp.fragments
-      #write.csv(Spp.fragments, "Outputs/Meassurments_perFragments.csv", row.names = F)
-
+# Subset data 
+      YII.Ofav<-subset(YII.data, Spp=="Of")
+      YII.Ssid<-subset(YII.data, Spp=="Ss")
 ```
 
 # Figure S4 (Only *O.fav* and *S.sid*)
@@ -171,7 +87,7 @@ YII_Treat_OfSs<- ggplot(data=subset(YII.data, Spp!="Ac"), aes (Days, YII, colour
       FigureS4<-YII_Treat_OfSs + #facet_grid (Spp~.)+
         annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
         annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
-    FigureS4+facet_wrap(Initial_Sym~Spp)
+    FigureS4+facet_wrap(InitialCommunity~Spp)
 
 ```
 
@@ -188,7 +104,7 @@ YII_Treat_Spp_Sym<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(
   theme(legend.position="bottom", 
               legend.title = element_blank(),
               strip.background = element_rect(fill="white"))+
-  scale_y_continuous(limits = c(0.2, 0.6),
+  scale_y_continuous(limits = c(0.2, 0.65),
                            breaks = seq(0.1, 0.6, 0.1),  
                            expand = c(0, 0),
                            name=expression(~italic("Fv / Fm"))) +
@@ -204,7 +120,7 @@ YII_Treat_Spp_Sym<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(
                   colour = "gray90", linetype=3)
 
         
-FigureS4b<-YII_Treat_Spp_Sym + facet_wrap (Initial_Sym~Spp)+
+FigureS4b<-YII_Treat_Spp_Sym + facet_wrap (InitialCommunity~Spp)+
         annotate("text", x = 45, y = 0.25, label = "Nutrients", size=3)+
         annotate("text", x = 99, y = 0.25, label = "Heat", size=3)
 FigureS4b
@@ -213,7 +129,7 @@ FigureS4b
 ```
 
 ```{r}
-YII_Treat_Sym_Spp<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(Initial_Sym))) +
+YII_Treat_Sym_Spp<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(InitialCommunity))) +
          ggthe_bw + geom_smooth()+
   #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
   #                  position = position_dodge(1) )+
@@ -223,8 +139,8 @@ YII_Treat_Sym_Spp<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(
   theme(legend.position="bottom", 
               legend.title = element_blank(),
               strip.background = element_rect(fill="white"))+
-  scale_y_continuous(limits = c(0.2, 0.6),
-                           breaks = seq(0.1, 0.6, 0.1),  
+  scale_y_continuous(limits = c(0.2, 0.7),
+                           breaks = seq(0.1, 0.65, 0.1),  
                            expand = c(0, 0),
                            name=expression(~italic("Fv / Fm"))) +
   scale_x_continuous(name="Days in the experiment",
@@ -275,7 +191,7 @@ YII.Ofav<-subset(YII.data, Spp=="Of")
 YII.Ofav.0<-subset(YII.Ofav, Days<2)
 YII.Ofav.C<-subset(YII.Ofav, Days<77)
 YII.Ofav.C.1<-subset(YII.Ofav.C, Days>2)
-YII.Ofav.H<-subset(YII.Ofav, Days>76)
+YII.Ofav.H<-subset(YII.Ofav, Days>75)
 
 ```
 
@@ -288,7 +204,7 @@ YII.Ssid<-subset(YII.data, Spp=="Ss")
 YII.Ssid.0<-subset(YII.Ssid, Days<2)
 YII.Ssid.C<-subset(YII.Ssid, Days<77)
 YII.Ssid.C.1<-subset(YII.Ssid.C, Days>2)
-YII.Ssid.H<-subset(YII.Ssid, Days>76)
+YII.Ssid.H<-subset(YII.Ssid, Days>75)
 
 ```
 
@@ -299,23 +215,23 @@ YII.Ssid.H<-subset(YII.Ssid, Days>76)
 
 ```{R}
 
-LME_Ofav0<-lmer(YII ~ Treatment + Initial_Sym + (1|Replicate), 
+LME_Ofav0<-lmer(YII ~ Treatment + InitialCommunity + (1|Replicate), 
                      data=YII.Ofav.0)
      #step (LME_Ofav0) 
      anova(LME_Ofav0) # Treatment not significant        
      ranova(LME_Ofav0) #  Replicate is not significant         
      
 
-LME_Ofav0<-lm(YII ~ Initial_Sym, data=YII.Ofav.0)
+LME_Ofav0<-lm(YII ~ InitialCommunity, data=YII.Ofav.0)
      step (LME_Ofav0) 
      anova(LME_Ofav0)         
 
 # EMMs
-    Ofav.YII.emm0<-emmeans(LME_Ofav0, ~ Initial_Sym)
+    Ofav.YII.emm0<-emmeans(LME_Ofav0, ~ InitialCommunity)
       # contrast(Ssid.YII.emm, "tukey")
       
       # Tukey comparison (do not trust CI to compare EMMs)
-      plot(emmeans(LME_Ofav0, ~Initial_Sym), comparisons = TRUE) +
+      plot(emmeans(LME_Ofav0, ~InitialCommunity), comparisons = TRUE) +
         coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
         theme_bw()
       
@@ -330,7 +246,7 @@ LME_Ofav0<-lm(YII ~ Initial_Sym, data=YII.Ofav.0)
 
 ```{R}
 
-LME_Ssid0<-lmer(YII ~ Treatment + Initial_Sym +(1|Replicate), 
+LME_Ssid0<-lmer(YII ~ Treatment + InitialCommunity + (1|Replicate), 
                      data=YII.Ssid.0)
      step (LME_Ssid0) #  Treatemnt and replicate are significant :/
      anova(LME_Ssid0)         
@@ -338,11 +254,11 @@ LME_Ssid0<-lmer(YII ~ Treatment + Initial_Sym +(1|Replicate),
      
 
 # EMMs
-      Ssid.YII.emm0<-emmeans(LME_Ssid0, ~ Initial_Sym)
+      Ssid.YII.emm0<-emmeans(LME_Ssid0, ~ InitialCommunity)
       # contrast(Ssid.YII.emm, "tukey")
       
       # Tukey comparison (do not trust CI to compare EMMs)
-      plot(emmeans(LME_Ssid0, ~Initial_Sym), comparisons = TRUE) +
+      plot(emmeans(LME_Ssid0, ~InitialCommunity), comparisons = TRUE) +
         coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) +
         theme_bw()
       
@@ -360,19 +276,19 @@ LME_Ssid0<-lmer(YII ~ Treatment + Initial_Sym +(1|Replicate),
 * C Days pooled (days 8-76)
 
 ```{r}
-LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment), 
+LME_Ofav1.1<-lmer(YII ~ Treatment * InitialCommunity + (1|Fragment), 
                      data=YII.Ofav.C.1)
      step (LME_Ofav1.1) #  Replicate is significant
      anova(LME_Ofav1.1)         
      ranova(LME_Ofav1.1)         
      
 # EMMs
-    Ofav.YII.emm1.1<-emmeans(LME_Ofav1.1, ~ Initial_Sym|Treatment)
+    Ofav.YII.emm1.1<-emmeans(LME_Ofav1.1, ~ InitialCommunity|Treatment)
     # contrast(Ssid.YII.emm, "tukey")
       
     # Tukey comparison (do not trust CI to compare EMMs)
-      plot(emmeans(LME_Ofav1.1, ~Treatment|Initial_Sym), comparisons = TRUE) +
-      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~Initial_Sym) +
+      plot(emmeans(LME_Ofav1.1, ~Treatment|InitialCommunity), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~InitialCommunity) +
         theme_bw()
       
       Ofav.YII.emm1.1<-cld(Ofav.YII.emm1.1, by=NULL) # compact-letter display
@@ -386,19 +302,19 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
 ```{r Ofav_models}
  
 # 1. Ofav- Days 
-      LME_Ofav<-lmer(YII ~ Treatment * Days * Initial_Sym +
+      LME_Ofav<-lmer(YII ~ Treatment * Days * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ofav.C, na.action=na.omit)
       lmerTest::step (LME_Ofav) # Replicate is not significant
       ranova(LME_Ofav)
       
-      LME_Ofav1<-lmer(YII ~ Treatment * Days * Initial_Sym + 
+      LME_Ofav1<-lmer(YII ~ Treatment * Days * InitialCommunity + 
                         (1 | Genotype/Fragment),
                       data=YII.Ofav.C, na.action=na.omit)
       lmerTest::step (LME_Ofav1)
       
       
-      # 2. Predict values:
+# 2. Predict values:
     pred_Ofav1 <- predict(LME_Ofav1,re.form = NA)
 
   #3. Bootstrap CI:
@@ -432,7 +348,7 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
     #             position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
   
-  Model_of_1b_plot + facet_grid(~Initial_Sym)
+  Model_of_1b_plot + facet_grid(~InitialCommunity)
   
 ```
 
@@ -440,13 +356,13 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
 
 ```{r}
 # 1. Ofav- Days 
-      LME_Ofav<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+      LME_Ofav<-lmer(YII ~ Treatment * DaysF * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ofav.C, na.action=na.omit)
       lmerTest::step (LME_Ofav) # Replicate is not significant
       ranova(LME_Ofav)
       
-      LME_Ofav1.2<-lmer(YII ~ Treatment * DaysF * Initial_Sym + 
+      LME_Ofav1.2<-lmer(YII ~ Treatment * DaysF * InitialCommunity + 
                         (1|Fragment),
                       data=YII.Ofav.C, na.action=na.omit)
       lmerTest::step (LME_Ofav1.2)
@@ -483,18 +399,18 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
                    position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
   
-  Model_of_1.2_plot + facet_grid(~Initial_Sym)
+  Model_of_1.2_plot + facet_grid(~InitialCommunity)
   
-      # EMMs
-      Ofav.YII.emmC<-emmeans(LME_Ofav1.2, ~Treatment * DaysF * Initial_Sym)
-      #contrast(Ofav.YII.emm, "tukey")
+  # EMMs
+    Ofav.YII.emmC<-emmeans(LME_Ofav1.2, ~Treatment * DaysF * InitialCommunity)
+    #contrast(Ofav.YII.emm, "tukey")
       
       
       # Ofav.YII_groupsC<-cld(Ofav.YII.emmC, by=NULL) # compact-letter display
       # Ofav.YII_groupsC<-Ofav.YII_groupsC[order(
       #   Ofav.YII_groupsC$Days,
       #   Ofav.YII_groupsC$Treatment,
-      #   Ofav.YII_groupsC$Initial_Sym),]
+      #   Ofav.YII_groupsC$InitialCommunity),]
       # Ofav.YII_groupsC
       # write.csv(Ofav.YII_groupsC, "Outputs/Multicomp_OfavYIIC.csv", row.names = F)
 ```
@@ -504,24 +420,24 @@ LME_Ofav1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
 * Days pooled (8-76 Days)
 
 ```{r}
-LME_Ssid1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment), 
+LME_Ssid1.1<-lmer(YII ~ Treatment * InitialCommunity + (1|Fragment), 
                      data=YII.Ssid.C.1)
      step (LME_Ssid1.1) #  Replicate is significant
      anova(LME_Ssid1.1)         
      ranova(LME_Ssid1.1)         
      
 # EMMs
-    Ssid.YII.emm1.1<-emmeans(LME_Ssid1.1, ~ Initial_Sym|Treatment)
+    Ssid.YII.emm1.1<-emmeans(LME_Ssid1.1, ~ InitialCommunity|Treatment)
     # contrast(Ssid.YII.emm, "tukey")
       
     # Tukey comparison (do not trust CI to compare EMMs)
-      plot(emmeans(LME_Ssid1.1, ~Treatment|Initial_Sym), comparisons = TRUE) +
-      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~Initial_Sym)+
+      plot(emmeans(LME_Ssid1.1, ~Treatment|InitialCommunity), comparisons = TRUE) +
+      coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + facet_grid(~InitialCommunity)+
         theme_bw()
       
       Ssid.YII.Groups1.1<-cld(Ssid.YII.emm1.1, by=NULL) # compact-letter display
       Ssid.YII.Groups1.1<- Ssid.YII.Groups1.1[order(
-        Ssid.YII.Groups1.1$Initial_Sym, 
+        Ssid.YII.Groups1.1$InitialCommunity, 
         Ssid.YII.Groups1.1$Treatment),]
       Ssid.YII.Groups1.1
      #write.csv( Ssid.YII.Groups1.1, "Outputs/Multicomp_SsidYII1.1.csv", row.names = F)
@@ -532,24 +448,24 @@ LME_Ssid1.1<-lmer(YII ~ Treatment * Initial_Sym + (1|Fragment),
 * Model for "Days" as continous variable (days 1-76)
 
 ```{r}
-LME_Ssid<-lmer(YII ~ Treatment * Days * Initial_Sym +
+LME_Ssid<-lmer(YII ~ Treatment * Days * InitialCommunity +
                        (1|Fragment) +(1|Replicate), 
                      data=subset(YII.Ssid.C))
      step (LME_Ssid) #  Replicate is not significant
      anova(LME_Ssid)         
      ranova(LME_Ssid)         
      
-LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
+LME_Ssid1<-lmer(YII ~ Treatment * Days * InitialCommunity +
                        (1|Fragment),
                      data=YII.Ssid.C, na.action=na.omit)
 
 
 # EMMs
-      Ssid.YII.emm1<-emmeans(LME_Ssid1, ~Treatment * Days * Initial_Sym)
+      Ssid.YII.emm1<-emmeans(LME_Ssid1, ~Treatment * Days * InitialCommunity)
       # contrast(Ssid.YII.emm, "tukey")
       
       # Effect plot options
-      emmip(LME_Ssid1, ~Initial_Sym|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions
+      emmip(LME_Ssid1, ~InitialCommunity|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions
 
 ```
 
@@ -590,20 +506,20 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     #               position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw # + Fill.colour
   
-  Model1Ss_plot + facet_grid(~Initial_Sym)
+  Model1Ss_plot + facet_grid(~InitialCommunity)
 ```
 
 * Model for "Days" as factor 
 
 ```{r}
 # 1. Ssid- Days 
-      LME_Ssid<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+      LME_Ssid<-lmer(YII ~ Treatment * DaysF * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ssid.C, na.action=na.omit)
       lmerTest::step (LME_Ssid) # Replicate is not significant
       ranova(LME_Ssid)
       
-      LME_Ssid1.2<-lmer(YII ~ Treatment * DaysF * Initial_Sym + 
+      LME_Ssid1.2<-lmer(YII ~ Treatment * DaysF * InitialCommunity + 
                         (1|Fragment),
                       data=YII.Ssid.C, na.action=na.omit)
       lmerTest::step (LME_Ssid1.2)
@@ -643,19 +559,19 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
                    position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
   
-  Model_Ss_1.2_plot + facet_grid(~Initial_Sym)
+  Model_Ss_1.2_plot + facet_grid(~InitialCommunity)
 ```
 
 ```{r}
 # 5. EMMs
-    Ssid.YII.emmC<-emmeans(LME_Ssid1.2, ~Treatment * DaysF * Initial_Sym)
+    Ssid.YII.emmC<-emmeans(LME_Ssid1.2, ~Treatment * DaysF * InitialCommunity)
       #contrast(Ssid.YII.emm, "tukey")
       
       
        Ssid.YII_groupsC<-cld(Ssid.YII.emmC, by=NULL) # compact-letter display
        Ssid.YII_groupsC<-Ssid.YII_groupsC[order(
          Ssid.YII_groupsC$DaysF,
-         Ssid.YII_groupsC$Initial_Sym,
+         Ssid.YII_groupsC$InitialCommunity,
          Ssid.YII_groupsC$Treatment),]
        Ssid.YII_groupsC
        #write.csv(Ssid.YII_groupsC, "Outputs/Multicomp_SsidYIIC.csv", row.names = F)
@@ -671,7 +587,7 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
 
 ```{r}
 # 1. Ofav- Days 
-      LME_Ofav.H<-lmer(YII ~ Treatment * Days * Initial_Sym +
+      LME_Ofav.H<-lmer(YII ~ Treatment * Days * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ofav.H, na.action=na.omit)
       lmerTest::step (LME_Ofav.H) # Replicate is not significant
@@ -720,7 +636,7 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     ggthe_bw
   
   Model_of_H_plot
-  Model_of_H_plot+ facet_grid(Initial_Sym~.)
+  Model_of_H_plot+ facet_grid(InitialCommunity~.)
   
 ```
 
@@ -728,14 +644,15 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
 
 ```{r}
 # 1. Ofav- Days 
-      LME_Ofav.HF<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+    LME_Ofav.HF<-lmer(YII ~ Treatment * DaysF * Community +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ofav.H, na.action=na.omit)
       lmerTest::step (LME_Ofav.HF) # Replicate is not significant
       ranova(LME_Ofav.HF)
       
-      LME_Ofav.HF.1<-lmer(YII ~ Treatment + DaysF + Initial_Sym + (1 | Fragment) +
-                      Treatment:DaysF + DaysF:Initial_Sym,
+      LME_Ofav.HF.1<-lmer(YII ~ Treatment + DaysF + Community + 
+                          (1 | Genotype) + (1 | Fragment) +
+                          Treatment:DaysF + DaysF:Community,
                       data=YII.Ofav.H, na.action=na.omit)
       lmerTest::step (LME_Ofav.HF.1)
 ```
@@ -775,21 +692,21 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     ggthe_bw
   
   Model_of_HF_plot
-  Model_of_HF_plot + facet_grid(Initial_Sym~.)
+  Model_of_HF_plot + facet_grid(Community~.)
 ```
 
 ```{r}
 # 5. EMMs
-      Ofav.YII.emmH<-emmeans(LME_Ofav.HF.1, ~ Treatment:DaysF + DaysF:Initial_Sym)
+      Ofav.YII.emmH<-emmeans(LME_Ofav.HF.1, ~ Treatment:DaysF + DaysF:Community)
       #contrast(Ofav.YII.emmH, "tukey")
       
       Ofav.YII_groupsH<-cld(Ofav.YII.emmH, by=NULL) # compact-letter display
       Ofav.YII_groupsH<-Ofav.YII_groupsH[order(
         Ofav.YII_groupsH$Days,
         Ofav.YII_groupsH$Treatment,
-        Ofav.YII_groupsH$Initial_Sym),]
+        Ofav.YII_groupsH$Community),]
       Ofav.YII_groupsH
-      #write.csv(Ofav.YII_groupsH, "Outputs/Multicomp_OfavYIIH.csv", row.names = F)
+      #write.csv(Ofav.YII_groupsH, "Outputs/Multicomp_OfavYII_H.csv", row.names = F)
 ```
 
 ### Ssid
@@ -797,13 +714,13 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
 * Model for "Days" as continous variable (days 84-110)
 ```{r}
 # 1. Ssid- Days 
-      LME_Ssid.H<-lmer(YII ~ Treatment * Days * Initial_Sym +
+      LME_Ssid.H<-lmer(YII ~ Treatment * Days * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ssid.H, na.action=na.omit)
       lmerTest::step (LME_Ssid.H) # Replicate is not significant
       ranova(LME_Ssid.H)
       
-      LME_Ssid.H1<-lmer(YII ~ Treatment * Days * Initial_Sym + 
+      LME_Ssid.H1<-lmer(YII ~ Treatment * Days * InitialCommunity + 
                         (1 | Genotype/Fragment),
                       data=YII.Ssid.H, na.action=na.omit)
       lmerTest::step (LME_Ssid.H1)
@@ -846,20 +763,20 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     #               position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
   
-  Model_Ss_H_plot+ facet_grid(~Initial_Sym)
+  Model_Ss_H_plot+ facet_grid(~InitialCommunity)
 ```
 
 * Model for "Days" as factor (daysF 84-110)
 
 ```{r}
 # 1. Ssid- Days 
-      LME_Ssid.HF<-lmer(YII ~ Treatment * DaysF * Initial_Sym +
+      LME_Ssid.HF<-lmer(YII ~ Treatment * DaysF * InitialCommunity +
                        (1|Genotype) + (1|Fragment) +(1|Replicate), 
                         data=YII.Ssid.H, na.action=na.omit)
       lmerTest::step (LME_Ssid.HF) # Replicate is not significant
       ranova(LME_Ssid.HF)
       
-      LME_Ssid.HF.1<-lmer(YII ~ Treatment * DaysF * Initial_Sym + (1 | Fragment),
+      LME_Ssid.HF.1<-lmer(YII ~ Treatment * DaysF * InitialCommunity + (1 | Fragment),
                       data=YII.Ssid.H, na.action=na.omit)
       lmerTest::step (LME_Ssid.HF.1)
       anova(LME_Ssid.HF.1)
@@ -899,19 +816,19 @@ LME_Ssid1<-lmer(YII ~ Treatment * Days * Initial_Sym +
     #               position=position_dodge(width=1), alpha=0.8)  +
     ggthe_bw
   
-  Model_Ss_HF_plot + facet_grid(~Initial_Sym)
+  Model_Ss_HF_plot + facet_grid(~InitialCommunity)
 ```
 
 ```{r}
 # 5. EMMs
-    Ssid.YII.emmH<-emmeans(LME_Ssid.HF.1, ~ Treatment*DaysF*Initial_Sym)
+    Ssid.YII.emmH<-emmeans(LME_Ssid.HF.1, ~ Treatment*DaysF*InitialCommunity)
       #contrast(Ssid.YII.emmH, "tukey")
       
       Ssid.YII_groupsH<-cld(Ssid.YII.emmH, by=NULL) # compact-letter display
       Ssid.YII_groupsH<-Ssid.YII_groupsH[order(
         Ssid.YII_groupsH$Days,
         Ssid.YII_groupsH$Treatment,
-        Ssid.YII_groupsH$Initial_Sym),]
+        Ssid.YII_groupsH$InitialCommunity),]
       Ssid.YII_groupsH
       #write.csv(Ssid.YII_groupsH, "Outputs/Multicomp_SsidYIIH.csv", row.names = F)
 ```
