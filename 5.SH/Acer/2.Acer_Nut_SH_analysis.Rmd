@@ -96,7 +96,7 @@ logSHTreatment + facet_wrap(~Genotype)
     qPCR.variables_2$MoteGen<-factor(as.character(
       qPCR.variables_2$MoteGen), 
                              levels=c("G_48", "G_62","G_31", 
-                                      "G_08","G_07", "G_50"))  # D dominance order
+                                      "G_08","G_07", "G_50"))  # Resistance order
     
 
 logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Treatment))) +
@@ -130,9 +130,14 @@ qPCR.variables_2$Survivorship[qPCR.variables_2$MoteGen=="G_08"|
 
 ```{r}
 SH.0<-subset(qPCR.variables_2, Days<2)
+  SH.0<-droplevels(SH.0)
+
 SH.C<-subset(qPCR.variables_2, Days<77)
   SH.C<-subset(SH.C, Days>2)
+  SH.C<-droplevels(SH.C)
+
 SH.H<-subset(qPCR.variables_2, Days>76)
+  SH.H<-droplevels(SH.H)
 ```
 
 # Figure 4a
@@ -159,13 +164,14 @@ Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
      
         
       annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=2)+
       annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=4)+
       annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
-                  colour = "gray90", linetype=1)+
-      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
-      annotate("text", x = 98, y = 0.02, label = "Heat", size=3)+
+                  colour = "gray90", linetype=3)+
+      annotate("text", x = 3, y = 0.02, label = "BL", size=3, colour="gray")+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3, colour="gray")+
+      annotate("text", x = 99, y = 0.02, label = "H", size=3, colour="gray")+
   
     scale_y_continuous(breaks = seq(0, 0.4, 0.05),
                        #limits = c(0,0.5),
@@ -183,22 +189,22 @@ Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                     position = position_dodge(width = 2))
 
 Figure4
+Figure4+facet_wrap(~Genotype)
 
-#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.5, height=3)
+#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=2.3, height=3.5)
 ```
 
 * Raw data - Treatments (Genotypes pooled by survivorship)
 
 ```{r}
 
-Figure4b <- ggplot (qPCR.variables_2, aes(Days, logA.SH, colour=Treatment,
+Figure4b <- ggplot (subset(qPCR.variables_2, Days!=0), aes(Days, A.Acer, colour=Treatment,
                                           shape=Treatment)) + 
     ggthe_bw + Fill.colour+ ggtitle("a.")+
     theme(legend.position=c(0.2, 0.3),
         legend.title = element_blank()) +
-       #geom_jitter(aes(colour=factor(Replicate))) +
+       #geom_jitter() +
      
-        
       annotate("segment", x = 2, xend = 91, y = 0.01, yend = 0.01,
                   colour = "gray90", linetype=1)+
       annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
@@ -212,9 +218,13 @@ Figure4b <- ggplot (qPCR.variables_2, aes(Days, logA.SH, colour=Treatment,
                        #limits = c(0,0.5),
                        expand = c(0.01,0.01),
                    name=("Symbiont to host cell ratio  (S/H)")) +
+    # scale_x_continuous(name="Days in the experiment",
+    #                      limits = c(-2,113),
+    #                      breaks = seq(0, 110, 15),  
+    #                      expand = c(0, 0)) +
     scale_x_continuous(name="Days in the experiment",
-                         limits = c(-2,113),
-                         breaks = seq(0, 110, 15),  
+                         limits = c(73,113),
+                         breaks = seq(75, 110, 15),  
                          expand = c(0, 0)) +
     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                     position = position_dodge(width = 2), width = 2 )+
@@ -270,7 +280,7 @@ Figure4_g
 * Raw data - by Treatment and genotype
 
 ```{r}
-Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, logA.SH , colour=Treatment,
+Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, A.Acer , colour=Treatment,
                                           shape=Treatment)) + 
     ggthe_bw + Fill.colour+ 
     theme(legend.position="bottom",
@@ -285,10 +295,10 @@ Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, logA.SH , colour=Treatment,
       annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3)+
       annotate("text", x = 99, y = 0.02, label = "H", size=3)+
   
-    scale_y_continuous(breaks = seq(-2, -0.1, 0.25),
-                       limits = c(-2, -0.1),
-                       expand = c(0,0),
-                  name=("Symbiont to host cell ratio  - log 10(S/H)")) +
+    # scale_y_continuous(breaks = seq(-2, -0.1, 0.25),
+    #                    limits = c(-2, -0.1),
+    #                    expand = c(0,0),
+    #               name=("Symbiont to host cell ratio  - log 10(S/H)")) +
     scale_x_continuous(name="Days in the experiment",
                          limits = c(-2,113),
                          breaks = seq(0, 110, 30),  
@@ -299,7 +309,7 @@ Figure4_gen<- ggplot (qPCR.variables_2, aes(Days, logA.SH , colour=Treatment,
                    position = position_dodge(width = 2)) +
     stat_summary(fun.y=mean, geom="line", 
                     position = position_dodge(width = 2))+
-  facet_grid(~MoteGen)
+  facet_wrap(~MoteGen+Replicate)
 
 Figure4_gen
 #ggsave(file="Outputs/Fig_S3_SH_Acer_Genotype.svg", plot=Figure4_gen, width=6.1, height=3.5)
@@ -310,14 +320,19 @@ Figure4_gen
 ## Baseline 
 
 ```{r}
-LME_BaseLine<-lmer(logA.SH ~ Treatment + MoteGen + Survivorship + (1|Replicate) + (1|Survivorship), 
+LME_BaseLine<-lmer(logA.SH ~ Treatment + MoteGen + 
+                     (1|Replicate) + (1|Survivorship), 
                      data=SH.0)
      step (LME_BaseLine) #  Treatement is not significant
      anova(LME_BaseLine)         
-     ranova(LME_BaseLine) # Replicate is       
+     ranova(LME_BaseLine) # Replicate is mariginally significant       
      
 LME_BaseLine1<-lmer(logA.SH ~ MoteGen + (1|Replicate), 
                      data=SH.0)
+    step (LME_BaseLine1) #  Treatement is not significant
+    anova(LME_BaseLine1)         
+    ranova(LME_BaseLine1) # Replicate is mariginally significant       
+     
 
 # Multicomp
     Acer.SH.0.emm<-emmeans(LME_BaseLine1, ~MoteGen)
@@ -364,10 +379,33 @@ LME_Acer.C<-lmer(logA.SH ~ Treatment * Survivorship +
     #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
       
   # Effect plot
-    plot(emmeans(LME_Acer.C1, ~Treatment*Survivorship), comparisons = TRUE) +
+    plot(emmeans(LME_Acer.C1, ~Treatment* Survivorship), comparisons = TRUE) +
         coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
 
 ```
+
+
+```{r}
+# Only Treatment    RAW DATA, NOT FOR STATS!
+
+  LME_Acer.C1<-lmer(A.Acer ~ Treatment * Survivorship + (1|MoteGen), 
+                       data=SH.C)
+      anova(LME_Acer.C1)         
+      ranova(LME_Acer.C1)
+      
+  # Multicomp
+      Acer.SH.C.emm<-emmeans(LME_Acer.C1, ~Treatment)
+        #contrast(Acer.SH.0.emm, "tukey")
+      Acer.SH.C_groups<-cld(Acer.SH.C.emm, by=NULL) # compact-letter display
+      Acer.SH.C_groups
+    #write.csv(Acer.SH.C_groups, "Outputs/Multicomp_AcerSH_C.csv", row.names = F)
+      
+  # Effect plot
+    plot(emmeans(LME_Acer.C1, ~Treatment), comparisons = TRUE) +
+        coord_flip(xlim = NULL, ylim = NULL, expand = TRUE) + theme_bw()
+
+```
+
 
 ```{r}
 # Genet Model
@@ -400,7 +438,7 @@ LME_Acer.H<-lmer(logA.SH ~ Treatment * Survivorship + DaysF +
 
 ```{r}
 # Treatment model          
-  LME_Acer.H<-lmer(logA.SH ~ Treatment * DaysF + (1|MoteGen), 
+  LME_Acer.H<-lmer(A.Acer ~ Treatment * DaysF + (1|MoteGen), 
                        data=SH.H)
       step (LME_Acer.H)
       anova(LME_Acer.H)         

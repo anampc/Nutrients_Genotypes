@@ -28,6 +28,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fi
     library(multcomp)
     library(effects)
     library(gridExtra)
+    library(rstatix)
 
 # Default ggplot settings
 
@@ -62,6 +63,10 @@ Merge/Transform
 # Organize data type
       YII.data$Date<-as.Date(YII.data$Date, "%Y-%m-%d")
       YII.data$Days<-(as.numeric(YII.data$Date) -17485)
+      #Time as a factor, not as int
+      str(YII.data)
+      YII.data$DaysF<-as.factor(YII.data$Days)
+
       
       YII.data$Spp <- as.factor(YII.data$Spp)
       
@@ -160,6 +165,9 @@ All_SppFif<-YII_Treat + facet_wrap (Spp~Community) + geom_smooth(span=0.5)
 ```{r Figure, fig.height = 3, fig.width = 3.5}
 
 YII.Acer<-subset(YII.data, Spp=="Ac")
+YII.Acer$Nutrients<-"Nutrients"
+YII.Acer$Nutrients[YII.Acer$Treatment=="A"]<-"Ambient"
+
 
 YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) + ggtitle("b") +
         ggthe_bw + Fill.colour+
@@ -167,7 +175,7 @@ YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, YII, colour=factor(Treatment), s
                      position = position_dodge(1) )+
         stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
                      linetype=1, alpha=1) + 
-         stat_summary(fun.y=mean, geom="point", size =1,
+         stat_summary(fun.y=mean, geom="point", size =3,
                    position=position_dodge(width=1), alpha=0.8)  +
         theme(legend.position=c(0.2, 0.5),
         legend.title = element_blank(), 
@@ -200,10 +208,22 @@ Figure3
 
 ```{r}
 YII.AcerB<-YII.Acer
+
 YII.AcerB<-subset(YII.AcerB, Sample!="Ac_103_T11")
 
 YII_Genotype_BW<- ggplot(data=YII.AcerB, aes (Days, YII, colour=factor(Genotype))) +
         ggthe_bw + 
+  
+  annotate("segment", x = 2, xend = 91, y = 0.1, yend = 0.1,
+                  colour = "gray90", linetype=1)+
+  annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.65,
+                  colour = "gray90", linetype=1)+
+  annotate("segment", x = 91, xend = 110, y = 0.65, yend = 0.65,
+                  colour = "gray90", linetype=1)+
+  
+   annotate("text", x = 45, y = 0.13, label = "Nutrients", size=3)+
+        annotate("text", x = 100, y = 0.61, label = "H", size=3)+
+  
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
                      position = position_dodge(1), alpha=0.5 )+
   #stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
@@ -212,34 +232,27 @@ YII_Genotype_BW<- ggplot(data=YII.AcerB, aes (Days, YII, colour=factor(Genotype)
   theme(legend.position="bottom", 
               legend.title = element_blank(),
               strip.background = element_rect(fill="white"))+
-  scale_y_continuous(limits = c(0.1, 0.7),
-                           breaks = seq(0.1, 0.6, 0.1),  
+  scale_y_continuous(limits = c(0.0, 0.7),
+                           breaks = seq(0.0, 0.6, 0.1),  
                            expand = c(0, 0),
                            name=expression(~italic("Fv / Fm"))) +
   scale_x_continuous(name="Days in the experiment",
                            limits = c(-1,113),
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
-  annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
-                  colour = "gray90", linetype=2)+
-  annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
-                  colour = "gray90", linetype=4)+
-  annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
-                  colour = "gray90", linetype=3)+
-  facet_grid (~Treatment)+
-        annotate("text", x = 45, y = 0.21, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.21, label = "H", size=3)
+  facet_grid (~Nutrients)
 
 YII_Genotype_BW <- YII_Genotype_BW + geom_smooth(method = "loess", span=0.4, alpha=0.1, size=0.5)
-#ggsave(file="Outputs/Acer_YII_Treat_Genotype.svg", plot=YII_Genotype_BW, width=5.5, height=5)
+YII_Genotype_BW
+#ggsave(file="Outputs/Acer_YII_Treat_Genotype.svg", plot=YII_Genotype_BW, width=4.5, height=4)
 ```
 
 
-# Figure S3b: Treatment effect by genotype
+# Figure S4: Treatment effect by genotype
 
 ```{r FigureSupple,  fig.height = 7, fig.width = 8}
 
-FigureS3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (Days, YII, colour=factor(Treatment), shape=factor(Treatment))) +
+FigureS3_genotype<-YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, YII, colour=factor(Nutrients), shape=factor(Nutrients))) +
         ggthe_bw + Fill.colour+
         stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
                      position = position_dodge(1) )+
@@ -267,20 +280,237 @@ FigureS3_genotype<-YII_Treat_BW<- ggplot(data=subset(YII.data, Spp=="Ac"), aes (
                   colour = "gray90", linetype=1)+
         annotate("text", x = 45, y = 0.05, label = "Nutrients", size=3)+
         annotate("text", x = 99, y = 0.05, label = "H", size=3) +
-  facet_grid(~Genotype)
+  facet_wrap(~Genotype)
 FigureS3_genotype
   
 #ggsave(file="Outputs/S3b_YII_Treat_Colo.svg", plot=Figure3_genotype, width=6.0, height=3.5)
 ```
+
+
+# Figure S4: Treatment difference by genotype
+
+```{r FigureSupple,  fig.height = 7, fig.width = 8}
+YII.Acer$Nutrients2<-YII.Acer$Nutrients
+YII.Acer$Nutrients2[YII.Acer$DaysF=="1"]<-"Ambient"
+          
+    YII.Summary <-YII.Acer %>%
+          group_by(Genotype, Nutrients2, DaysF) %>%
+          get_summary_stats(YII, type = "mean_sd")
+    YII.Summary
+    
+   YII.Summary<-subset(YII.Summary, Nutrients2=="Ambient" )
+    YII.Summary<-YII.Summary[, -3]
+    YII.Summary<-YII.Summary[, -3]
+    YII.Summary<-YII.Summary[, -3]
+    
+    #YII.Acer<-merge(YII.Acer, YII.Summary,  by=c("Genotype", "DaysF"), all.x = T)
+    YII.Acer$Difference<-YII.Acer$YII-YII.Acer$mean
+
+FigureS4_genotype<-YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, Difference, colour=factor(Nutrients), shape=factor(Nutrients))) +
+        geom_smooth()+
+        ggthe_bw + Fill.colour+
+          stat_summary(fun.y=mean, geom="point", size =2,
+                   position=position_dodge(width=1), alpha=0.5)  +
+          stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
+                     position = position_dodge(1) )+
+       
+          theme(axis.title.y=element_text(size=12), 
+            legend.position="bottom",
+            legend.title = element_blank(),
+            strip.background =element_rect(fill=NA)) +
+  ggtitle("b)") +
+      
+    scale_y_continuous(limits = c(-0.3, 0.1),
+                           breaks = seq(-0.4, 0.1, 0.1),  
+                           expand = c(0, 0),
+                           name=expression(~italic("Fv / Fm"))) +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.65,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 0.65, yend = 0.65,
+                  colour = "gray90", linetype=1)+
+        annotate("text", x = 45, y = 0.05, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.05, label = "H", size=3) +
+  facet_wrap(~Genotype)
+FigureS4_genotype
+  
+#ggsave(file="Outputs/S3b_YII_Treat_Colo.svg", plot=Figure3_genotype, width=6.0, height=3.5)
+```
+
+# Figure S4: Treatment difference by genotype N and N+P pooled
+
+```{r FigureSupple,  fig.height = 7, fig.width = 8}
+
+    YII.Summary <-YII.Acer %>%
+          group_by(Genotype, Treatment, DaysF) %>%
+          get_summary_stats(YII, type = "mean_sd")
+    YII.Summary
+    
+   YII.Summary<-subset(YII.Summary, Treatment=="A" )
+    YII.Summary<-YII.Summary[, -3]
+    YII.Summary<-YII.Summary[, -3]
+    YII.Summary<-YII.Summary[, -3]
+    
+    #YII.Acer<-merge(YII.Acer, YII.Summary,  by=c("Genotype", "DaysF"), all.x = T)
+    YII.Acer$Difference2<-YII.Acer$YII-YII.Acer$mean
+
+YII.Acer$Percentaje2 <- (YII.Acer$Difference2/YII.Acer$mean)*100
+#Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
+#Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+
+
+FigureS4b_genotype<-YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, Percentaje2, 
+                    colour=factor(Treatment), fill=factor(Treatment), shape=factor(Treatment))) +
+        annotate("segment", x = 2, xend = 91, y = -35, yend = -35,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = -34, yend = 10,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 10, yend = 10,
+                  colour = "gray90", linetype=1)+
+        annotate("text", x = 45, y = -40, label = "Nutrients", size=3)+
+        annotate("text", x = 101, y = 13, label = "H", size=3) +
+        
+        geom_smooth()+      
+  
+        #stat_summary(fun.y=mean, geom="point", size =2,
+        #           position=position_dodge(width=1), alpha=0.5)  +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
+                      position = position_dodge(1) )+
+       
+  #ggtitle("b)") +
+  #scale_shape_manual(values=c(21, 14),
+  #                   labels=c("A", "N and N+P"))+
+  ggthe_bw + #Fill.colour+ Colour.colour +
+      
+    scale_y_continuous(limits = c(-45, 25),
+                           breaks = seq(-40, 25, 10),  
+                           expand = c(0, 0),
+                           name="Fv/Fm  change respect to A (%)") +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+
+   theme(axis.title.y=element_text(size=12), 
+          legend.position="bottom",
+          legend.title = element_blank(),
+           strip.background =element_rect(fill=NA)) +
+  facet_wrap(~Genotype)
+FigureS4b_genotype
+  
+#ggsave(file="Outputs/S4_YII_Treat_Colo.svg", plot=FigureS4_genotype, width=5.0, height=5.5)
+```
+
+# Figure S4: Treatment difference by genotype N and N+P separated
+
+```{r FigureSupple,  fig.height = 7, fig.width = 8}
+
+YII.Acer$Percentaje<- (YII.Acer$Difference/YII.Acer$mean)*100
+Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
+Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+YII.Acer$Nutrients2<factor(YII.Acer$Nutrients2, levels = c("Nutrients", "Ambient"))
+
+FigureS4_genotype<-YII_Treat_BW<- ggplot(data=YII.Acer, aes (Days, Percentaje, 
+                    colour=factor(Nutrients2), fill=factor(Nutrients2), shape=factor(Nutrients2))) +
+        annotate("segment", x = 2, xend = 91, y = -35, yend = -35,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 79, xend = 91, y = -34, yend = 10,
+                  colour = "gray90", linetype=1)+
+        annotate("segment", x = 91, xend = 110, y = 10, yend = 10,
+                  colour = "gray90", linetype=1)+
+        annotate("text", x = 45, y = -40, label = "Nutrients", size=3)+
+        annotate("text", x = 101, y = 13, label = "H", size=3) +
+        
+        geom_smooth()+      
+  
+        #stat_summary(fun.y=mean, geom="point", size =2,
+        #           position=position_dodge(width=1), alpha=0.5)  +
+        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 5,
+                      position = position_dodge(1) )+
+       
+  #ggtitle("b)") +
+  scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+  ggthe_bw + Fill.colour+ Colour.colour +
+      
+    scale_y_continuous(limits = c(-45, 25),
+                           breaks = seq(-40, 25, 10),  
+                           expand = c(0, 0),
+                           name="Fv/Fm  change respect to A (%)") +
+        scale_x_continuous(name="Days in the experiment",
+                           limits = c(-1,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+
+   theme(axis.title.y=element_text(size=12), 
+          legend.position="bottom",
+          legend.title = element_blank(),
+           strip.background =element_rect(fill=NA)) +
+  facet_wrap(~Genotype)
+FigureS4_genotype
+  
+#ggsave(file="Outputs/S4_YII_Treat_Colo.svg", plot=FigureS4_genotype, width=5.0, height=5.5)
+```
+
+
+### Subset timepoints
+
+```{r}
+summary(YII.Acer$DaysF)
+YII.Acer1<-subset(YII.Acer, DaysF=="1")
+YII.Acer76<-subset(YII.Acer, DaysF=="76")
+YII.Acer92<-subset(YII.Acer, DaysF=="92")
+YII.Acer110<-subset(YII.Acer, DaysF=="110")
+
+YII.AcerTimePoints<-rbind(YII.Acer1, YII.Acer76, YII.Acer92, YII.Acer110)
+
+YII_Timepoints<- ggplot(YII.AcerTimePoints, aes (DaysF, YII, fill=Genotype, shape=Nutrients2)) +
+  #ggtitle("(a) Baseline")+
+  ggthe_bw +
+  scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+  
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.9) + 
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  scale_y_continuous(name=("Fv/Fm"),
+                     limits = c(0.1, 0.65),
+                     breaks = seq(0, 0.7, by=0.1))+
+  theme(legend.position="right",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA))+ 
+  facet_grid(~Genotype)
+YII_Timepoints
+
+YII_Timepoints<- ggplot(YII.AcerTimePoints, aes (Genotype, YII, fill=Genotype, shape=Nutrients2)) +
+  #ggtitle("(a) Baseline")+
+  scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=1) + 
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  ggthe_bw +
+  scale_y_continuous(name=("Fv/Fm"),
+                     limits = c(0.1, 0.65),
+                     breaks = seq(0, 0.7, by=0.1))+
+  theme(legend.position="right",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA))+ 
+  facet_grid(~DaysF)
+YII_Timepoints
+
+#ggsave(file="Outputs/S4_YII_Treat_Colo.svg", plot=YII_Timepoints, width=5.5, height=3.0)
+```
+
 
 # YII GLMs
 
 ## All spp pooled
 
 ```{r models}
-#Time as a factor, not as int
-      str(YII.data)
-      YII.data$DaysF<-as.factor(YII.data$Days)
 
 # All spp together
       LME1<-lmer(YII ~ Treatment * DaysF * Spp + (1|Genotype),
@@ -331,8 +561,10 @@ LME_Acer<-lmerTest::lmer(YII ~ Treatment * DaysF +
   anova(LME_Acer1, LME_Acer2) # LME_Acer1 and LME_Acer2 are the same 
   
 #2. Extract EMMs
-      Acer.YII.emm<-emmeans(LME_Acer1, ~Treatment * DaysF)
+      Acer.YII.emm<-emmeans(LME_Acer1, ~Treatment | DaysF)
       contrast(Acer.YII.emm, "tukey")
+      
+      Acer.YII.emm<-emmeans(LME_Acer1, ~Treatment * DaysF)
       
       # Effect plot options
       emmip(LME_Acer, ~DaysF|Treatment, CIs = TRUE) + theme_bw() # interaction plot of predictions

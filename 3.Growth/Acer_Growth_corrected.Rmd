@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     library(emmeans)
     library(multcomp)
     library(gridExtra)
+    library(rstatix)
 
 # Default ggplot settings
 
@@ -61,20 +62,36 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     # BW.Tall$Initial.Date<-as.Date(BW.Tall$Initial.Date, "%Y-%m-%d")
     # BW.Tall$Final.Date<-as.Date(BW.Tall$Final.Date, "%Y-%m-%d")
     BW.Tall$Days<-(as.numeric(as.Date(BW.Tall$Final.Date))-17485)
-    BW.Tall$Day<-(as.factor(BW.Tall$Days))
-    BW.Tall$TimePoint[BW.Tall$Day=="-28"]<-"3"
-    BW.Tall$TimePoint[BW.Tall$Day=="-7"]<-"4"
-    BW.Tall$TimePoint[BW.Tall$Day=="28"]<-"9"
-    BW.Tall$TimePoint[BW.Tall$Day=="62"]<-"11"
-    BW.Tall$TimePoint[BW.Tall$Day=="75"]<-"13"
-    BW.Tall$TimePoint[BW.Tall$Day=="91"]<-"16"
-    BW.Tall$TimePoint[BW.Tall$Day=="100"]<-"17"
-    BW.Tall$TimePoint[BW.Tall$Day=="113"]<-"22"
+    BW.Tall$DayF<-(as.factor(BW.Tall$Days))
+ 
+    # BW.Tall$TimePoint[BW.Tall$Day=="-28"]<-"3"
+    # BW.Tall$TimePoint[BW.Tall$Day=="-7"]<-"4"
+    # BW.Tall$TimePoint[BW.Tall$Day=="28"]<-"9"
+    # BW.Tall$TimePoint[BW.Tall$Day=="62"]<-"11"
+    # BW.Tall$TimePoint[BW.Tall$Day=="75"]<-"13"
+    # BW.Tall$TimePoint[BW.Tall$Day=="91"]<-"16"
+    # BW.Tall$TimePoint[BW.Tall$Day=="100"]<-"17"
+    # BW.Tall$TimePoint[BW.Tall$Day=="113"]<-"22"
+    
+    
+    BW.Tall$TimePoint[BW.Tall$DayF=="-28"]<-"1"
+    BW.Tall$TimePoint[BW.Tall$DayF=="-7"]<-"NA"
+    BW.Tall$TimePoint[BW.Tall$DayF=="28"]<-"2"
+    BW.Tall$TimePoint[BW.Tall$DayF=="62"]<-"3"
+    BW.Tall$TimePoint[BW.Tall$DayF=="75"]<-"4"
+    BW.Tall$TimePoint[BW.Tall$DayF=="91"]<-"5"
+    BW.Tall$TimePoint[BW.Tall$DayF=="100"]<-"6"
+    BW.Tall$TimePoint[BW.Tall$DayF=="113"]<-"7"
+    BW.Tall$TimePoint<-as.numeric(as.character(BW.Tall$TimePoint))
+    
     
     BW.Tall$Treatment <- as.character(BW.Tall$Treatment)
     BW.Tall$Treatment[BW.Tall$Treatment == "Control"] <- "A"
     BW.Tall$Treatment[BW.Tall$Treatment == "NP"] <- "N+P"
     BW.Tall$Treatment <- as.factor(BW.Tall$Treatment)
+    
+    BW.Tall$Nutrients <- "Nutrients"
+    BW.Tall$Nutrients[BW.Tall$Treatment == "A"] <- "Ambient"
     
     BW.Tall$Colony <- as.factor(BW.Tall$Gen)
     BW.Tall$MoteGen<-factor(BW.Tall$MoteGen, 
@@ -90,7 +107,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     BW.Control<-subset(BW.Control, Initial.Date!="2017-10-18")
     BW.Control<-droplevels(BW.Control)
     
-    BW.FinalAC<-subset(BW.Control, Day=="75")
+    BW.FinalAC<-subset(BW.Control, DayF=="75")
     BW.FinalAC<-droplevels(BW.FinalAC)
     
     #BW.nutrients<-subset(BW.Tall, Days>-10) # Remove baseline
@@ -98,8 +115,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     BW.nutrients<-subset(BW.Tall, Days<76) # with baseline
     BW.nutrients<-droplevels(BW.nutrients)
     
-    BW.100<-subset(BW.Tall, Day=="100")
-    BW.91<-subset(BW.Tall, Day=="91")
+    BW.100<-subset(BW.Tall, DayF=="100")
+    BW.91<-subset(BW.Tall, DayF=="91")
     
   ## Remove recovery data points
     BW.Tall<-subset(BW.Tall, Initial.Date!="2017-10-18")
@@ -110,7 +127,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     
     
  N.fragments<-BW.Tall %>% 
-     group_by(MoteGen) %>% count(Day)
+     group_by(MoteGen) %>% count(DayF)
  N.fragments
     
 ```
@@ -121,6 +138,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ## Figure 3a
 
 ```{r, fig.height=3.5, fig.width=3.5}
+
 # Treatment effect over time
     BW_Treat<- ggplot(BW.Tall, aes (Days, dAW.gd, shape=factor(Treatment),
                                     colour=factor(Treatment))) + 
@@ -165,85 +183,268 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ## Figure S2a: All genotypes by nutrient treatment over time
 
 ```{r, echo =FALSE}
-BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=factor(Treatment),
-                              shape=factor(Treatment))) +
+
+BW.Tall$TreatmentG<-BW.Tall$Treatment
+BW.Tall$TreatmentG[BW.Tall$DayF==-28] <-"A"
+
+Colour.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
+Fill.colour<-scale_fill_manual(values = c("black", "gray70", "gray35"))
+
+BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, fill=TreatmentG,
+                              shape=factor(TreatmentG))) +
+  
+     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+      #          colour = "gray90")+
+      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+                colour = "gray90")+
+      # annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
+    
+      annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
+                colour = "gray90")+
+      # annotate("text", x = 99, y = 3.5, label = "H", size=4)+
+  
            stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                         position=position_dodge(width=5), width = 10)+
            stat_summary(fun.y=mean, geom="point", size =2,
-                        position=position_dodge(width=5), alpha=0.5) +
+                        position=position_dodge(width=5), alpha=0.8) +
            stat_summary(fun.y=mean, geom="line", 
                         position=position_dodge(width=5), linetype=1) + 
-           ggthe_bw + Fill.colour + ggtitle("a") +
-   scale_x_continuous(name="Days in the experiment",
+    scale_shape_manual(values=c(21, 22, 24),
+                     labels=c("A", "N", "N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour + ggtitle("b)") +
+    scale_x_continuous(name="Days in the experiment",
                            limits = c(-35,113),
                            breaks = seq(0, 113, 30),  
                            expand = c(0, 0))+
+    scale_y_continuous(name="Growth rate (mg / g d) ", 
+                         breaks = seq(-1, 5, by=1)) +
+   geom_hline(yintercept = 0, linetype=3)+
   
-    ylab("Growth (mg/ g d) ") + 
-    theme(axis.title.y=element_text(size=12), 
-           legend.position="bottom",
-           legend.title = element_blank()) +
-     
-     annotate("segment", x = 2, xend = 91, y = -1, yend = -1,
-                   colour = "gray90", linetype=1)+
-     annotate("segment", x = 79, xend = 91, y = -1, yend = -0.5,
-                   colour = "gray90", linetype=1)+
-     annotate("segment", x = 91, xend = 110, y = -0.5, yend = -0.5,
-                   colour = "gray90", linetype=1)+
-     annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
-     annotate("text", x = 99, y = -1.5, label = "H", size=3) +
-     facet_grid(~MoteGen)
+    ylab("Growth rate (mg/ g d) ") + 
+    theme(text=element_text(size=14),
+          legend.position="none",
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
 BW_Col
 
 #ggsave(file="Outputs/S2a_Growth_genotype.svg", plot=BW_Col, width=6.0, height=3.5)
 
 ```
 
-## All genotypes (colour) by nutrient treatment over time
+## Figure S2a: All genotypes by nutrient treatment over time (differrence)
 
-```{r, echo =FALSE}
-BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + ggthe_bw +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 10,
-                     position = position_dodge(5), alpha=0.5 )+
-  stat_summary(fun.y=mean, geom="line", position = position_dodge(5),
-               linetype=1, alpha=0.5) + 
-  stat_summary(fun.y=mean, geom="point", size =1,
-                   position=position_dodge(width=5))  +
-  theme(legend.position="bottom", 
-              legend.title = element_blank(),
-              strip.background = element_rect(fill="white"))+
+```{r}
+
+# Claculate relative changes (1 - Control)
+      
+BW.Tall$Nutrients2<-BW.Tall$Nutrients
+BW.Tall$Nutrients2[BW.Tall$DayF=="-28"]<-"Ambient"
+          
+    BW.Summary <-BW.Tall %>%
+          group_by(MoteGen, Nutrients2, DayF) %>%
+          get_summary_stats(dAW.gd, type = "mean_sd")
+    BW.Summary
+    
+    BW.Summary<-subset(BW.Summary, Nutrients2=="Ambient" )
+    BW.Summary<-BW.Summary[, -3]
+    BW.Summary<-BW.Summary[, -3]
+    BW.Summary<-BW.Summary[, -3]
+    
+    BW.Tall<-merge(BW.Tall, BW.Summary,  by=c("MoteGen", "DayF"), all.x = T)
+    BW.Tall$Difference<-BW.Tall$dAW.gd-BW.Tall$mean
+    
+
+Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
+Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+
+BW_Diff_Col <- ggplot(BW.Tall, aes(Days, Difference, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
   
-           
-   scale_x_continuous(name="Days in the experiment",
+     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+      #          colour = "gray90")+
+      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -3.5, yend = -3.5,
+                colour = "gray90")+
+       annotate("text", x = 45, y = -3.9, label = "Nutrients", size=4, colour="gray")+
+    
+      annotate("segment", x = 79, xend = 91, y = -3.5, yend = 1,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y =1, yend =1,
+                colour = "gray90")+
+       annotate("text", x = 99, y = 0.8, label = "H", size=4, colour="gray")+
+  
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour +
+    scale_x_continuous(name="Days in the experiment",
                            limits = c(-35,113),
-                           breaks = seq(-30, 113, 15),  
+                           breaks = seq(0, 113, 30),  
                            expand = c(0, 0))+
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                           limits = c(-3,6),
-                           breaks = seq(-2, 6, 1),  
-                           expand = c(0, 0))+
+    scale_y_continuous(name="Difference in growth (mg/ g d) respecto to Ambient", 
+                         breaks = seq(-4, 1.5, by=1)) +
+   geom_hline(yintercept = 0, linetype=3)+
   
-  theme(axis.title.y=element_text(size=12), 
-           legend.position="bottom",
-           legend.title = element_blank()) +
-     
-     annotate("segment", x = 2, xend = 91, y = -2, yend = -2,
-                   colour = "gray90", linetype=2)+
-     annotate("segment", x = 79, xend = 91, y = -2, yend = -1.5,
-                   colour = "gray90", linetype=4)+
-     annotate("segment", x = 91, xend = 110, y = -1.5, yend = -1.5,
-                   colour = "gray90", linetype=3)+
-     annotate("text", x = 45, y = -2.5, label = "Nutrients", size=3)+
-     annotate("text", x = 99, y = -2.5, label = "H", size=3) +
-    annotate("text", x = -16, y = -2.5, label = "Baseline", size=3) +
-     facet_grid(~Treatment)
-BW_Col
+    theme(text=element_text(size=14),
+          legend.position=c(0.1, 0.2),
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
 
-#ggsave(file="Outputs/Growth_genotype.svg", plot=BW_Col, width=5.5, height=4)
+     facet_wrap(~MoteGen)
+BW_Diff_Col
+        
+#ggsave(file="Outputs/S_3_BW_Diff_Col.svg", plot=BW_Diff_Col, width=5.0, height=5)
+          
+```
+
+* Percantages 
+
+```{r}
+# Claculate percentajes changes (1 - Control)
+  BW.Tall$percentage<-(BW.Tall$Difference/BW.Tall$mean)*100
+    
+
+Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
+Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+
+BW_perent_Col <- ggplot(BW.Tall, aes(Days, percentage, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
+  
+     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+      #          colour = "gray90")+
+      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -140, yend = -140,
+                colour = "gray90")+
+       annotate("text", x = 45, y = -135, label = "Nutrients", size=4, colour="gray")+
+    
+      annotate("segment", x = 79, xend = 91, y = -139, yend = 28,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y =28, yend =28,
+                colour = "gray90")+
+       annotate("text", x = 99, y = 33, label = "H", size=4, colour="gray")+
+  
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour +
+    scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+    scale_y_continuous(name="Percentage of growth change respecto to Ambient", 
+                         breaks = seq(-140, 100, by=20)) +
+   geom_hline(yintercept = 0, linetype=3)+
+  
+    theme(text=element_text(size=14),
+          legend.position=c(0.1, 0.2),
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_perent_Col
+
+#ggsave(file="Outputs/S_3_BW_Percentaje_Col.svg", plot=BW_perent_Col, width=5.0, height=5)
 
 ```
 
-## Other interesting figures
+
+# Figure 3b: By genotype, but N and N+P pooled
+
+```{r, echo =FALSE}
+
+BW.Tall$Nutrients[BW.Tall$DayF==-28] <-"Ambient"
+
+Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
+Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+
+BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, fill=Nutrients,
+                              shape=factor(Nutrients))) +
+  
+     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+      #          colour = "gray90")+
+      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+                colour = "gray90")+
+      # annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
+    
+      annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
+                colour = "gray90")+
+    
+      annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
+                colour = "gray90")+
+      # annotate("text", x = 99, y = 3.5, label = "H", size=4)+
+  
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour + ggtitle("b)") +
+    scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+    scale_y_continuous(name="Growth rate (mg / g d) ", 
+                         breaks = seq(-1, 5, by=1)) +
+   geom_hline(yintercept = 0, linetype=3)+
+  
+    ylab("Growth rate (mg/ g d) ") + 
+    theme(text=element_text(size=14),
+          legend.position="none",
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_Col
+
+#ggsave(file="Outputs/S2a_Growth_genotype.svg", plot=BW_Col, width=6.0, height=3.5)
+
+```
+
+```{r}
+# sample means
+BW.nutrients1 <- aggregate(dAW.gd~Nutrients+Days+MoteGen, data=BW.Tall, mean, na.rm=TRUE)
+          names(BW.nutrients1)[4] <- "mean"
+      
+# sample SDs
+BW.nutrientssd1 <- aggregate(dAW.gd~Nutrients+Days+MoteGen, data=BW.Tall, sd, na.rm=TRUE)
+          names(BW.nutrientssd1)[4] <- "sd"
+          
+          
+# Collect the summary statistics in a dataframe
+    BW.nutrients1<-merge(BW.nutrients1, BW.nutrientssd1)
+    BW.nutrients1<-BW.nutrients1[order(BW.nutrients1$Days, BW.nutrients1$MoteGen),]
+    BW.nutrients1
+```
+
+## Other figures 
+
+### All genotypes (colour) by nutrient treatment over time
 
 Compare individual genotypes inside each nutrient treatment
 * Growth declined in G50, G07 and G08 in A, but increased in G48, G62 and G31
@@ -266,7 +467,7 @@ BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=MoteGen)) +
 BW_ColonyT
 ```
 
-Compare individual fragments inside each nutrient treatment
+### Compare individual fragments inside each nutrient treatment
 
 ```{R}
 BW_ColonyTF<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +    stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (MoteGen~Treatment)+  geom_point()+ theme(legend.position = "none")
@@ -274,7 +475,7 @@ BW_ColonyTF
 
 ```
 
-Initial performance vs ambient per genotype: some genotypes declined in growth even without nutrients
+### Initial performance vs ambient per genotype: some genotypes declined in growth even without nutrients
 
 ```{r, , fig.height=4, fig.width=6}
 
@@ -285,7 +486,7 @@ BW_Init<- ggplot(BW.Initial, aes (MoteGen, dAW.gd, colour=MoteGen)) +
   scale_y_continuous(name=("Growth (mg/ g d) "),
                      limits = c(0,6),
                      breaks = seq(0, 6, by=0.5))+
-  theme(legend.position=c(0.7, 0.3),
+  theme(legend.position=c(0.3, 0.3),
         legend.title = element_blank(), 
         strip.background =element_rect(fill=NA))
 
@@ -336,17 +537,19 @@ BW_Colony_Control
 
 ## Treatment 
 
+### LMER4
+
 ```{r}
 # Complex to simple models 
   
-  LM_1 <- lmer(dAW.gd ~ Treatment*Day +
-                               (1 + Treatment|Colony) + (1|Replicate), REML=TRUE, data= BW.Tall)
+  LM_1 <- lmer(dAW.gd ~ Treatment*DayF +
+                               (1 + Treatment|Genotype) + (1|Replicate), REML=TRUE, data= BW.Tall)
   
-  LM_2 <- lmer(dAW.gd ~ Treatment * Day +
-                               (Treatment|Colony), REML=TRUE,  data= BW.Tall)
+  LM_2 <- lmer(dAW.gd ~ Treatment * DayF +
+                               (Treatment|Genotype), REML=TRUE,  data= BW.Tall)
    
-  LM_3 <- lmer(dAW.gd ~ Treatment  * Day +
-                               (1|Colony), REML=TRUE, data= BW.Tall)
+  LM_3 <- lmer(dAW.gd ~ Treatment  * DayF +
+                               (1|Genotype), REML=TRUE, data= BW.Tall)
  
 
 # Select model
@@ -357,49 +560,164 @@ BW_Colony_Control
   anova(LM_1, LM_3, refit=FALSE)
  
 # Final model 
-  LM_Treatment_Days<-lmer(dAW.gd ~ Treatment * Day +
-                             (1|Colony),  data= BW.Tall) 
+  LM_Treatment_Days<-lmer(dAW.gd ~ Treatment * DayF +
+                             (1|Genotype) + (1|Fra),  data= BW.Tall) 
   # Removed (1|Replicate) since it was not significant (p=0.1642)
   isSingular(LM_Treatment_Days)
   
   anova(LM_Treatment_Days)
   ranova(LM_Treatment_Days)
-  summary(LM_Treatment_Days)
+  #summary(LM_Treatment_Days)
+
+par(mfrow=c(1,2))
+  plot(fitted(LM_Treatment_Days), residuals(LM_Treatment_Days, type="pearson"))
+  abline(h=0)
+  qqnorm(residuals(LM_Treatment_Days, type="pearson"))
+abline(0,1)
   
 # Pairwise comparisons
-  BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment*Day)
-  contrast(BW.emmc, "tukey")
+  BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment*DayF)
+  #contrast(BW.emmc, "tukey")
   BW_groups<-cld(BW.emmc)
+  #BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment|DayF)
+  #contrast(BW.emmc, "tukey")
+  #BW_groups<-cld(BW.emmc)
   
   #BW_groups<-as.data.frame(BW_groups[complete.cases(BW_groups),])
-  BW_groups<-BW_groups[order(BW_groups$Day,BW_groups$Treatment),]
+  BW_groups<-BW_groups[order(BW_groups$DayF,BW_groups$Treatment),]
   BW_groups
   
-  #write.csv(BW_groups, "Outputs/BW_groups_corrected.csv", row.names = F)
+#write.csv(BW_groups, "Outputs/BW_groups_corrected.csv", row.names = F)
 
 ```
 
+### nlme
+
+```{r}
+#library(nlme)
+# 
+# fit1 <- gls(dAW.gd ~ DayF *Treatment, data=BW.Tall,
+#   correlation=corSymm(form=~TimePoint|Fra),
+#   weights=varIdent(form=~1|TimePoint),
+#   na.action=na.exclude,
+#   control=glsControl(opt="optim"))
+```
+
+Only Ambient summary model 
+
+```{r}
+# summary(fit1)
+# 
+# intervals(fit1)
+# anova(fit1, type="marginal")
+# getVarCov(fit1)
+# residuals(fit1, type="pearson")
+# 
+# par(mfrow=c(1,2))
+# plot(fitted(fit1), residuals(fit1, type="pearson"))
+# abline(h=0)
+# qqnorm(residuals(fit1, type="pearson"))
+# abline(0,1)
+```
+
+Predictions 
+
+```{r}
+# library(rms)
+# clda_Gls_1 <- Gls(dAW.gd ~ DayF * Treatment, 
+#                   correlation=corSymm (form = ~TimePoint|Fra),
+#         weights=varIdent(form=~1|TimePoint),
+#         na.action=na.exclude,
+#         control=glsControl(opt="optim"),
+#         data=BW.Tall)
+# 
+# data1<-expand.grid(DayF=unique(BW.Tall$DayF),
+#                    Treatment=unique(BW.Tall$Treatment))
+# 
+# predictions_1 <- cbind(data1, 
+# predict (clda_Gls_1, data1, conf.int=0.95))
+# 
+# predictions_1$Days<-as.numeric(as.character(predictions_1$DayF))
+
+```
+
+Model prediction by treatment
+
+```{r}
+# pd <- position_dodge(2)
+# limits <- aes(ymax = upper , ymin=lower, shape=Treatment)
+# 
+# pCI1 <- ggplot(predictions_1, aes(y=linear.predictors, x=Days, 
+#                                 fill=Treatment)) + 
+#       geom_errorbar(limits, width= 2 , position=pd) + 
+#       geom_line(aes(group=Treatment, y=linear.predictors), position=pd, size=0.1) + 
+#       geom_point(aes(fill=Treatment), shape=21, position=pd, size=4, alpha=0.8) +
+#         
+#       ggthe_bw+
+#         
+#       geom_hline(yintercept = 0, linetype=3)+
+#       
+#       scale_x_continuous(name="Days in the experiment", 
+#                          breaks = seq(0, 115, by=15)) +
+#       scale_y_continuous(name="Estimated growth (mg / g d) ", 
+#                          breaks = seq(-1, 4, by=1)) +
+#     
+#       theme(text=element_text(size=14),
+#           legend.position="right",
+#           legend.title = element_blank(), 
+#           strip.background =element_rect(fill=NA)) +
+#     
+#       annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+#                 colour = "gray90")+
+#       annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
+#     
+#       annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+#                 colour = "gray90")+
+#       annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
+#     
+#       annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
+#                 colour = "gray90")+
+#     
+#       annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
+#                 colour = "gray90")+
+#       annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
+#  
+# pCI1
+```
+
 ## Genets
+
+### No nutrients
+
+#### lmer4
 
 * Baseline differences
 
 ```{r}
 # ANOVA
-  LM_bl <- lm(dAW.gd ~ MoteGen, data= BW.Initial)
+  LM_bl <- lmer(dAW.gd ~ MoteGen + (1|Replicate), data= BW.Initial)
   anova(LM_bl)
-
+  ranova(LM_bl)
+  
+    LM_bl <- lm(dAW.gd ~ MoteGen, data= BW.Initial)
+    anova(LM_bl)
+    summary(LM_bl)
+  
 # Pairwise comparisons
   BW_bl.emmc<-emmeans(LM_bl, ~MoteGen)
-  contrast(BW_bl.emmc, "tukey")
+  #contrast(BW_bl.emmc, "tukey")
   
 #Tukey groups
   BW_bl_groups<-cld(BW_bl.emmc)
   #write.csv(BW_bl_groups, "Outputs/BW_baseline_groups.csv", row.names = F)
 
-# N fragments    
-  N.fragments<-BW.Initial %>% 
-     group_by(MoteGen) %>% count(MoteGen)
-  N.fragments
+# Summary stats
+  # library(rstatix)
+  
+  Stats_BL<-BW.Initial %>%
+    group_by(MoteGen) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_BL
 
 ```
 
@@ -409,16 +727,19 @@ BW_Colony_Control
 summary(BW.Control)
 
 # Model
-  LM_A_C.0 <- lmer(dAW.gd ~ MoteGen * Day + (1|Replicate), data= BW.Control)
+  LM_A_C.0 <- lmer(dAW.gd ~ MoteGen * DayF + (1|Replicate), data= BW.Control)
   anova(LM_A_C.0) # Day alone is not significant, but Day:Genet is 
   ranova(LM_A_C.0) # Replicate is not significant
 
-  LM_A_C <-lmer(dAW.gd ~ MoteGen * Day + (1|Fra), data= BW.Control)
+  LM_A_C <-lmer(dAW.gd ~ MoteGen * DayF + (1|Fra), data= BW.Control)
   anova(LM_A_C) # Day alone is not significant, but Day:Genet is 
   ranova(LM_A_C)
   
 # Pairwise comparisons
-  BW_A_C.emmc<-emmeans(LM_A_C, ~MoteGen * Day)
+  BW_A_C.emmc<-emmeans(LM_A_C, ~MoteGen | DayF)
+  #contrast(BW_A_C.emmc, "tukey")
+  
+  #BW_A_C.emmc<-emmeans(LM_A_C, ~DayF|MoteGen)
   #contrast(BW_A_C.emmc, "tukey")
   
 #Tukey groups
@@ -429,10 +750,13 @@ summary(BW.Control)
   
   #write.csv(BW_A_C_groups, "Outputs/BW_A_C_groups.csv", row.names = F)
 
-# N fragments    
-  N.fragments_A_C<-BW.Control %>% 
-     group_by(MoteGen) %>% count(Day)
-  N.fragments_A_C
+# Summary stats
+  # library(rstatix)
+  
+  Stats_Control<-BW.Control %>%
+    group_by(MoteGen) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_Control
 
 ```
 
@@ -460,19 +784,183 @@ summary(BW.FinalAC)
   BW_A_C75_groups
   #write.csv(BW_A_C75_groups, "Outputs/BW_A_C75_groups.csv", row.names = F)
 
-# N fragments    
-  N.fragments_A_C75<-BW.FinalAC %>% 
-     count(MoteGen)
-  N.fragments_A_C75
+  Stats_75_a<-BW.FinalAC %>%
+    group_by(MoteGen) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_75_a
+```
+
+
+* Baseline + Ambient-Control overtime 
+
+```{r}
+BW.AC<-subset(BW.Tall, Days<80)
+  BW.AC$Treatment[BW.AC$DayF=="-28"]<-"A"
+  BW.AC<-subset(BW.AC, Treatment=="A") # Only Ambient
+  BW.AC<-droplevels(BW.AC)
+
+  Stats_Con_BL<-BW.AC %>%
+    group_by(MoteGen, DayF) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_Con_BL
+
+  summary(BW.AC)
+
+# Model
+  LM_AC_BL <- lmer(dAW.gd ~ MoteGen * DayF + (1|Replicate), data= BW.AC)
+  isSingular(LM_AC_BL)
+  anova(LM_AC_BL) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_AC_BL) # Replicate is not significant
+
+  LM_AC_BL <-lmer(dAW.gd ~ MoteGen * DayF + (1|Fra), data= BW.AC)
+  anova(LM_AC_BL) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_AC_BL)
+  
+# Pairwise comparisons
+  BW_AC_BL.emmc<-emmeans(LM_AC_BL, ~MoteGen | DayF)
+  #contrast(BW_AC_BL.emmc, "tukey")
+  
+  BW_AC_BL.emmc<-emmeans(LM_AC_BL, ~DayF|MoteGen)
+  #contrast(BW_AC_BL.emmc, "tukey")
+  
+#Tukey groups
+  BW_AC_BL.emmc<-emmeans(LM_AC_BL, ~MoteGen * DayF)
+  BW_AC_BL_groups<-cld(BW_AC_BL.emmc)
+  
+  BW_AC_BL_groups<-BW_AC_BL_groups[order(BW_AC_BL_groups$DayF,BW_AC_BL_groups$MoteGen),]
+  BW_AC_BL_groups
+  
+  #write.csv(BW_AC_BL_groups, "Outputs/BW_AC_BL_groups", row.names = F)
 
 ```
 
-## Treatment and genets (nutrient phase)
+* Ambient heat stress (day 100)
+
+```{r}
+
+summary(BW.100)
+
+BW.100.C<-subset(BW.100, Treatment=="A")
+summary(BW.100.C)
+
+# Model
+  LM_A_H.100 <- lmer(dAW.gd ~ MoteGen + (1|Replicate), data= BW.100.C)
+  anova(LM_A_H.100) 
+  ranova(LM_A_H.100) # Replicate is not significant
+
+# Pairwise comparisons
+  BW_A_H100.emmc<-emmeans(LM_A_H.100, ~MoteGen)
+  #contrast(BW_A_H100.emmc, "tukey")
+  
+#Tukey groups
+  BW_A_H100_groups<-cld(BW_A_H100.emmc)
+  BW_A_H100_groups
+  #write.csv(BW_A_H100_groups, "Outputs/BW_A_H100_groups.csv", row.names = F)
+
+  Stats_100_a<-BW.100.C %>%
+    group_by(MoteGen) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_100_a
+  
+```
+
+```{r}
+  
+BW_91<- ggplot(subset(BW.91, Treatment=="A"), aes (MoteGen, dAW.gd, colour=MoteGen)) +
+  ggtitle("(c) Heat (day 91)")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                     limits = c(0,6),
+                     breaks = seq(0, 6, by=0.5))+
+  theme(legend.position="none",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA)) #+
+  facet_grid(Treatment~.)
+
+
+BW_100<- ggplot(subset(BW.100, Treatment=="A"), aes (MoteGen, dAW.gd, colour=MoteGen)) +
+  ggtitle("(d) Heat (day 100)")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
+  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                     limits = c(0,6),
+                     breaks = seq(0, 6, by=0.5))+
+  theme(legend.position="none",
+        legend.title = element_blank(), 
+        strip.background =element_rect(fill=NA)) #+facet_grid(Treatment~.)
+
+HeatEffect<-grid.arrange(BW_91, BW_100, nrow=1)
+
+```
+
+## Figure S2
+
+```{r}
+All_ambient<-grid.arrange(BW_Init,BW_Final, BW_91, BW_100, nrow=1)
+
+#ggsave(file="Outputs/S_Genotypes_Ambient.svg", plot=All_ambient, width=8, height=5.5)
+```
+
+* Selected timepoints = BL + Ambient 75 (Control) and 100 (Heat) 
+
+```{r}
+
+# Subset_data
+  BW.A<-BW.Tall
+    BW.A$Treatment[BW.A$DayF=="-28"]<-"A"
+    BW.A<-subset(BW.A, Treatment=="A")  
+    BW.A<-subset(BW.A, DayF!="28")
+    BW.A<-subset(BW.A, DayF!="62")  
+    # BW.A<-subset(BW.A, DayF!="91")
+    BW.A<-droplevels(BW.A)
+
+# Summary    
+  summary(BW.A)
+  
+  Stats_Ambient<-BW.A %>%
+    group_by(MoteGen, DayF) %>%
+    get_summary_stats(dAW.gd, type = "mean_sd")
+  Stats_Ambient
+  
+# Model
+  LM_Ambinet <- lmer(dAW.gd ~ MoteGen * DayF + (1|Replicate), data= BW.A)
+  isSingular(LM_Ambinet)
+  anova(LM_Ambinet) 
+  ranova(LM_Ambinet) # Replicate is not significant
+
+  LM_Ambinet <-lmer(dAW.gd ~ MoteGen * DayF + (1|Fra), data= BW.A)
+  anova(LM_Ambinet) # Day alone is not significant, but Day:Genet is 
+  ranova(LM_Ambinet)
+  
+# Pairwise comparisons
+  BW_Ambient.emmc<-emmeans(LM_Ambinet, ~MoteGen | DayF)
+  #contrast(BW_Ambient.emmc, "tukey")
+  
+  BW_Ambient.emmc<-emmeans(LM_Ambinet, ~DayF|MoteGen)
+  #contrast(BW_Ambient.emmc, "tukey")
+  
+#Tukey groups
+  BW_AC_BL.emmc<-emmeans(LM_Ambinet, ~MoteGen * DayF)
+  BW_AC_BL_groups<-cld(BW_AC_BL.emmc)
+  
+  BW_AC_BL_groups<-BW_AC_BL_groups[
+    order(BW_AC_BL_groups$DayF,BW_AC_BL_groups$MoteGen),]
+  BW_AC_BL_groups
+  
+  #write.csv(BW_AC_BL_groups, "Outputs/BW_AC_BL_groups", row.names = F)
+
+```
+
+
+## Treatment and genets
+
+### Control all treatments
 
 ```{r}
 # 1. Model
   
-  LM_4 <- lmer(dAW.gd ~ Treatment*Days*MoteGen +
+  LM_4 <- lmer(dAW.gd ~ Treatment*DayF*MoteGen +
                        (1|Fra), REML=TRUE, data=BW.nutrients)
 
 # Select model  
@@ -513,7 +1001,7 @@ summary(BW.FinalAC)
   Model_nutrinets_plot + facet_grid(~Treatment)
   
 # Pairwise comparisons
-  BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment*Day)
+  BW.emmc<-emmeans(LM_4, ~Treatment|DayF|MoteGen)
   contrast(BW.emmc, "tukey")
   BW_groups<-cld(BW.emmc)
   
@@ -521,63 +1009,86 @@ summary(BW.FinalAC)
   BW_groups<-BW_groups[order(BW_groups$Day,BW_groups$Treatment),]
   BW_groups
   
-  write.csv(BW_groups, "Outputs/BW_groups_corrected.csv", row.names = F)
+  #write.csv(BW_groups, "Outputs/BW_groups_corrected.csv", row.names = F)
 
 ```
 
-## Ambient heat stress
+## Pooled N and N+P during Control
 
 ```{r}
 
-BW_91<- ggplot(BW.91, aes (MoteGen, dAW.gd, colour=MoteGen)) +
-  ggtitle("(c) Heat (day 91)")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-  theme(legend.position="none",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA))
-
-
-BW_100<- ggplot(BW.100, aes (MoteGen, dAW.gd, colour=MoteGen)) +
-  ggtitle("(d) Heat (day 100)")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-  theme(legend.position="none",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA))
-
-HeatEffect<-grid.arrange(BW_91, BW_100, nrow=1)
-All_ambient<-grid.arrange(BW_Init,BW_Final, BW_91, BW_100, nrow=1)
-
-#ggsave(file="Outputs/S_Genotypes.png", plot=All_ambient, width=7, height=3.5)
-
-
-```
-
-# Selected dates all 
-
-```{r}
-BW_Selected<- ggplot(BW.selected, aes (Treatment, dAW.gd, colour=MoteGen)) +
-  ggtitle("(d) Heat (day 100)")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-  theme(legend.position="none",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA)) +
-  #facet_grid(~Days)
-  facet_grid(MoteGen~Days)
+BW.Tall$Nutrients <- "Nutrients"
+BW.Tall$Nutrients[BW.Tall$Treatment == "A"] <- "Ambient"
+BW.Nutrients<-subset(BW.Tall, Days<91)
+   
+# 1. Model
   
-BW_Selected        
+  LM_5 <- lmer(dAW.gd ~ Nutrients*DayF*MoteGen +
+                       (1|Fra), REML=TRUE, data=BW.Nutrients)
 
+# Select model  
+  anova(LM_5)  
+  ranova(LM_5)
+
+# 2. Predict values:
+  pred_nutrients2 <- predict(LM_5, re.form = NA)
+
+  #3. Bootstrap CI:
+    nutrients.boot2 <- bootMer(LM_5, predict, nsim = 1000, re.form = NULL) # include random effects, reduce CI lot!
+    std.err <- apply(nutrients.boot2$t, 2, sd)
+    CI.lo_2 <- pred_nutrients2 - std.err*1.96
+    CI.hi_2 <- pred_nutrients2 + std.err*1.96
+
+  #Plot
+  Model_nutrinets_plot2<- ggplot(BW.Nutrients, 
+                                 aes(x = Days, y = dAW.gd, 
+                                     colour = MoteGen, shape=Nutrients)) +
+    geom_line(aes(y = pred_nutrients2),size=2) +
+    #geom_point(aes(fill=factor(Nutrients)),
+    #         shape = 21, colour = "black", size = 2, stroke = 0.3, alpha=0.3) +
+    geom_ribbon(aes(ymin = CI.lo_2, ymax = CI.hi_2),
+                size=2, alpha = 0.1, linetype = 0) +
+    #scale_color_manual(values=my_colours) +
+    #scale_fill_manual(values=my_colours) +
+    scale_y_continuous(name=expression(~italic("Growth")),
+                      limits = c(-2, 6), 
+                      breaks = seq(-2, 6, by=1), expand = c(0,0))+
+    scale_x_continuous("Days in the experiment", limits = c(-30, 110),
+                     breaks = seq(-30, 110, by=30), expand = c(0,0))+
+    
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
+                   position = position_dodge(1) )+
+    stat_summary(fun.y=mean, geom="line", position = position_dodge(1), 
+                linetype=1, alpha=0.5) + ggthe_bw
+    
+  
+  Model_nutrinets_plot2 + facet_grid(~Nutrients)
+  
+# Pairwise comparisons
+  contrast(BW.emmc, "tukey")
+  BW.emmc<-emmeans(LM_5, ~MoteGen|DayF|Nutrients)
+  contrast(BW.emmc, "tukey")
+  
+  BW.emmc<-emmeans(LM_5, ~Nutrients|MoteGen|DayF)
+  contrast(BW.emmc, "tukey")
+  
+  BW.emmc<-emmeans(LM_5, ~MoteGen*DayF*Nutrients)
+  BW_groups_genotypes<-cld(BW.emmc)
+  
+  #BW_groups_genotypes<-as.data.frame(BW_groups_genotypes[complete.cases(BW_groups_genotypes),])
+  BW_groups_genotypes<-BW_groups_genotypes[order(BW_groups_genotypes$MoteGen, 
+                             BW_groups_genotypes$DayF,
+                             BW_groups_genotypes$Nutrients),]
+  BW_groups_genotypes
+  
+  #write.csv(BW_groups_genotypes, "Outputs/BW_groups_genotypes.csv", row.names = F)
 
 ```
+
+
+```{r}
+
+```
+
+
 

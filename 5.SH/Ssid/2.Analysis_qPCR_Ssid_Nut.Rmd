@@ -252,45 +252,95 @@ logSH_Genotype + theme(legend.position = "none" ) + geom_point()
 
 ```
 
-## Log S/H graph
+## Log S/H graph with treatment
 
 ```{r}
-logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment)) +  theme_bw() + ggtitle("A.")+        Fill.colour+ ggthe_bw+
+qPCR.variables_2$Community<-factor(qPCR.variables_2$Community, levels = c("C3", "C1", "D"))
+
+logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment, shape=Treatment)) + 
+    # ggtitle("(b)") +
+    Fill.colour + ggthe_bw+
     theme(plot.background=element_blank(), 
             panel.border = element_blank(),
             axis.line = element_line(colour = "black"),
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank(),
-            legend.position="bottom",
+            legend.position=c(0.1, 0.25),
+            strip.background = element_rect(fill="white"),
+            legend.title = element_blank()) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+       stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 5), width = 0.2 )+
+      stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5, 
+                   position = position_dodge(width = 5)) +
+       stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
+      
+        annotate("segment", x = 2, xend = 91, y = -4.5, yend = -4.5,
+                  colour = "gray90", linetype=2)+
+        annotate("segment", x = 79, xend = 91, y = -4.5, yend = -4,
+                  colour = "gray90", linetype=4)+
+        annotate("segment", x = 91, xend = 110, y = -4, yend = -4,
+                  colour = "gray90", linetype=3)+
+        annotate("text", x = 45, y = -4.4, label = "Nutrients", size=3, colour="gray")+
+        annotate("text", x = 3, y = -4.4, label = "BL", size=3,  colour="gray")+
+        annotate("text", x = 100, y = -3.9, label = "H", size=3, colour="gray") +
+
+      scale_y_continuous(limits = c(-4.6,0),
+        breaks = seq(-5, 0.3, 0.5),
+                    expand = c(0,0),
+                   name=("Relative (S/H) cell ratio")) +
+      scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,113),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0.01, 0.01))
+  logSHTreatment 
+  logSHTreatmentb<-logSHTreatment  + facet_grid(~Community)
+  logSHTreatmentb
+  #ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
+  #ggsave(file="Outputs/Fig6c.svg", plot=logSHTreatmentb, width=6.6, height=3.5)
+```
+
+## Log S/H graph without treatment
+
+```{r}
+logSH_Community <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Community, shape=Community)) +  
+   ggtitle("(c)")+         ggthe_bw+
+    theme(plot.background=element_blank(), 
+            panel.border = element_blank(),
+            axis.line = element_line(colour = "black"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.position=c(0.2,0.25),
             strip.background = element_rect(fill="white")) +
        #geom_jitter(aes(colour=factor(Replicate))) +
        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                     position = position_dodge(width = 5), width = 0.2 )+
-      #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
-       #            position = position_dodge(width = 5)) +
-       stat_summary(fun.y=mean, geom="line") + 
+      stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+                   position = position_dodge(width = 5)) +
+       stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
       
   annotate("segment", x = 2, xend = 91, y = -4.5, yend = -4.5,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=2)+
         annotate("segment", x = 79, xend = 91, y = -4.5, yend = -4,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=4)+
         annotate("segment", x = 91, xend = 110, y = -4, yend = -4,
-                  colour = "gray90", linetype=1)+
+                  colour = "gray90", linetype=3)+
+        annotate("text", x = 2, y = -4.4, label = "BL", size=3)+
         annotate("text", x = 45, y = -4.4, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = -3.9, label = "Heat", size=3) +
+        annotate("text", x = 100, y = -3.9, label = "H", size=3) +
 
-      scale_y_continuous(breaks = seq(-5, 0.3, 0.5),
-                    expand = c(0,0),
-                   name=("Symbiodiniaceae / S. siderea (S/H) cell ratio")) +
+      scale_y_continuous(limits = c(-4.6, -0.3),
+                        breaks = seq(-4.5, 0.3, 0.5),
+                        expand = c(0,0),
+                        name=("Relative (S/H) cell ratio")) +
       scale_x_continuous(name="Days in the experiment",
                          limits = c(-2,113),
                          breaks = seq(0, 110, 15),  
                          expand = c(0, 0))
-  logSHTreatment 
-  logSHTreatment + facet_grid(~Community)
+  logSH_Community
   
-  #ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
-  #ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.0, height=3)
+  #ggsave(file="S6_SH.svg", plot=logSH_Community, width=4.0, height=3.5)
+
 ```
 
 ## Log C/H graph
@@ -453,7 +503,7 @@ LME_Ssid.C<-lmer(logSH ~ Treatment + Community + (1|Replicate),
 
 ```{r}
 # Multicomp
-Ssid.SH.C.emm<-emmeans(LME_Ssid.C, ~Community)
+Ssid.SH.C.emm<-emmeans(LME_Ssid.C, ~Community|Treatment)
       #contrast(Ssid.SH.C.emm, "tukey")
     Ssid.SH.C_groups<-cld(Ssid.SH.C.emm, by=NULL) # compact-letter display
     Ssid.SH.C_groups
@@ -516,8 +566,8 @@ LME_Ssid.H<-lmer(logSH ~ Treatment * Community * DaysF+ (1|Genotype),
 
 ```{r}
 # Multicomp
-Ssid.SH.H.emm<-emmeans(LME_Ssid.H, ~Treatment*Community*DaysF)
-      #contrast(Ssid.SH.H.emm, "tukey")
+Ssid.SH.H.emm<-emmeans(LME_Ssid.H, ~Treatment|Community|DaysF)
+    contrast(Ssid.SH.H.emm, "tukey")
     Ssid.SH.H_groups<-cld(Ssid.SH.H.emm, by=NULL) # compact-letter display
     Ssid.SH.H_groups<-Ssid.SH.H_groups[order(Ssid.SH.H_groups$Day,
                            Ssid.SH.H_groups$Community, 
@@ -609,7 +659,7 @@ LM_Ssid.qpCR<-lmer(logSH ~ Treatment + DaysF + Community +
 
 ```{r}
 # Emmeans
-Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment*DaysF*Community)
+Ssid.YII.emm<-emmeans(LM_Ssid.qpCR, ~Treatment|Community|DaysF)
      #contrast(Ssid.YII.emm, "tukey")
 
 # Pairwise comparisons
