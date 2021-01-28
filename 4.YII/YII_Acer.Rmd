@@ -79,6 +79,8 @@ Merge/Transform
                             "Ss_22","Ss_23","Ss_27", "Ss_28",
                             "Ss_20", "Ss_24","Ss_30"
                              ))  # D dominance order
+      YII.data$Community <- factor(YII.data$Community, 
+                                   levels = c("A", "B", "C3", "C1", "D"))
       
 # Check the data
       str(YII.data)
@@ -128,7 +130,13 @@ YII_Frag_Gen<- ggplot(YII.data, aes (Days, YII, colour=Genotype, group=Fragment)
 * Treatment differences 
 
 ```{r treatmentcolours}
-YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
+
+DropPlot<-YII.data[which(YII.data$Spp !="Ac" &
+                        YII.data$DaysF==110),]
+Pdam<-Pdam[!(Pdam$ID %in% ToRem1$ID),]
+YII.datab<-YII.data[!(YII.data$Sample) %in% (DropPlot$Sample),]
+  
+YII_Treat<- ggplot(YII.datab, aes (Days, YII, colour=Treatment)) +
         #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
         #             width = 0.2, position = position_dodge(1) ) +
         ggthe_bw+ Fill.colour +
@@ -143,15 +151,15 @@ YII_Treat<- ggplot(YII.data, aes (Days, YII, colour=Treatment)) +
                            limits = c(-1,113),
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
-        annotate("segment", x = 2, xend = 91, y = 0.12, yend = 0.12,
+        annotate("segment", x = 2, xend = 91, y = 0.05, yend = 0.05,
                   colour = "gray90", linetype=2)+
-        annotate("segment", x = 79, xend = 91, y = 0.12, yend = 0.20,
-                  colour = "gray90", linetype=2)+
+        annotate("segment", x = 79, xend = 91, y = 0.05, yend = 0.20,
+                  colour = "gray90", linetype=3)+
         annotate("segment", x = 91, xend = 110, y = 0.20, yend = 0.20,
-                  colour = "gray90", linetype=2)+
-        annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.15, label = "H", size=3)
-YII_Treat + facet_grid (~Spp) + geom_smooth(span=0.5)
+                  colour = "gray90", linetype=3)+
+        annotate("text", x = 45, y = 0.12, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.12, label = "Heat", size=3)
+#YII_Treat + facet_grid (~Spp) + geom_smooth(span=0.5)
 
 All_SppFif<-YII_Treat + facet_wrap (Spp~Community) + geom_smooth(span=0.5)
 #YII_Treat + facet_wrap (Spp~InitialCommunity) + geom_smooth(span=0.5)

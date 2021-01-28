@@ -114,30 +114,6 @@ Summary_Tanks
 
 
 ```{r}
-Temperature_Experiment_Colours<- ggplot(Temperature, aes (
-  Day, Temperature, colour=Replicate)) +
-    ggthe_bw +
-    scale_y_continuous(limits = c(25,32),
-                       name=(expression("Temperature"~(degree*C))),
-                       expand = c(0, 0)) +
-    scale_x_continuous(name="Days in the experiment",
-                       limits = c(0,115),
-                       breaks = seq(0, 115, 15),  
-                       expand = c(0, 0))+
-     annotate("rect", xmin= c(2,79,90), xmax = c(91, 90, 113),
-              ymin = c(25, 25, 25), 
-              ymax = c(27, 32, 32), fill=c("blue" , "orange", "red"), alpha = .1)+
-    annotate("text", x= c(46, 84, 104), y = 25.5, 
-              label=c("Nutrient addition", "Ramping up", "Heat"), size=3) +
-    theme(legend.position=c(0.2, 0.7)) +
-    scale_colour_manual(values = c("black","gray"))+
-    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-    stat_summary(fun.y=mean, geom="line") 
-  Temperature_Experiment_Colours
-  
-```
-
-```{r}
   
 Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
     ggthe_bw +
@@ -153,7 +129,7 @@ Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
     annotate("segment", x = 2, xend = 91, y = 25, yend = 25,
               colour = "black", linetype=2)+
     annotate("segment", x = 79, xend = 90, y = 25.3, yend = 27,
-              colour = "black", linetype=4)+
+              colour = "black", linetype=3)+
     annotate("segment", x = 91, xend = 113, y = 27, yend = 27,
               colour = "black", linetype=3)+
 
@@ -163,9 +139,9 @@ Temperature_BW<- ggplot(Temperature, aes (Day, Temperature, colour=Replicate)) +
     scale_colour_manual(values = c("black","gray"))+
     stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
     stat_summary(fun.y=mean, geom="line") 
-  Temperature_BW
+Temperature_BW
   
-  # ggsave(file="Outputs/Figure_1_Experiment_a.svg", dpi = 300, plot=Temperature_BW, width=3.5, height=2)
+# ggsave(file="Outputs/Figure_1_Experiment_a.svg", dpi = 300, plot=Temperature_BW, width=3.5, height=2)
   
 ```
 

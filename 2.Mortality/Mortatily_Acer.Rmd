@@ -91,7 +91,7 @@ Try survival package
     Ac_Treatment_Only<-ggsurvplot(fit1, data = Survival.data, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour,
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
-           risk.table.title="Number of fragments at risk") + ggtitle("(a)")
+           risk.table.title="Number of fragments at risk") + ggtitle("(Treatment (all genotypes))")
     Ac_Treatment_Only
     
     #ggsave("Outputs/Fig_Acer_Surv_Treatment.svg", 
@@ -114,7 +114,7 @@ Try survival package
     # Plot the survival model
     GenTre_1<-ggsurvplot(fit2, data = Survival.data, pval = TRUE,
            risk.table=T,  tables.height=0.5)
-    GenTre_1
+    #GenTre_1
     
     Ac_facet_T<-ggsurvplot_facet(fit2, data = Survival.data, facet.by="Genotype", 
                   #risk.table=T, tables.height=0.5, 
@@ -136,8 +136,8 @@ Try survival package
     fit3 <- survfit(surv_object ~ Gen_Treat, data = Survival.data)
     summary(fit3)
     # Plot the survival model
-    ggsurvplot(fit3, data = Survival.data, pval = TRUE, conf.int = F,
-           risk.table=T,  tables.height=0.5)
+    #ggsurvplot(fit3, data = Survival.data, pval = TRUE, conf.int = F,
+    #       risk.table=T,  tables.height=0.5)
     
 
 ```
@@ -226,7 +226,7 @@ Do not run
     # Plot the survival model
     GenTre_1_2<-ggsurvplot(fit2_2, data = Survival.data2, pval = TRUE, conf.int = T,
            risk.table=T,  tables.height=0.5)
-    GenTre_1_2
+    #GenTre_1_2
     
     ggsurvplot_facet(fit2_2, data = Survival.data2, 
                  facet.by="Genotype", risk.table=T, conf.int = T,
@@ -245,16 +245,18 @@ Do not run
 ```{r}
 fit.coxph0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
 HazardRatio<-ggforest(fit.coxph0_2, data = Survival.data2)
+HazardRatio
 fit.coxph0_2
+surv_pvalue(fit.coxph0_2)
 
-#ggsave("Outputs/Fig_S1_HazardRatio.svg", HazardRatio, width=6, height=4,dpi = 300)
+#ggsave("Outputs/Fig_1b_HazardRatio.svg", HazardRatio, width=5, height=4,dpi = 300)
     
 fit.coxph1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
 ggforest(fit.coxph1_2, data = Survival.data2)
 fit.coxph1_2
 
 fit.coxph2_2 <- coxph(surv_object2 ~ Treatment + Genotype, data = Survival.data2)
-ggforest(fit.coxph2_2, data = Survival.data2)
+#ggforest(fit.coxph2_2, data = Survival.data2)
 fit.coxph2_2
 summary(fit.coxph2_2)
 ```

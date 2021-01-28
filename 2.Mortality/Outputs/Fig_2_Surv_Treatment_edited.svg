@@ -11,9 +11,9 @@
    version="1.1"
    id="svg190"
    sodipodi:docname="Fig_2_Surv_Treatment_edited.svg"
-   inkscape:export-filename="/home/mcano/Documents/WorkingRepos/NutrientsCaribbean/2.Mortality/Fig_2_Surv_Treatment.svg.png"
-   inkscape:export-xdpi="299.11099"
-   inkscape:export-ydpi="299.11099"
+   inkscape:export-filename="/home/mcano/Documents/WorkingRepos/NutrientsCaribbean/2.Mortality/Fig_S1_Treatment.png"
+   inkscape:export-xdpi="298.07605"
+   inkscape:export-ydpi="298.07605"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata194">
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1849"
-     inkscape:window-height="1025"
+     inkscape:window-width="1529"
+     inkscape:window-height="872"
      id="namedview192"
      showgrid="false"
      inkscape:zoom="2.54"
-     inkscape:cx="40.510297"
-     inkscape:cy="143.38252"
-     inkscape:window-x="71"
-     inkscape:window-y="27"
+     inkscape:cx="184.77324"
+     inkscape:cy="111.88646"
+     inkscape:window-x="1991"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg190" />
   <defs
@@ -10271,17 +10271,9 @@
      id="g29"
      style="fill:#999999"
      inkscape:export-xdpi="299.11099"
-     inkscape:export-ydpi="299.11099">
-    <text
-       x="166.95"
-       y="107.73"
-       style="font-size:8.53999996px;font-family:Arial;fill:#999999"
-       textLength="46.029999"
-       lengthAdjust="spacingAndGlyphs"
-       id="text27">Ramping-up</text>
-  </g>
+     inkscape:export-ydpi="299.11099" />
   <g
-     transform="translate(21.069254,65.52621)"
+     transform="translate(17.069254,65.52621)"
      clip-path="url(#cpNDAuMzZ8MjQ2LjUyfDExMi41MXw1LjQ4-6)"
      id="g33"
      style="fill:#999999"

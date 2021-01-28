@@ -58,6 +58,13 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
   data$Days<-(as.numeric(data$Date) -17485)
   data$DaysF<-(as.factor(data$Days))
   data$Treatment <- as.factor(data$Treatment)
+  
+  data$Community <- factor(data$Community, levels = c("A", "B", "C3", "C1", "D"))
+  
+  data$Days2<-data$Days-82
+  data$Days2[data$Days2 == 31] <- "15"
+  data$Days2<-as.numeric(data$Days2)
+  
   summary (data)
 
 # Remove the sick guy
@@ -107,16 +114,18 @@ Sym_Community
 
 ```{r}
 
-Sym_Treatment<- ggplot(data, aes (Days, Sym.cm2, colour=Treatment,
+Sym_Treatment<- ggplot(data, aes (Days2, Sym.cm2, colour=Treatment,
                                    shape=Treatment)) + ggthe_bw +
+  #geom_point(position = position_dodge(width = 8), shape=21)+
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-               position = position_dodge(width = 3), width = 0.2 )+
-  stat_summary(fun.y=mean, geom="line", 
-               position = position_dodge(width = 3)) + 
-  stat_summary(fun.y=mean, geom="point",
-               position = position_dodge(width = 3)) + 
+               position = position_dodge(width = 8), width = 0.2 )+
+  stat_summary(fun.y=mean, geom="line", linetype=1, 
+               position = position_dodge(width = 8)) + 
+  stat_summary(fun.y=mean, geom="point", size=2,
+               position = position_dodge(width = 8)) + 
   scale_x_continuous(breaks=c(82, 113)) + Fill.colour +
-  scale_y_continuous(breaks=seq(0, 7, by=1), 
+  scale_y_continuous(limits = c(0, 2.4),
+                     breaks=seq(0, 2, by=0.5), 
    name="Symbiodiniaceae (106 cells / cm2)") 
   
 #Sym_Treatment
@@ -124,7 +133,7 @@ Sym_CommunityB<-Sym_Treatment  +  facet_wrap (Spp~Community, scales="free_y")
 Sym_CommunityB
 Sym_Community<-Sym_Treatment  +  facet_wrap (Spp~Community)
 
-# ggsave(file="Outputs/AllB_Acer_Ofav_Ssid_Blastate.svg", Sym_CommunityB, width=6, height=5.5)
+# ggsave(file="Outputs/AllB_Acer_Ofav_Ssid_Blastateb.svg", Sym_CommunityB, width=6, height=5)
 
 
 Sy.Summary <- plyr::ddply (data, . (Spp, Treatment, Days, Community),
@@ -145,14 +154,14 @@ Chl<-ggplot(data, aes(DaysF, Chl_a, colour=Treatment)) +
   ggthe_bw + facet_grid(Spp~., scales = "free_y" )
 Chl
 
-Chl_Treatment<- ggplot(data, aes (Days, Chl_a, colour=Treatment,
+Chl_Treatment<- ggplot(data, aes (Days2, Chl_a, colour=Treatment,
                                   shape=Treatment)) +
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-               position = position_dodge(width = 3), width = 0.2 )+
+               position = position_dodge(width = 8), width = 0.2 )+
   stat_summary(fun.y=mean, geom="line", 
-               position = position_dodge(width = 3)) + 
+               position = position_dodge(width = 8)) + 
   stat_summary(fun.y=mean, geom="point", 
-               position = position_dodge(width = 3)) + ggthe_bw + ylab("Chlorophyll-a (ug / cm2)") + 
+               position = position_dodge(width = 8)) + ggthe_bw + ylab("Chlorophyll-a (ug / cm2)") + 
   scale_x_continuous(breaks=c(82, 113)) + Fill.colour +
     facet_wrap (~Spp)
 Chl_Treatment
@@ -160,7 +169,7 @@ Chl_Treatment
 Chl_TreatmentB<-Chl_Treatment  +  facet_wrap (Spp~Community)
 Chl_TreatmentB
 
-#ggsave(file="Outputs/AllB_Acer_Ofav_Ssid_Chla.svg", Chl_TreatmentB, width=6, height=5.5)
+#ggsave(file="Outputs/AllB_Acer_Ofav_Ssid_Chla.svg", Chl_TreatmentB, width=6, height=5)
 
 Chl.Summary <- plyr::ddply (data, . (Spp, Treatment, Days),
               summarise,

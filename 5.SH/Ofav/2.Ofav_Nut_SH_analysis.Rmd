@@ -41,7 +41,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_blank(),
-          legend.box.background = element_rect(),
+          #legend.box.background = element_rect(),
           panel.background =element_rect(fill = NA, color = "black")
           )+
     theme_bw()
@@ -116,43 +116,34 @@ logSH_Replicate<- ggplot(qPCR.variables, aes (Days, logSH,
   stat_summary(fun.y=mean, geom="line") + facet_grid (~Treatment) + ggthe_bw
 logSH_Replicate 
 
-```
-
-```{r}
-logSHTreatment <- ggplot (qPCR.variables, aes(Days, logSH, 
-                                  colour=Treatment, shape=Treatment)) + 
-  Fill.colour +
-  ggthe_bw +  theme( legend.position=c(0.1, 0.25),
-            strip.background = element_rect(fill="white"),
-            legend.title = element_blank()) +
+logSHTreatment <- ggplot (qPCR.variables, aes(Days, logSH, colour=Treatment)) + 
+  ggtitle("A.")+
+  ggthe_bw +  theme(legend.position="bottom") +
+  
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                     position = position_dodge(width = 5), width = 0.2 )+
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
-                   position = position_dodge(width = 5)) +
+  #stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
+       #            position = position_dodge(width = 1)) +
   stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
 
-  scale_y_continuous(limits = c(-4.6,-0),
-                    breaks = seq(-4.5, 0, 0.5),
+  scale_y_continuous(breaks = seq(-2.5, 0, 0.5),
                     expand = c(0,0),
-                  name=("Relative log 10 S/H cell ratio")) +
+                  name=("log 10 (Total S/H cell ratio")) +
   scale_x_continuous(name="Days in the experiment",
                          limits = c(-2,113),
                          breaks = seq(0, 110, 15),  
                          expand = c(0, 0)) +  
-        annotate("segment", x = 2, xend = 91, y = -4.5, yend = -4.5,
-                  colour = "gray90", linetype=2)+
-        annotate("segment", x = 79, xend = 91, y = -4.5, yend = -4,
-                  colour = "gray90", linetype=4)+
-        annotate("segment", x = 91, xend = 110, y = -4, yend = -4,
-                  colour = "gray90", linetype=3)+
-        annotate("text", x = 45, y = -4.4, label = "Nutrients", size=3, colour="gray")+
-        annotate("text", x = 3, y = -4.4, label = "BL", size=3,  colour="gray")+
-        annotate("text", x = 100, y = -3.9, label = "H", size=3, colour="gray")
-
+  geom_point(alpha=0.5) +
+  
+      annotate("segment", x = 2, xend = 91, y = -2.2, yend = -2.2,
+                colour = "gray90")+
+      annotate("segment", x = 79, xend = 90, y = -2.2, yend = -1.8,
+                colour = "gray90")+
+      annotate("segment", x = 91, xend = 110, y = -1.8, yend = -1.8,
+                colour = "gray90")
     
 logSHTreatment
-logSHTreatmentb<- logSHTreatment+facet_wrap (~Community)
-#ggsave(file="Outputs/Fig6b.svg", plot=logSHTreatmentb, width=4.0, height=3.5)
+logSHTreatment +facet_wrap (~Genotype)
 
 ```
 
@@ -242,24 +233,25 @@ D.PTreatment <- ggplot(qPCR.variables, aes(Days, D.Prp, colour=Fragment)) +
         geom_jitter(aes(colour=factor(Fragment)), alpha=0.5, size=1) +
         geom_line() + facet_grid (Genotype~Treatment) +
   
-      annotate("segment", x = 2, xend = 91, y = 0, yend = 0,
-                colour = "gray90")+
+      annotate("segment", x = 2, xend = 91, y = -0.03, yend = -0.03,
+                colour = "gray90", linetype=2)+
         
-      annotate("segment", x = 79, xend = 90, y = 0, yend = 0.3,
-                colour = "gray90")+
+      annotate("segment", x = 79, xend = 90, y = -0.03, yend = 0.3,
+                colour = "gray90",linetype=3)+
     
       annotate("segment", x = 91, xend = 110, y = 0.3, yend = 0.3,
-                colour = "gray90")+
-      annotate("text", x = 8, y = 0.08, label = "(BL)", size=3, colour="gray")+
-      annotate("text", x = 45, y = 0.08, label = "(C)", size=3, colour="gray")+
-      annotate("text", x = 100, y = 0.08, label = "(H)", size=3, colour="gray")+  
+                colour = "gray90", linetype=3)+
+      #annotate("text", x = 8, y = 0.08, label = "(BL)", size=3, colour="gray")+
+      annotate("text", x = 45, y = 0.1, label = "Nutrients", size=3, colour="gray")+
+      annotate("text", x = 99, y = 0.4, label = "Heat", size=3, colour="gray")+  
   
 
       scale_y_continuous(breaks = seq(0, 1, 0.3),
+                         limits = c(-0.035,1),
                      name=("Durusdinium proportion (D/H)/(S/H)")) +
       scale_x_continuous(name="Days in the experiment",
-                           limits = c(-2,113),
-                         breaks = seq(0, 110, 45),  
+                        limits = c(-2,113),
+                         breaks = seq(0, 110, 30),  
                          expand = c(0, 0))
 D.PTreatment
 #ggsave(file="Outputs/D.P_Treatment_Genotype.svg", plot=D.PTreatment, width=4.5, height=4.5)
@@ -287,37 +279,48 @@ SH.H<-subset(qPCR.variables_2, Days>76)
 ## Log S/H graph
 ```{r}
 
-logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, logSH, colour=Treatment, shape=Treatment)) + 
-  ggtitle("A.")+ Fill.colour +
-  ggthe_bw +  theme(legend.position="bottom") +
+logSHTreatment <- ggplot (qPCR.variables, aes(Days, logSH, colour=Treatment, shape=Treatment)) + 
+  Fill.colour +
+  ggthe_bw +  
+   theme(plot.background=element_blank(), 
+            #panel.border = element_blank(),
+            axis.line = element_line(colour = "black"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.position=c(0.1, 0.25),
+            #strip.background = element_rect(fill="white"),
+            legend.title = element_blank()) +
   
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-                    position = position_dodge(width = 5), width = 0.2 )+
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
-                  position = position_dodge(width = 5)) +
-  stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
+                    position = position_dodge(width = 2), width = 2 )+
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                  position = position_dodge(width = 2)) +
+  stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 2)) + 
 
-  scale_y_continuous(breaks = seq(-2.5, 0, 0.5),
+   scale_y_continuous(limits = c(-4.6,0),
+        breaks = seq(-5, 0.3, 0.5),
                     expand = c(0,0),
-                  name=("log 10 (relative S/H cell ratio)")) +
-  scale_x_continuous(name="Days in the experiment",
-                         limits = c(-2,113),
+                   name=("log10(Relative S/H cell ratio)")) +
+      scale_x_continuous(name="Days in the experiment",
+                         limits = c(70,114),
                          breaks = seq(0, 110, 15),  
-                         expand = c(0, 0)) +  
+                         expand = c(0.01, 0.01))+
   #geom_point(alpha=0.5) +
-  
-      annotate("segment", x = 2, xend = 91, y = -2.2, yend = -2.2,
-                colour = "gray90")+
-      annotate("segment", x = 79, xend = 90, y = -2.2, yend = -1.8,
-                colour = "gray90")+
-      annotate("segment", x = 91, xend = 110, y = -1.8, yend = -1.8,
-                colour = "gray90")
+   annotate("segment", x = 73, xend = 91, y = -4.5, yend = -4.5,
+                  colour = "gray90", linetype=2)+
+        annotate("segment", x = 79, xend = 91, y = -4.5, yend = -4,
+                  colour = "gray90", linetype=3)+
+        annotate("segment", x = 91, xend = 110, y = -4, yend = -4,
+                  colour = "gray90", linetype=3)+
+        annotate("text", x = 45, y = -4.4, label = "Nutrients", size=3, colour="gray")+
+        #annotate("text", x = 3, y = -4.4, label = "BL", size=3,  colour="gray")+
+        annotate("text", x = 100, y = -4.4, label = "Heat", size=3, colour="gray")
     
 logSHTreatment
-logSHTreatment +facet_wrap (~Genotype)
-  
+logSHTreatmentb<-logSHTreatment +facet_wrap (~Community)
+logSHTreatmentb  
   #ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
-  #ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.0, height=3)
+  #ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.2, height=3.4)
 
 ```
 
@@ -325,13 +328,13 @@ logSHTreatment +facet_wrap (~Genotype)
 ```{r}
 
 logSHTreatment <- ggplot (qPCR.variables_2, aes(Days, TotalSH, colour=Treatment, shape=Treatment)) + 
-  ggtitle("A.")+ Fill.colour +
+  Fill.colour +
   ggthe_bw +  theme(legend.position="bottom") +
   
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-                    position = position_dodge(width = 5), width = 0.2 )+
+                    position = position_dodge(width = 6), width = 0.2 )+
   stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5, 
-                  position = position_dodge(width = 5)) +
+                  position = position_dodge(width = 6)) +
   stat_summary(fun.y=mean, geom="line", position = position_dodge(width = 5)) + 
 
   scale_y_continuous(breaks = seq(0, 1, 0.5),
@@ -354,7 +357,7 @@ logSHTreatment
 logSHTreatment +facet_wrap (~Genotype)
   
   # ggsave(file="5.3A_AH.svg", plot=logSHTreatment, width=3.0, height=6)
-  # ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.0, height=3)
+  # ggsave(file="5.3A_AH_NoGenotype.svg", plot=logSHTreatment, width=3.0, height=5)
 
 ```
 

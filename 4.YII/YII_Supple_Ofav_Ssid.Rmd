@@ -94,8 +94,12 @@ YII_Treat_OfSs<- ggplot(data=subset(YII.data, Spp!="Ac"), aes (Days, YII, colour
 ### Smoothed data 
 
 ```{r}
+
 YII_Treat_Spp_Sym<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(Treatment))) +
-         ggthe_bw + Fill.colour + geom_smooth()+
+         ggthe_bw + Fill.colour +
+  #geom_jitter(shape=21, size=0.05)+
+  geom_smooth(span=0.5)+
+ 
   #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 1,
   #                  position = position_dodge(1) )+
   #stat_summary(fun.y=mean, geom="line", position = position_dodge(1), linetype=1, alpha=1) + 
@@ -104,28 +108,28 @@ YII_Treat_Spp_Sym<- ggplot(data=subset(YII.data), aes (Days, YII, colour=factor(
   theme(legend.position="bottom", 
               legend.title = element_blank(),
               strip.background = element_rect(fill="white"))+
-  scale_y_continuous(limits = c(0.2, 0.65),
-                           breaks = seq(0.1, 0.6, 0.1),  
+  scale_y_continuous(limits = c(0.0, 0.65),
+                           breaks = seq(0.0, 0.6, 0.1),  
                            expand = c(0, 0),
                            name=expression(~italic("Fv / Fm"))) +
   scale_x_continuous(name="Days in the experiment",
                            limits = c(-1,113),
                            breaks = seq(0, 113, 15),  
                            expand = c(0, 0))+
-  annotate("segment", x = 2, xend = 91, y = 0.21, yend = 0.21,
+  annotate("segment", x = 2, xend = 91, y = 0.1, yend = 0.1,
                   colour = "gray90", linetype=2)+
-  annotate("segment", x = 79, xend = 91, y = 0.21, yend = 0.28,
-                  colour = "gray90", linetype=4)+
-  annotate("segment", x = 91, xend = 110, y = 0.28, yend = 0.28,
-                  colour = "gray90", linetype=3)
+  annotate("segment", x = 79, xend = 91, y = 0.13, yend = 0.2,
+                  colour = "gray", linetype=3)+
+  annotate("segment", x = 91, xend = 110, y = 0.2, yend = 0.2,
+                  colour = "gray", linetype=3)
 
         
-FigureS4b<-YII_Treat_Spp_Sym + facet_wrap (InitialCommunity~Spp)+
-        annotate("text", x = 45, y = 0.25, label = "Nutrients", size=3)+
-        annotate("text", x = 99, y = 0.25, label = "Heat", size=3)
+FigureS4b<-YII_Treat_Spp_Sym + facet_wrap (Spp~InitialCommunity)+
+        annotate("text", x = 45, y = 0.15, label = "Nutrients", size=3)+
+        annotate("text", x = 99, y = 0.15, label = "Heat", size=3)
 FigureS4b
 
-#ggsave(file="Outputs/Fig_S4_Ofav-Ssid_YII_Treatb.svg", plot=FigureS4b, width=7, height=6)
+#ggsave(file="Outputs/Fig_3_YII_Treat.svg", plot=FigureS4b, width=7, height=6)
 ```
 
 ```{r}
