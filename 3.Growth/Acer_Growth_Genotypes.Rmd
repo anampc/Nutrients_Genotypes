@@ -171,41 +171,67 @@ N.fragments<-BW.Tall %>%
       stat_summary(fun.y=mean, geom="point", size =2,
                    position=position_dodge(width=5))  + 
   
-      geom_hline(yintercept = 0, linetype=3)+
+      #geom_hline(yintercept = 0, linetype=3)+
       
       scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
+                         breaks = seq(0, 115, by=15), 
+                         expand = c(0,0)) +
       scale_y_continuous(limits = c (-2,5.5),
                          name="Growth (mg / g d)", 
-                         breaks = seq(-2, 5, by=1)) +
+                         breaks = seq(-2, 5, by=1), 
+                         expand = c(0,0)) +
     
-    theme(legend.position="right",
+    theme(legend.position=c(0.2,0.3),
         legend.title = element_blank(), 
         strip.background =element_rect(fill=NA)) +
 
-      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+      annotate("segment", x = -30, xend = -2, y = -1.8, yend = -1.8,
                 colour = "gray90")+
-      annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
+      annotate("text", x = -16, y = -1.5, label = "Baseline", size=3)+
     
-      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
+      annotate("segment", x = 2, xend = 91, y = -1.8, yend = -1.8,
+                colour = "gray90", linetype=2)+
+      annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
     
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-                colour = "gray90")+
+      annotate("segment", x = 79, xend = 91, y = -1.8, yend = -1,
+                colour = "gray90", linetype=3)+
     
       annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
+                colour = "gray90", linetype=3)+
+      annotate("text", x = 99, y = -1.5, label = "Heat", size=3)
   BW_Treat
   
-# ggsave(file="Outputs/Figure3_BW_corrected.svg", plot=BW_Treat, dpi = 300, units="in", width=3.5, height=3.0)
+# ggsave(file="Outputs/Figure3_BW_corrected.svg", plot=BW_Treat, dpi = 300, units="in", width=3.0, height=3.5)
+```
+
+```{r}
+Model_treatment<-lmer(dAW.gd~Treatment + (1|DayF) + (1|Genotype), data = BW.Tall)
+summary(Model_treatment)
+anova(Model_treatment)
+ranova(Model_treatment)
+
+Model_treatmentEM<-emmeans(Model_treatment,~Treatment)
+ library(multcomp)
+cld(Model_treatmentEM, "tukey")
+
+# Pairwise comparisons
+  BW.emmc<-emmeans(Model_treatmentEM, ~Treatment)
+  #contrast(BW.emmc, "tukey")
+  BW_groups<-cld(BW.emmc)
+  #BW.emmc<-emmeans(LM_Treatment_Days, ~Treatment|DayF)
+  #contrast(BW.emmc, "tukey")
+  #BW_groups<-cld(BW.emmc)
+  
+  #BW_groups<-as.data.frame(BW_groups[complete.cases(BW_groups),])
+  BW_groups<-BW_groups[order(BW_groups$DayF,BW_groups$Treatment),]
+  BW_groups
 ```
 
 
 ## Genotypes and nutrient treatment means over time
 
 ```{r, echo =FALSE}
+
 BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + ggthe_bw +
   stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 10,
                      position = position_dodge(4), alpha=0.8 )+
@@ -244,6 +270,61 @@ BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + ggthe_bw +
 BW_Col
 
 #ggsave(file="Outputs/Growth_genotype.svg", plot=BW_Col, width=5.5, height=4)
+
+```
+
+
+## Genotypes and nutrients (pooled) means over time
+
+```{r}
+  BW.Tall$Treatment2 <- "N and N+P"
+  BW.Tall$Treatment2[BW.Tall$Treatment == "A"] <- "A"
+  BW.Tall$Treatment2<-as.factor(BW.Tall$Treatment2)
+  summary (BW.Tall$Treatment2)
+```
+
+
+```{r, echo =FALSE}
+
+BW_Col2 <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + ggthe_bw + ggtitle("b")+
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 10,
+                     position = position_dodge(2), alpha=0.8 )+
+  stat_summary(fun.y=mean, geom="line", position = position_dodge(2),
+               linetype=1, alpha=0.5) + 
+  stat_summary(fun.y=mean, geom="point", size =2, shape=21,
+                   position=position_dodge(width=2))  +
+  theme(legend.position=c(0.2,0.3), 
+        legend.title = element_blank(),
+        strip.background = element_rect(fill="white"))+
+  
+  scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(-30, 113, 15),  
+                           expand = c(0, 0))+
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                           limits = c(-3,5),
+                           breaks = seq(-2, 6, 1),  
+                           expand = c(0, 0))+
+  
+    annotate("segment", x = -30, xend = -2, y = -2.5, yend = -2.5,
+                colour = "gray90")+
+      annotate("text", x = -16, y = -2, label = "Baseline", size=3)+
+    
+      annotate("segment", x = 2, xend = 91, y = -2.5, yend = -2.5,
+                colour = "gray90", linetype=2)+
+      annotate("text", x = 45, y = -2, label = "Nutrients", size=3)+
+    
+      annotate("segment", x = 79, xend = 91, y = -2.5, yend = -1.5,
+                colour = "gray90", linetype=3)+
+    
+      annotate("segment", x = 91, xend = 110, y = -2.5, yend = -2.5,
+                colour = "gray90", linetype=3)+
+      annotate("text", x = 99, y = -2, label = "Heat", size=3)+
+     facet_grid(~Treatment2)
+BW_Col2
+
+#ggsave(file="Outputs/Growth_genotype.svg", plot=BW_Col2, dpi = 300, units="in", width=5.0, height=3.5)
+
 
 ```
 

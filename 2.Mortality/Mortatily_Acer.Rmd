@@ -1,5 +1,5 @@
 ---
-title: "New_Acer mortality"
+title: "Survivorship of Acer genotypes under nutrient and heat stress"
 author: "Ana Palacio"
 date: "Nov 18, 2019"
 output:
@@ -91,7 +91,7 @@ Try survival package
     Ac_Treatment_Only<-ggsurvplot(fit1, data = Survival.data, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour,
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
-           risk.table.title="Number of fragments at risk") + ggtitle("(Treatment (all genotypes))")
+           risk.table.title="Number of fragments at risk") + ggtitle("Treatment (all genotypes)")
     Ac_Treatment_Only
     
     #ggsave("Outputs/Fig_Acer_Surv_Treatment.svg", 
@@ -164,7 +164,9 @@ Do not run
 
 ```
 
-## 2. Remove the Ambient data and run models again
+## 2. Only nutrients (N and N+P) models
+
+* Corals in A did not experience any mortality, remove this data to compare the different genotypes under elevated nutrients.
 
 ```{r}
 # Data
@@ -238,8 +240,6 @@ Do not run
                  facet.by="Treatment", risk.table=T, conf.int = T,
                  tables.height=0.5, nrow = 3, alpha=0.5,
                  linetype=1)
-    
-
 ```
 
 ```{r}
@@ -260,3 +260,5 @@ fit.coxph2_2 <- coxph(surv_object2 ~ Treatment + Genotype, data = Survival.data2
 fit.coxph2_2
 summary(fit.coxph2_2)
 ```
+
+
