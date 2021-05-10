@@ -28,10 +28,10 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     #library(rms)
    
 # Default ggplot settings
-
-    Fill.colour<-c("black", "gray70", "gray35")
-
-    ggthe_bw<-theme(plot.background=element_blank(),
+  # Nutrient treatment colors
+  Fill.colour<-c ("#4A6CAA", "#469B53", "#AA4A74")
+  
+  ggthe_bw<-theme(plot.background=element_blank(),
           panel.grid.major.y = element_blank(),
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x = element_blank(),
@@ -52,10 +52,12 @@ Try survival package
     summary(Survival.data$Genotype)
     Survival.data$Genotype<-factor(Survival.data$Genotype, 
                                    levels=c("G_48", "G_62","G_31", "G_08","G_07", "G_50"))
-    summary(Survival.data$Genotype)
+    #Survival.data$Treatment<-factor(Survival.data$Treatment, 
+    #                               levels=c("N", "N_P","Ambient"))
+    summary(Survival.data$Treatment)
 ```
 
-## 1. All data models
+# 1. All data models
 
 ```{r}
 ## Add survival object (Fit survival data using the Kaplan-Meier method)
@@ -64,27 +66,17 @@ Try survival package
 
 ```
 
-* Genotype
+
+## Treatment only: This model pools all the genotyes and replicates per treatment
+
 ```{r}
-# Only genotype model
-  # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
-    fit0 <- survfit(surv_object ~ Genotype, conf.type = "log-log", data = Survival.data)
-    summary(fit0)
-  # Plot the survival model
-    Genotype_only<-ggsurvplot(fit0, data = Survival.data, pval = TRUE,
-               risk.table=T, tables.height=0.4, conf.int = T, n.risk   = TRUE )
-    Genotype_only
-
-```
-
-* Treatment
-```{r}
-
 # Only treatment model
+
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit1 <- survfit(surv_object ~ Treatment, data = Survival.data)
     summary(fit1)
     #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, ties = 'exact')
+    #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, singular.ok = TRUE)
     #summary(coxfit)
 
     # Plot the survival model
@@ -93,24 +85,68 @@ Try survival package
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
            risk.table.title="Number of fragments at risk") + ggtitle("Treatment (all genotypes)")
     Ac_Treatment_Only
-    
-    #ggsave("Outputs/Fig_Acer_Surv_Treatment.svg", 
-     #      Ac_Treatment_Only$plot, width=4, height=3.5,dpi = 300)
-    #ggsave("Outputs/Fig_2_Surv_Treatment.pdf", print(Ac_Treatment_Only),
-     #      width=5, height=6,dpi = 300)
-
-    Acer.Probabilities<-Ac_Treatment_Only$data.survplot
-
 ```
 
-* Genotype and treatment
+## Genotype and treatment
+
+Model
 
 ```{r}
-
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit2 <- survfit(surv_object ~ Genotype + Treatment, data = Survival.data)
     summary(fit2)
+```
+
+Cox hazards 
+
+```{r}
+ coxfit2 <- coxph(surv_object ~ Genotype + Treatment, data = Survival.data)
+    summary(coxfit2)
+    coxfit2
+
+```
+
+* “z” gives the Wald statistic value. It corresponds to the ratio of each regression coefficient to its standard error (z = coef/se(coef)). The wald statistic evaluates, whether the beta (β) coefficient of a given variable is statistically significantly different from 0.
+
+* The regression coefficients is the the sign of the regression coefficients (coef). A positive sign means that the hazard (risk of death) is higher, and thus the prognosis worse, for subjects with higher values of that variable. The variable sex is encoded as a numeric vector. 1: male, 2: female. The R summary for the Cox model gives the hazard ratio (HR) for the second group relative to the first group.
+
+* Hazard ratios. The exponentiated coefficients (exp(coef)), also known as hazard ratios, give the effect size of covariates. Confidence intervals of the hazard ratios. The summary output also gives upper and lower 95% confidence intervals for the hazard ratio (exp(coef))
+
+* Global statistical significance of the model. p-values for three alternative tests for overall significance of the model: The likelihood-ratio test, Wald test, and score logrank statistics. These three methods are asymptotically equivalent. For large enough N, they will give similar results. For small N, they may differ somewhat. The Likelihood ratio test has better behavior for small sample sizes, so it is generally preferred.
+
+```{r}
+
+# Test for the proportional-hazards (PH) assumption
+    test.ph <- cox.zph(coxfit2)
+    test.ph
+    # the test is not statistically significant for each of the covariates, or the global test.
+    # Therefore, we can assume the proportional hazards.
+    
+    ggcoxzph(test.ph)
+    # Systematic departures from a horizontal line are indicative of non-proportional hazard
+    
+# Testing influential observations
+    
+    ggcoxdiagnostics(coxfit2, type = "dfbeta",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+      #Positive values correspond to individuals that “died too soon” compared to expected survival times.
+      #Negative values correspond to individual that “lived too long”.
+      #Very large or small values are outliers, which are poorly predicted by the model.
+    
+    ggcoxdiagnostics(coxfit2, type = "deviance",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+    
+ # Testing non linearity (for numeric variales)
+    #$ggcoxfunctional(Surv(time = Survival.data$Fu.time_texp,
+    #                     event = Survival.data$Fu.stat_exp) ~ Day + log(Day) + sqrt(Day),
+     #               data = Survival.data)
+
+```
+
+Plor survival models
+
+```{r}
     # Plot the survival model
     GenTre_1<-ggsurvplot(fit2, data = Survival.data, pval = TRUE,
            risk.table=T,  tables.height=0.5)
@@ -118,55 +154,30 @@ Try survival package
     
     Ac_facet_T<-ggsurvplot_facet(fit2, data = Survival.data, facet.by="Genotype", 
                   #risk.table=T, tables.height=0.5, 
-                  nrow = 6, alpha=1,
+                  conf.int = T,
+                  nrow = 6, alpha=1, 
                   palette=Fill.colour, linetype=1)
     Ac_facet_T
+    
     #ggsave("Outputs/Ac_facet_T.svg", Ac_facet_T, width=4, height=7,dpi = 300)
       
     Ac_facet_G<-ggsurvplot_facet(fit2, data = Survival.data, 
                  facet.by="Treatment", 
+                 conf.int = T,
                  # risk.table=T, tables.height=0.5, 
                  nrow = 3, alpha=0.5,
                  linetype=1)
     Ac_facet_G
     #ggsave("Outputs/Ac_facet_G.svg", Ac_facet_G, width=4, height=6,dpi = 300)
-    
-# Treatment and genotype model 2
-    # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
-    fit3 <- survfit(surv_object ~ Gen_Treat, data = Survival.data)
-    summary(fit3)
-    # Plot the survival model
-    #ggsurvplot(fit3, data = Survival.data, pval = TRUE, conf.int = F,
-    #       risk.table=T,  tables.height=0.5)
-    
 
 ```
 
-Do not run
-```{r}
-# fit.coxph0 <- coxph(surv_object ~ Genotype, data = Survival.data)
-# ggforest(fit.coxph0, data = Survival.data)
-# fit.coxph0
 
-# fit.coxph1 <- coxph(surv_object ~ Treatment, data = Survival.data)
-# ggforest(fit.coxph1, data = Survival.data)
-# fit.coxph1
-# 
-# fit.coxph2 <- coxph(surv_object ~ factor(Treatment) + factor (Genotype), data = Survival.data)
-# ggforest(fit.coxph, data = Survival.data)
-# fit.coxph2
-# summary(fit.coxph2)
-# 
-# fit.coxph3 <- coxph(surv_object ~ factor(Gen_Treat), data = Survival.data)
-# ggforest(fit.coxph3, data = Survival.data)
-# fit.coxph3
-# summary(fit.coxph3)
-
-```
-
-## 2. Only nutrients (N and N+P) models
+# 2. Only nutrients (N and N+P) data and models
 
 * Corals in A did not experience any mortality, remove this data to compare the different genotypes under elevated nutrients.
+
+* Filter data
 
 ```{r}
 # Data
@@ -181,25 +192,79 @@ Do not run
                                    levels=c("N", "N_P"))
 ```
 
+* Object 
+
 ```{r}
 ## Add survival object (Fit survival data using the Kaplan-Meier method)
   surv_object2 <- Surv(time = Survival.data2$Fu.time_texp, 
                        event = Survival.data2$Fu.stat_exp)
   surv_object2 
 
+```
+
+## Genotype model 
+
+* Model
+
+```{r}
 # Only genotype model
+  
   # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
-    fit0_2 <- survfit(surv_object2 ~ Genotype, conf.type = "log-log", data = Survival.data2)
-    summary(fit0_2)
-    surv_pvalue(fit0_2)
-    coxfit0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2, ties = 'exact')
-  # Plot the survival model
-    Genotype_only2<-ggsurvplot(fit0_2, data = Survival.data2, pval = TRUE,
+    fit3 <- survfit(surv_object2 ~ Genotype, data = Survival.data2)
+    summary(fit3)
+    surv_pvalue(fit3)
+
+```
+
+ * Cox hazards 
+
+```{r}
+    coxfit3 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
+    summary(coxfit3)
+    coxfit3
+
+```
+
+
+```{r}
+
+# Test for the proportional-hazards (PH) assumption
+    test.ph <- cox.zph(coxfit3)
+    test.ph
+    # the test is not statistically significant for each of the covariates, or the global test.
+    # Therefore, we can assume the proportional hazards.
+    
+    ggcoxzph(test.ph)
+    # Systematic departures from a horizontal line are indicative of non-proportional hazard
+    
+# Testing influential observations
+    
+    ggcoxdiagnostics(coxfit3, type = "dfbeta",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+      #Positive values correspond to individuals that “died too soon” compared to expected survival times.
+      #Negative values correspond to individual that “lived too long”.
+      #Very large or small values are outliers, which are poorly predicted by the model.
+    
+    ggcoxdiagnostics(coxfit3, type = "deviance",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+    
+ # Testing non linearity (for numeric variales)
+    #$ggcoxfunctional(Surv(time = Survival.data$Fu.time_texp,
+    #                     event = Survival.data$Fu.stat_exp) ~ Day + log(Day) + sqrt(Day),
+     #               data = Survival.data)
+
+```
+
+Plot survival model
+
+```{r}
+# Plot the survival model
+   Genotype_only2<-ggsurvplot(fit3, data = Survival.data2, pval = TRUE,
                risk.table=T, tables.height=0.4, conf.int = T, n.risk = TRUE,
                #risk.table.y.text = FALSE, 
                break.time.by=15, xlim=c(0,115), 
            risk.table.title="Number of A. cervicornis at risk")
-    Genotype_only2
+   Genotype_only2
     
     Acer.Nut.Probabilities<-Genotype_only2$data.survplot
     
@@ -208,57 +273,114 @@ Do not run
     #ggsave("Outputs/Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
     #       width=4.5, height=4.5,dpi = 300)
 
+```
+
+Plot Hazard ratio
+
+```{r}
+HazardRatio3<-ggforest(fit.coxph3, data = Survival.data2)
+HazardRatio3
+
+#ggsave("Outputs/Fig_2b_HazardRatio.svg", HazardRatio3, width=5, height=4,dpi = 300)
+```
+
+## Treatment model
+
+Non-significant
+
+```{r}
 # Only treatment model
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
-    fit1_2 <- survfit(surv_object2 ~ Treatment, data = Survival.data2)
-    summary(fit1_2)
-    surv_pvalue(fit1_2)
-    coxfit1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2, ties = 'exact')
-    #summary(coxfit1_2)
+    fit4 <- survfit(surv_object2 ~ Treatment, data = Survival.data2)
+    summary(fit4)
+    surv_pvalue(fit4)
+    coxfit4 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
+    summary(coxfit4)
 
     # Plot the survival model
-    Treatment_Only<-ggsurvplot(fit1_2, data = Survival.data2, pval = TRUE, 
+    Treatment_Only<-ggsurvplot(fit4, data = Survival.data2, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour)
     Treatment_Only
     
+    # Plot the Hazard ratio
+    fit.coxph4 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
+    ggforest(fit.coxph4, data = Survival.data2)
+    fit.coxph4
+```
+
+## Treatment and genotype model
+
+* Model 
+
+```{r}
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
-    fit2_2 <- survfit(surv_object2 ~ Genotype + Treatment, data = Survival.data2)
-    summary(fit2_2)
-    # Plot the survival model
-    GenTre_1_2<-ggsurvplot(fit2_2, data = Survival.data2, pval = TRUE, conf.int = T,
-           risk.table=T,  tables.height=0.5)
-    #GenTre_1_2
+    fit5 <- survfit(surv_object2 ~ Treatment + Genotype, data = Survival.data2)
+    summary(fit5)
+    surv_pvalue(fit5)
+
+```
+
+* Cox hazards 
+```{r}
+coxfit5 <- coxph(surv_object2 ~ Genotype + Treatment, data = Survival.data2)
+    summary(coxfit5)
+    coxfit5
+```
+
+```{r}
+# Test for the proportional-hazards (PH) assumption
+    test.ph <- cox.zph(coxfit5)
+    test.ph
+    # the test is not statistically significant for each of the covariates, or the global test.
+    # Therefore, we can assume the proportional hazards.
     
-    ggsurvplot_facet(fit2_2, data = Survival.data2, 
+    ggcoxzph(test.ph)
+    # Systematic departures from a horizontal line are indicative of non-proportional hazard
+    
+# Testing influential observations
+    
+    ggcoxdiagnostics(coxfit5, type = "dfbeta",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+      #Positive values correspond to individuals that “died too soon” compared to expected survival times.
+      #Negative values correspond to individual that “lived too long”.
+      #Very large or small values are outliers, which are poorly predicted by the model.
+    
+    ggcoxdiagnostics(coxfit2, type = "deviance",
+                 linear.predictions = FALSE, ggtheme = theme_bw())
+    
+ # Testing non linearity (for numeric variales)
+    #$ggcoxfunctional(Surv(time = Survival.data$Fu.time_texp,
+    #                     event = Survival.data$Fu.stat_exp) ~ Day + log(Day) + sqrt(Day),
+     #               data = Survival.data)
+```
+
+Plot the model 
+
+```{r}
+    
+  # Plot the survival model
+  GenTre_5<-ggsurvplot(fit5, data = Survival.data2, pval = TRUE, conf.int = T,
+           risk.table=T,  tables.height=0.5)
+  #GenTre_5
+    
+  ggsurvplot_facet(fit5, data = Survival.data2, 
                  facet.by="Genotype", risk.table=T, conf.int = T,
                  tables.height=0.5, nrow = 6, alpha=1,
                  palette=Fill.colour, linetype=1)
 
 
-    ggsurvplot_facet(fit2_2, data = Survival.data2, 
+  ggsurvplot_facet(fit5, data = Survival.data2, 
                  facet.by="Treatment", risk.table=T, conf.int = T,
                  tables.height=0.5, nrow = 3, alpha=0.5,
                  linetype=1)
+
 ```
+
+Plot the hazard ratios 
 
 ```{r}
-fit.coxph0_2 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
-HazardRatio<-ggforest(fit.coxph0_2, data = Survival.data2)
-HazardRatio
-fit.coxph0_2
-surv_pvalue(fit.coxph0_2)
+ggforest(coxfit5, data = Survival.data2)
 
-#ggsave("Outputs/Fig_1b_HazardRatio.svg", HazardRatio, width=5, height=4,dpi = 300)
-    
-fit.coxph1_2 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
-ggforest(fit.coxph1_2, data = Survival.data2)
-fit.coxph1_2
-
-fit.coxph2_2 <- coxph(surv_object2 ~ Treatment + Genotype, data = Survival.data2)
-#ggforest(fit.coxph2_2, data = Survival.data2)
-fit.coxph2_2
-summary(fit.coxph2_2)
 ```
-
 

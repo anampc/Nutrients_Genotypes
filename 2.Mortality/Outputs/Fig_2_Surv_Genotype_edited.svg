@@ -11,7 +11,7 @@
    version="1.1"
    id="svg262"
    sodipodi:docname="Fig_2_Surv_Genotype_edited.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    width="324"
    height="220"
    inkscape:export-filename="/home/mcano/Documents/WorkingRepos/NutrientsCaribbean/2.Mortality/Fig_2_Surv_Genotype.svg.png"
@@ -38,17 +38,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1849"
-     inkscape:window-height="1172"
+     inkscape:window-width="1844"
+     inkscape:window-height="1016"
      id="namedview264"
      showgrid="false"
      inkscape:zoom="3.3402581"
-     inkscape:cx="151.25121"
-     inkscape:cy="103.42755"
-     inkscape:window-x="1991"
-     inkscape:window-y="0"
+     inkscape:cx="175.23603"
+     inkscape:cy="127.3778"
+     inkscape:window-x="76"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g932" />
+     inkscape:current-layer="svg262" />
   <defs
      id="defs4">
     <style
@@ -1183,11 +1183,11 @@
     </clipPath>
   </defs>
   <rect
-     x="2"
-     y="4.0230942"
-     width="324.13162"
-     height="203.9769"
-     style="fill:#ffffff;stroke:#ffffff;stroke-width:1.04384589;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+     x="1.9966286"
+     y="4.0197229"
+     width="319.94708"
+     height="203.98364"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1.03710306;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
      id="rect8" />
   <defs
      id="defs13">
@@ -1257,7 +1257,7 @@
      id="polygon33"
      transform="translate(2,-50)" />
   <polygon
-     points="301.64,159.92 301.64,203.82 295.3,203.82 295.3,155.91 286.85,155.91 286.85,123.73 280.51,123.73 280.51,72.54 286.85,72.54 286.85,92.16 295.3,92.16 295.3,159.92 "
+     points="295.3,203.82 295.3,155.91 286.85,155.91 286.85,123.73 280.51,123.73 280.51,72.54 286.85,72.54 286.85,92.16 295.3,92.16 295.3,159.92 301.64,159.92 301.64,203.82 "
      style="fill:#b79f00;fill-opacity:0.3;stroke:none;stroke-width:1.07000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
      clip-path="url(#cpNTAuNjd8MzE4LjAyfDIxMy41Nnw2NC40NQ==)"
      id="polygon35"

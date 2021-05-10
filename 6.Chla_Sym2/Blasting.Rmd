@@ -1118,14 +1118,16 @@ LMER_Sym_Ssid3<-lmer(Zoox.sq ~ Treatment + DaysF +
 ```{r}
 # Chl-a
     
-LMER_Chla_Ssid<-lmer(Chl_a ~ Treatment * DaysF * Community + 
-                       # (1|Rep) + 
+LMER_Chla_Ssid<-lmer(Chl.sq ~ Treatment * DaysF * Community + 
+                       (1|Rep) + 
                        (1|Genotype), data=Ssid.data)
     anova(LMER_Chla_Ssid)
     ranova(LMER_Chla_Ssid)
     step(LMER_Chla_Ssid)
 
-LMER_Chla_Ssid2<-lmer(Chl_a ~ Treatment + DaysF + Community + (1 |Genotype) + 
+LMER_Chla_Ssid2<-lmer(Chl_a ~ Treatment + DaysF + Community + 
+                        (1 |Genotype) + 
+                        (1|Rep) +
                         DaysF:Community, data=Ssid.data)
     anova(LMER_Chla_Ssid2)
     ranova(LMER_Chla_Ssid2)
@@ -1137,7 +1139,7 @@ LMER_Chla_Ssid2<-lmer(Chl_a ~ Treatment + DaysF + Community + (1 |Genotype) +
 # Multicomp
   Ssid.Chla.emm<-emmeans(LMER_Chla_Ssid2, ~Treatment|Community|DaysF)
     contrast(Ssid.Chla.emm, "tukey")
-    pwpp(Ssid.Chla.emm)
+    pwpp(Ssid.Chla.emm)+facet_wrap
     
   Ssid.Chla.emm<-emmeans(LMER_Chla_Ssid2, ~Community|Treatment|DaysF)
     contrast(Ssid.Chla.emm, "tukey")
