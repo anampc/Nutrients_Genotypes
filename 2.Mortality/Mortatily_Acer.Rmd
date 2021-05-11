@@ -75,6 +75,9 @@ Try survival package
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit1 <- survfit(surv_object ~ Treatment, data = Survival.data)
     summary(fit1)
+    
+    survdiff(surv_object~Treatment, data = Survival.data)
+    
     #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, ties = 'exact')
     #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, singular.ok = TRUE)
     #summary(coxfit)
@@ -96,6 +99,8 @@ Model
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit2 <- survfit(surv_object ~ Genotype + Treatment, data = Survival.data)
     summary(fit2)
+    
+    survdiff(surv_object~ Genotype + Treatment, data = Survival.data)
 ```
 
 Cox hazards 
@@ -156,7 +161,10 @@ Plor survival models
                   #risk.table=T, tables.height=0.5, 
                   conf.int = T,
                   nrow = 6, alpha=1, 
-                  palette=Fill.colour, linetype=1)
+                  palette=Fill.colour, linetype=1)+
+      geom_segment(aes(x = 0, y = 0, xend = 91, yend = 0), linetype="dashed", colour = "gray35")+
+      geom_segment(aes(x = 79, xend = 91, y = 0, yend = 0.5), colour = "gray35", linetype="dotted")+
+      geom_segment(aes(x = 91, xend = 113, y = 0.5, yend = 0.5), colour = "gray35", linetype="dotted")
     Ac_facet_T
     
     #ggsave("Outputs/Ac_facet_T.svg", Ac_facet_T, width=4, height=7,dpi = 300)
@@ -166,7 +174,10 @@ Plor survival models
                  conf.int = T,
                  # risk.table=T, tables.height=0.5, 
                  nrow = 3, alpha=0.5,
-                 linetype=1)
+                 linetype=1)+
+       geom_segment(aes(x = 0, y = 0, xend = 91, yend = 0), linetype="dashed", colour = "gray35")+
+       geom_segment(aes(x = 79, xend = 91, y = 0, yend = 0.5), colour = "gray35", linetype="dotted")+
+       geom_segment(aes(x = 91, xend = 113, y = 0.5, yend = 0.5), colour = "gray35", linetype="dotted")
     Ac_facet_G
     #ggsave("Outputs/Ac_facet_G.svg", Ac_facet_G, width=4, height=6,dpi = 300)
 
@@ -213,6 +224,8 @@ Plor survival models
     fit3 <- survfit(surv_object2 ~ Genotype, data = Survival.data2)
     summary(fit3)
     surv_pvalue(fit3)
+    
+    survdiff(surv_object2 ~ Genotype, data = Survival.data2)
 
 ```
 
@@ -255,6 +268,8 @@ Plor survival models
 
 ```
 
+### Figure 2a
+
 Plot survival model
 
 ```{r}
@@ -264,9 +279,9 @@ Plot survival model
                #risk.table.y.text = FALSE, 
                break.time.by=15, xlim=c(0,115), 
            risk.table.title="Number of A. cervicornis at risk")
-   Genotype_only2
-    
-    Acer.Nut.Probabilities<-Genotype_only2$data.survplot
+  Genotype_only2
+     
+  Acer.Nut.Probabilities<-Genotype_only2$data.survplot
     
     #ggsave("Outputs/Fig_2_Surv_Genotype.svg", 
     #       Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
@@ -275,10 +290,12 @@ Plot survival model
 
 ```
 
+### Figure 2b
+
 Plot Hazard ratio
 
 ```{r}
-HazardRatio3<-ggforest(fit.coxph3, data = Survival.data2)
+HazardRatio3<-ggforest(coxfit3, data = Survival.data2)
 HazardRatio3
 
 #ggsave("Outputs/Fig_2b_HazardRatio.svg", HazardRatio3, width=5, height=4,dpi = 300)
@@ -294,9 +311,11 @@ Non-significant
     fit4 <- survfit(surv_object2 ~ Treatment, data = Survival.data2)
     summary(fit4)
     surv_pvalue(fit4)
+    survdiff(surv_object2~Treatment, data = Survival.data2)
+    
     coxfit4 <- coxph(surv_object2 ~ Treatment, data = Survival.data2)
     summary(coxfit4)
-
+    
     # Plot the survival model
     Treatment_Only<-ggsurvplot(fit4, data = Survival.data2, pval = TRUE, 
            conf.int = T, risk.table=T, palette=Fill.colour)
@@ -365,9 +384,15 @@ Plot the model
   #GenTre_5
     
   ggsurvplot_facet(fit5, data = Survival.data2, 
-                 facet.by="Genotype", risk.table=T, conf.int = T,
+                 facet.by="Genotype", risk.table=F, conf.int = T,
                  tables.height=0.5, nrow = 6, alpha=1,
-                 palette=Fill.colour, linetype=1)
+                 palette=Fill.colour, linetype=1)+
+      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+                colour = "gray35", linetype="dashed")+
+      annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
+                colour = "gray35", linetype="dotted")+
+      annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
+                colour = "gray35",  linetype="dotted")
 
 
   ggsurvplot_facet(fit5, data = Survival.data2, 

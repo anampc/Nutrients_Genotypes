@@ -201,15 +201,13 @@ BW_Col
 
 ```
 
-## Figure
+## Figure 3
 
 ```{r}
 Figure.3<-grid.arrange(BW_Treat, BW_Col,
           ncol = 2,  widths = c(1.5,2))
 #ggsave(file="Outputs/Figure3.svg", plot=Figure.3, width=6.5, height=4.5)
 ```
-
-
 
 
 ## Figure S2a: All genotypes by nutrient treatment over time (differrence)

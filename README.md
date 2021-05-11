@@ -3,8 +3,8 @@
 This repository contains data and analysis scripts for the manuscript:
 
 ## TITLE
-#### Authors: Ana M. Palacio-Castro, Caroline E. Dennison, Stephanie M. Rosales, Andrew C. Baker
-#### Journal: _Coral Reefs_ [doi:XXX](http://dx.doi.org/XXX)  
+#### **Authors**: Ana M. Palacio-Castro, Caroline E. Dennison, Stephanie M. Rosales, Andrew C. Baker
+#### **Journal**: _Coral Reefs_ [doi:XXX](http://dx.doi.org/XXX)  
 
 -----
 
