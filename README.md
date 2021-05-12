@@ -30,14 +30,18 @@ Contains raw mortality data and code for **Figure 2**
 * **Mortatily_Acer.Rmd:** code for survivorship analysis and **Figure 2**
 * Data/**Acer_Mortality.csv:** Raw mortality data for *A. cervicornis*
 
-#### 3.Growth (only *A.cer*):
-* **XXX:**
+#### [3.Growth:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/3.Growth/Acer_Growth_Genotypes.html)
 
+Contains raw mortality data and code for **Figure 3**
+
+* **Acer_Growth_Genotypes.html.Rmd:** code for growth rate analysis and **Figure 3**
+* **Growth_corrected.csv:** Calculated change in areal weight per fragment and data point
 
 #### [4.YII:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/4.YII/YII_Acer.html)
-* Contains raw photochemical efficiency (*F~v~/F~m~*) data and code for **Figure 4**
 
-* **YII_Script.Rmd:** code for *F~v~/F~m~* analysis and **Figure 3**
+Contains raw photochemical efficiency (*F~v~/F~m~*) data and code for **Figure 4**
+
+* **YII_Script.Rmd:** code for *F~v~/F~m~* analysis and **Figure 4**
 
 * YII_Data/**All_YII_data.csv:** YII values for all coral species
 
