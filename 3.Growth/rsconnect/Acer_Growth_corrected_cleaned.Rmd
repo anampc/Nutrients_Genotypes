@@ -209,12 +209,12 @@ Figure.3<-grid.arrange(BW_Treat, BW_Col,
 #ggsave(file="Outputs/Figure3.svg", plot=Figure.3, width=6.5, height=4.5)
 ```
 
+# 4. Relative differences
 
-## Figure S2a: All genotypes by nutrient treatment over time (differrence)
+## 4.1 Ambient versus elevated nutrients (N and N+p pooled) 
 
 ```{r}
-
-# Claculate relative changes (1 - Control)
+# Claculate relative changes (1 - Ambinet)
       
 BW.Tall$Nutrients2<-BW.Tall$Nutrients
 BW.Tall$Nutrients2[BW.Tall$DayF=="-28"]<-"Ambient"
@@ -231,48 +231,44 @@ BW.Tall$Nutrients2[BW.Tall$DayF=="-28"]<-"Ambient"
     
     BW.Tall<-merge(BW.Tall, BW.Summary,  by=c("MoteGen", "DayF"), all.x = T)
     BW.Tall$Difference<-BW.Tall$dAW.gd-BW.Tall$mean
-    
+```
 
-Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
-Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+
+## All genotypes by nutrient treatment over time (difference)
+
+```{r}
+
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
 
 BW_Diff_Col <- ggplot(BW.Tall, aes(Days, Difference, fill=Nutrients2,
                               shape=factor(Nutrients2))) +
-  
-     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-      #          colour = "gray90")+
-      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
       annotate("segment", x = 2, xend = 91, y = -3.5, yend = -3.5,
-                colour = "gray90")+
-       annotate("text", x = 45, y = -3.9, label = "Nutrients", size=4, colour="gray")+
-    
+                colour = "gray35", linetype = "dashed")+
       annotate("segment", x = 79, xend = 91, y = -3.5, yend = 1,
-                colour = "gray90")+
-    
+                colour = "gray35", linetype = "dotted")+
       annotate("segment", x = 91, xend = 110, y =1, yend =1,
-                colour = "gray90")+
-       annotate("text", x = 99, y = 0.8, label = "H", size=4, colour="gray")+
-  
-           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                colour = "gray35",  linetype = "dotted")+
+    
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                         position=position_dodge(width=5), width = 10)+
-           stat_summary(fun.y=mean, geom="point", size =2,
+      stat_summary(fun.y=mean, geom="point", size =2,
                         position=position_dodge(width=5), alpha=0.8) +
-           stat_summary(fun.y=mean, geom="line", 
+      stat_summary(fun.y=mean, geom="line", 
                         position=position_dodge(width=5), linetype=1) + 
-    scale_shape_manual(values=c(21, 14),
-                     labels=c("A", "N and N+P"))+
-           ggthe_bw + Colour.colour + Fill.colour +
-    scale_x_continuous(name="Days in the experiment",
+      
+      scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+ 
+      ggthe_bw + Colour.colour + Fill.colour +
+      scale_x_continuous(name="Days in the experiment",
                            limits = c(-35,113),
                            breaks = seq(0, 113, 30),  
                            expand = c(0, 0))+
-    scale_y_continuous(name="Difference in growth (mg/ g d) respecto to Ambient", 
+      scale_y_continuous(name="Difference in growth (mg g-1 d-1) respecto to ambient", 
                          breaks = seq(-4, 1.5, by=1)) +
-   geom_hline(yintercept = 0, linetype=3)+
   
     theme(text=element_text(size=14),
-          legend.position=c(0.1, 0.2),
+          legend.position=c(0.1, 0.1),
           legend.title = element_blank(), 
           strip.background =element_rect(fill=NA)) +
 
@@ -283,34 +279,30 @@ BW_Diff_Col
           
 ```
 
-* Percantages 
+## All genotypes by nutrient treatment over time (percentaje)
 
 ```{r}
 # Claculate percentajes changes (1 - Control)
   BW.Tall$percentage<-(BW.Tall$Difference/BW.Tall$mean)*100
-    
 
-Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
-Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+```
+
+
+```{r}
+
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
 
 BW_perent_Col <- ggplot(BW.Tall, aes(Days, percentage, fill=Nutrients2,
                               shape=factor(Nutrients2))) +
   
-     #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-      #          colour = "gray90")+
-      # annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
       annotate("segment", x = 2, xend = 91, y = -140, yend = -140,
-                colour = "gray90")+
-       annotate("text", x = 45, y = -135, label = "Nutrients", size=4, colour="gray")+
-    
+                colour = "gray35", linetype = "dashed")+
       annotate("segment", x = 79, xend = 91, y = -139, yend = 28,
-                colour = "gray90")+
+                colour = "gray35", linetype = "dotted")+
+      annotate("segment", x = 91, xend = 110, y = 28, yend =28,
+                colour = "gray35",  linetype = "dotted")+
     
-      annotate("segment", x = 91, xend = 110, y =28, yend =28,
-                colour = "gray90")+
-       annotate("text", x = 99, y = 33, label = "H", size=4, colour="gray")+
-  
            stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
                         position=position_dodge(width=5), width = 10)+
            stat_summary(fun.y=mean, geom="point", size =2,
@@ -324,11 +316,10 @@ BW_perent_Col <- ggplot(BW.Tall, aes(Days, percentage, fill=Nutrients2,
                            limits = c(-35,113),
                            breaks = seq(0, 113, 30),  
                            expand = c(0, 0))+
-    scale_y_continuous(name="Percentage of growth change respecto to Ambient", 
+    scale_y_continuous(name="Percentage of growth change respecto to ambient", 
                          breaks = seq(-140, 100, by=20)) +
-   geom_hline(yintercept = 0, linetype=3)+
   
-    theme(text=element_text(size=14),
+      theme(text=element_text(size=14),
           legend.position=c(0.1, 0.2),
           legend.title = element_blank(), 
           strip.background =element_rect(fill=NA)) +
@@ -341,14 +332,14 @@ BW_perent_Col
 ```
 
 
-# Figure 3b: By genotype, but N and N+P pooled
+# 5. Growth over time (control, ramp-up and heat stress phases) by nutrient treatment (By genotype, but N and N+P pooled)
 
 ```{r, echo =FALSE}
 
 BW.Tall$Nutrients[BW.Tall$DayF==-28] <-"Ambient"
 
-Colour.colour<-scale_colour_manual(values = c("black", "gray70"))
-Fill.colour<-scale_fill_manual(values = c("black", "gray70"))
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
 
 BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, fill=Nutrients,
                               shape=factor(Nutrients))) +
@@ -416,6 +407,10 @@ BW.nutrientssd1 <- aggregate(dAW.gd~Nutrients+Days+MoteGen, data=BW.Tall, sd, na
 ```
 
 ## Other figures 
+
+```{r}
+
+```
 
 ### All genotypes (colour) by nutrient treatment over time
 
@@ -992,7 +987,7 @@ All_ambient<-grid.arrange(BW_Init,BW_Final, BW_91, BW_100, nrow=1)
 
 BW.Tall$Nutrients <- "Nutrients"
 BW.Tall$Nutrients[BW.Tall$Treatment == "A"] <- "Ambient"
-BW.Nutrients<-subset(BW.Tall, Days<91)
+
    
 # 1. Model
   
@@ -1057,11 +1052,4 @@ BW.Nutrients<-subset(BW.Tall, Days<91)
   #write.csv(BW_groups_genotypes, "Outputs/BW_groups_genotypes.csv", row.names = F)
 
 ```
-
-
-```{r}
-
-```
-
-
 

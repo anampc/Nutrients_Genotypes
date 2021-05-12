@@ -41,7 +41,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
                     legend.title = element_blank(), 
                     legend.box.background = element_rect(),
                     panel.background =element_rect(fill = NA, color = "white"),
-                    legend.position=c(0.2, 0.5),
+                    legend.position="bottom",
                     strip.background =element_rect(fill=NA))
 ```
 
@@ -110,12 +110,32 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
   # Remove recovery data points
     BW.Tall<-subset(BW.Tall, Initial.Date!="2017-10-18")
     BW.Tall<-subset(BW.Tall, Initial.Date!="2018-02-23") # After heat stress
-    
-    
   
 ```
 
-Fragments meassured per timepoint and genotype 
+### Check Individual fragments behavior
+
+Compare individual fragments inside each nutrient treatment
+
+```{r}
+BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=MoteGen, group=(Fra))) +   
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
+  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
+   ylab("Growth (mg/ g d)") +
+  
+     annotate("segment", x = 2, xend = 91, y = -1, yend = -1,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 79, xend = 91, y = -1, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("segment", x = 91, xend = 110, y = -0.5, yend = -0.5,
+                   colour = "gray90", linetype=1)+
+     annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
+     annotate("text", x = 99, y = -1.5, label = "H", size=3)+
+  stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (~Treatment)  
+BW_ColonyT+ facet_grid(Treatment~MoteGen)
+```
+
+Fragments measured per time point and genotype 
 
 ```{r}
 N.fragments<-BW.Tall %>% 
@@ -169,7 +189,7 @@ Fill.colour<-scale_colour_manual(values = c ("#4A6CAA", "#469B53", "#AA4A74"))
 # ggsave(file="Outputs/Figure3_BW_corrected.svg", plot=BW_Treat, dpi = 300, units="in", width=3.0, height=3.5)
 ```
 
-## Overall model (genotype as random effects)
+## Model 1: Overall growth - genotype as random effect and all three nutrient levels
 
 ```{r}
 
@@ -181,19 +201,35 @@ Fill.colour<-scale_colour_manual(values = c ("#4A6CAA", "#469B53", "#AA4A74"))
   #summary(Model_treatment)
 
 # Pairwise comparisons
-  # Day specific comparissions
+  # Day specific comparisons
   BW.emmc<-emmeans(Model_treatment, ~Treatment|DayF)
   BW_groups<-cld(BW.emmc)
   BW_groups
   
-  # Across days (temperature) comparissions
+  # Across days (temperature) comparisons
   BW.emmc<-emmeans(Model_treatment, ~Treatment*DayF)
   BW_groups<-cld(BW.emmc)
   BW_groups<-BW_groups[order(BW_groups$DayF,BW_groups$Treatment),]
   BW_groups
 ```
 
-# 4.1 Genotypes
+## Summary by nutrient treatment and timepoint
+
+```{r}
+summary(BW.Tall)
+
+# Sample means
+BW.mean <- aggregate(dAW.gd~Treatment+Days, data=BW.Tall, mean, na.rm=TRUE)
+          names(BW.mean)[3] <- "mean"
+# sample SDs
+BW.sd <- aggregate(dAW.gd~Treatment+Days, data=BW.Tall, sd, na.rm=TRUE)
+          names(BW.sd)[3] <- "sd"
+# Collect the summary statistics in a dataframe
+BW.summaries <- merge(BW.mean, BW.sd)
+print(BW.summaries, digits=3)
+```
+
+# 4 Genotypes
 
 ## 4.1 Genotypes and nutrient treatment means over time
 
@@ -218,10 +254,10 @@ BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, fill=Treatment,
                 colour = "gray35", linetype="dashed")+
       # annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
     
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
+      annotate("segment", x = 79, xend = 91, y = -1.4, yend = 5,
                 colour = "gray35", linetype="dotted")+
     
-      annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
+      annotate("segment", x = 91, xend = 110, y = 5, yend = 5,
                 colour = "gray35",  linetype="dotted")+
       # annotate("text", x = 99, y = 3.5, label = "H", size=4)+
   
@@ -261,160 +297,7 @@ Figure.3<-grid.arrange(BW_Treat, BW_Col,
 #ggsave(file="Outputs/Figure3.svg", plot=Figure.3, width=6.5, height=4.5)
 ```
 
-
-## 4.1 Genotypes with nutrients (pooled) over time model
-
-```{r}
-  BW.Tall$Treatment2 <- "N and N+P"
-  BW.Tall$Treatment2[BW.Tall$Treatment=="Ambient"] <- "Ambient"
-  BW.Tall$Treatment2<-as.factor(BW.Tall$Treatment2)
-  summary (BW.Tall$Treatment2)
-```
-
-
-```{r, echo =FALSE}
-
-BW_Col2 <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + ggthe_bw + ggtitle("b")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 10,
-                     position = position_dodge(2), alpha=0.8 )+
-  stat_summary(fun.y=mean, geom="line", position = position_dodge(2),
-               linetype=1, alpha=0.5) + 
-  stat_summary(fun.y=mean, geom="point", size =2, shape=21,
-                   position=position_dodge(width=2))  +
-  theme(legend.position=c(0.2,0.3), 
-        legend.title = element_blank(),
-        strip.background = element_rect(fill="white"))+
-  
-  scale_x_continuous(name="Days in the experiment",
-                           limits = c(-35,113),
-                           breaks = seq(-30, 113, 15),  
-                           expand = c(0, 0))+
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                           limits = c(-3,5),
-                           breaks = seq(-2, 6, 1),  
-                           expand = c(0, 0))+
-  
-    annotate("segment", x = -30, xend = -2, y = -2.5, yend = -2.5,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -2, label = "Baseline", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -2.5, yend = -2.5,
-                colour = "gray90", linetype=2)+
-      annotate("text", x = 45, y = -2, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -2.5, yend = -1.5,
-                colour = "gray90", linetype=3)+
-    
-      annotate("segment", x = 91, xend = 110, y = -2.5, yend = -2.5,
-                colour = "gray90", linetype=3)+
-      annotate("text", x = 99, y = -2, label = "Heat", size=3)+
-     facet_grid(~Treatment2)
-BW_Col2
-
-#ggsave(file="Outputs/Growth_genotype.svg", plot=BW_Col2, dpi = 300, units="in", width=5.0, height=3.5)
-
-
-```
-
-* Growth declined in G50, G07 and G08 in A, but increased in G48, G62 and G31
-
-## Individual fragments
-
-Compare individual fragments inside each nutrient treatment
-
-```{r}
-BW_ColonyT<- ggplot(BW.Tall, aes (Days, dAW.gd, colour=MoteGen, group=(Fra))) +   
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
-  stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
-   ylab("Growth (mg/ g d)") +
-  
-     annotate("segment", x = 2, xend = 91, y = -1, yend = -1,
-                   colour = "gray90", linetype=1)+
-     annotate("segment", x = 79, xend = 91, y = -1, yend = -0.5,
-                   colour = "gray90", linetype=1)+
-     annotate("segment", x = 91, xend = 110, y = -0.5, yend = -0.5,
-                   colour = "gray90", linetype=1)+
-     annotate("text", x = 45, y = -1.5, label = "Nutrients", size=3)+
-     annotate("text", x = 99, y = -1.5, label = "H", size=3)+
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw + facet_grid (~Treatment)  
-BW_ColonyT+ facet_grid(Treatment~MoteGen)
-```
-
-
-Initial performance vs ambient per genotype: some genotypes declined in growth even without nutrients
-
-```{r, , fig.height=4, fig.width=6}
-
-BW_Init<- ggplot(BW.Initial, aes (MoteGen, dAW.gd, colour=MoteGen)) +
-  ggtitle("(a) Baseline")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-  theme(legend.position="right",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA))
-
-BW_Final<- ggplot(BW.FinalAC, aes (MoteGen, dAW.gd, colour=MoteGen)) +
-   ggtitle("(a) Ambient (day 75)")+
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5) + ggthe_bw +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-   ylab("Growth (mg/ g d) ")+
-  theme(legend.position="none",
-        legend.title = element_blank(), 
-        strip.background =element_rect(fill=NA))
-
-BW_Colony_Control<- ggplot(BW.Control, aes (Days, dAW.gd, colour=MoteGen)) +
-  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
-               width = 10, position=position_dodge(width=5)) +
-  stat_summary(fun.y=mean, geom="point", size =3, alpha=0.5,
-               position=position_dodge(width=5)) +
-  stat_summary(fun.y=mean, geom="line", position=position_dodge(width=5)) +
-  
-  ggthe_bw + # geom_jitter()+
-  ggtitle("(b) Ambient - Control") +
-  scale_y_continuous(name=("Growth (mg/ g d) "),
-                     limits = c(0,6),
-                     breaks = seq(0, 6, by=0.5))+
-  theme(legend.position="none")
-
-
-Captivityeffect<-grid.arrange(BW_Init,BW_Final, nrow=1)
-Captivityeffect2<-grid.arrange(BW_Init,BW_Colony_Control, nrow=1)
-#ggsave(file="Outputs/S_Genotypes.svg", plot=Captivityeffect, width=6, height=3.5)
-
-```
-
-```{r}
-BW_Colony_Control<-ggplot(BW.Control, aes (Days, dAW.gd, colour=factor(Fra), group=Fra)) +   
-  #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.8)+
-  #stat_summary(fun.y=mean, geom="point", size =2, alpha=0.5) +
-  stat_summary(fun.y=mean, geom="line") + ggthe_bw + 
-  facet_wrap (~MoteGen)+  geom_point()+ theme(legend.position = "none")
-BW_Colony_Control
-```
-
-# Summary by treatment
-
-```{r}
-summary(BW.Tall)
-
-# Sample means
-BW.mean <- aggregate(dAW.gd~Treatment+Days, data=BW.Tall, mean, na.rm=TRUE)
-          names(BW.mean)[3] <- "mean"
-# sample SDs
-BW.sd <- aggregate(dAW.gd~Treatment+Days, data=BW.Tall, sd, na.rm=TRUE)
-          names(BW.sd)[3] <- "sd"
-# Collect the summary statistics in a dataframe
-BW.summaries <- merge(BW.mean, BW.sd)
-print(BW.summaries, digits=3)
-```
-
-# Summary by Genotype
+## Summary by genotype, nutrient treatment, and time point
 
 ```{r}
 # sample means
@@ -434,8 +317,395 @@ BW.sd1 <- aggregate(dAW.gd~Treatment+Days+MoteGen, data=BW.Tall, sd, na.rm=TRUE)
 ```
 
 
+## 4.2 Genotypes with nutrients (pooled) over time model
 
-## Subset timepoints
+```{r}
+  BW.Tall$Treatment2 <- "N and N+P"
+  BW.Tall$Treatment2[BW.Tall$Treatment=="Ambient"] <- "Ambient"
+  BW.Tall$Treatment2<-as.factor(BW.Tall$Treatment2)
+  summary (BW.Tall$Treatment2)
+```
+
+
+```{r, echo =FALSE}
+
+BW_Col2 <- ggplot(BW.Tall, aes(Days, dAW.gd, colour=MoteGen)) + 
+  ggthe_bw +
+  stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 10,
+                     position = position_dodge(2), alpha=0.8 )+
+  stat_summary(fun.y=mean, geom="line", position = position_dodge(2),
+               linetype=1, alpha=0.5) + 
+  stat_summary(fun.y=mean, geom="point", size =2, shape=21,
+                   position=position_dodge(width=2))  +
+  theme(legend.position=c(0.2,0.3), 
+        legend.title = element_blank(),
+        strip.background = element_rect(fill="white"))+
+  
+  scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(-30, 113, 15),  
+                           expand = c(0, 0))+
+  scale_y_continuous(name=("Growth (mg/ g d) "),
+                           limits = c(-3,5),
+                           breaks = seq(-2, 6, 1),  
+                           expand = c(0, 0))+
+  
+  annotate("segment", x = -30, xend = -2, y = -2.5, yend = -2.5,
+                colour = "gray35")+
+  annotate("segment", x = 2, xend = 91, y = -2.5, yend = -2.5,
+                colour = "gray35", linetype=2)+
+  annotate("segment", x = 79, xend = 91, y = -2.5, yend = 4,
+                colour = "gray35", linetype=3)+
+  annotate("segment", x = 91, xend = 110, y = 4, yend = 4,
+                colour = "gray35", linetype=3)+
+  facet_grid(~Treatment2)
+BW_Col2
+
+#ggsave(file="Outputs/Growth_genotype.svg", plot=BW_Col2, dpi = 300, units="in", width=5.0, height=3.5)
+
+```
+
+```{r}
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
+
+BW_Col <- ggplot(BW.Tall, aes(Days, dAW.gd, fill=Treatment2,
+                              shape=factor(Treatment2))) +
+  
+     annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
+            colour = "gray90", linetype=1)+
+     annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
+                colour = "gray35", linetype=2)+
+     annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
+                colour = "gray35", linetype=3)+
+     annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
+                colour = "gray35", linetype=3)+
+     
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour +
+  
+    scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+    scale_y_continuous(name="Growth rate (mg g-1 d-1) ", 
+                         breaks = seq(-1, 5, by=1)) +
+    #geom_hline(yintercept = 0, linetype=3)+
+  
+    theme(text=element_text(size=14),
+          legend.position="none",
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+     facet_wrap(~MoteGen)
+BW_Col
+```
+
+## Model 2: Genotype model -N and N+P pooled compared to ambient.
+
+```{r}
+# Linear model 
+  Model_genotype<-lmer(dAW.gd~MoteGen * Treatment2 *DayF + 
+                         (1|Fra) + (1|Replicate),
+                        data = BW.Tall)
+  anova(Model_genotype)
+  ranova(Model_genotype)
+  #summary(Model_genotype)
+
+# Pairwise comparisons
+  # Day specific comparisons
+  BW.emmc<-emmeans(Model_genotype, ~Treatment2|DayF)
+  BW_groups<-cld(BW.emmc)
+  BW_groups
+  
+  # Across days (temperature) comparisons
+  BW.emmc<-emmeans(Model_genotype, ~Treatment2*DayF)
+  BW_groups<-cld(BW.emmc)
+  BW_groups<-BW_groups[order(BW_groups$DayF,BW_groups$Treatment),]
+  BW_groups
+  
+  # genets comparisons
+  BW.emmc<-emmeans(Model_genotype, ~Treatment2*DayF*MoteGen)
+  BW_groups<-cld(BW.emmc)
+  BW_groups<-BW_groups[order(BW_groups$DayF,
+                             BW_groups$Treatment2, 
+                             BW_groups$MoteGen),]
+  BW_groups
+  #write.csv(BW_groups, "Outputs/genotype_growth.csv", row.names = F)
+
+```
+
+* Growth in ambient declined in G50, G07 and G08 in A, but increased in G48, G62 and G31
+
+## Summary by genotype, nutrient treatment (N and N+P pooled), and time point
+
+```{r}
+# sample means
+BW.mean2 <- aggregate(dAW.gd~Treatment2+Days+MoteGen, data=BW.Tall, mean, na.rm=TRUE)
+          names(BW.mean2)[4] <- "mean"
+      
+# sample SDs
+BW.sd2 <- aggregate(dAW.gd~Treatment2+Days+MoteGen, data=BW.Tall, sd, na.rm=TRUE)
+          names(BW.sd2)[4] <- "sd"
+          
+          
+# Collect the summary statistics in a dataframe
+    BW.summaries2<-merge(BW.mean2, BW.sd2)
+    BW.summaries2<-BW.summaries2[order(BW.summaries2$MoteGen,BW.summaries2$Day),]
+    BW.summaries2
+```
+
+# 5. Plot relative differences
+
+## 5.1 Compare the treatment effect ambient versus elevated nutrients (N and N+p pooled) inside each genotype
+
+```{r}
+library(rstatix)
+# Calculate relative changes (1 - Ambient)
+      
+BW.Tall$Nutrients2<-BW.Tall$Nutrients
+BW.Tall$Nutrients2[BW.Tall$DayF=="-28"]<-"Ambient"
+          
+    BW.Summary <-BW.Tall %>%
+          group_by(MoteGen, Nutrients2, DayF) %>%
+          get_summary_stats(dAW.gd, type = "mean_sd")
+    BW.Summary
+    
+    BW.Summary<-subset(BW.Summary, Nutrients2=="Ambient" )
+    BW.Summary<-BW.Summary[, -3]
+    BW.Summary<-BW.Summary[, -3]
+    BW.Summary<-BW.Summary[, -3]
+    names(BW.Summary)[3] <- "A_Mean"
+    
+    BW.Tall<-merge(BW.Tall, BW.Summary,  by=c("MoteGen", "DayF"), all.x = T)
+    BW.Tall$Difference<-BW.Tall$dAW.gd-BW.Tall$A_Mean
+```
+
+
+## All genotypes by nutrient treatment over time (difference)
+
+```{r}
+
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
+
+BW_Diff_Col <- ggplot(BW.Tall, aes(Days, Difference, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
+      annotate("segment", x = -30, xend = 0, y = -3.5, yend = -3.5,
+                  colour = "gray35", linetype = 1)+  
+      annotate("segment", x = 2, xend = 91, y = -3.5, yend = -3.5,
+                colour = "gray35", linetype = "dashed")+
+      annotate("segment", x = 79, xend = 91, y = -3.5, yend = 1,
+                colour = "gray35", linetype = "dotted")+
+      annotate("segment", x = 91, xend = 110, y =1, yend =1,
+                colour = "gray35",  linetype = "dotted")+
+    
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+      stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+      stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+      
+      scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+ 
+      ggthe_bw + Colour.colour + Fill.colour +
+      scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+      scale_y_continuous(name="Difference in growth (mg g-1 d-1) respecto to ambient", 
+                         breaks = seq(-4, 1.5, by=1)) +
+  
+    theme(legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_Diff_Col
+        
+#ggsave(file="Outputs/S_3_BW_Diff_Col.svg", plot=BW_Diff_Col, width=5.0, height=5)
+          
+```
+
+##  All genotypes by nutrient treatment over time (percentage)
+
+```{r}
+# Calculate percentages changes (1 - Control)
+  BW.Tall$percentage<-(BW.Tall$Difference/BW.Tall$A_Mean)*100
+
+```
+
+
+```{r}
+
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
+
+BW_perent_Col <- ggplot(BW.Tall, aes(Days, percentage, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
+      annotate("segment", x = -30, xend = 0, y = -140, yend = -140,
+                  colour = "gray35", linetype = 1)+  
+      annotate("segment", x = 2, xend = 91, y = -140, yend = -140,
+                colour = "gray35", linetype = "dashed")+
+      annotate("segment", x = 79, xend = 91, y = -139, yend = 28,
+                colour = "gray35", linetype = "dotted")+
+      annotate("segment", x = 91, xend = 110, y = 28, yend =28,
+                colour = "gray35",  linetype = "dotted")+
+    
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour +
+    scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+    scale_y_continuous(name="Percentage of growth change respecto to ambient", 
+                         breaks = seq(-140, 100, by=20)) +
+  
+      theme(legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_perent_Col
+
+#ggsave(file="Outputs/S_3_BW_Percentaje_Col.svg", plot=BW_perent_Col, width=5.0, height=5)
+
+```
+
+
+## 5.2 Compare among genotypes using treatment means as reference.
+
+```{r}
+# Calculate relative changes (mean per treatment - genotype per treatment)
+    
+    BW.Summary2 <-BW.Tall %>%
+          group_by(Nutrients2, DayF) %>%
+          get_summary_stats(dAW.gd, type = "mean_sd")
+    BW.Summary2
+    
+    BW.Summary2<-BW.Summary2[, -3]
+    BW.Summary2<-BW.Summary2[, -3]
+    BW.Summary2<-BW.Summary2[, -4]
+    
+    BW.Tall<-merge(BW.Tall, BW.Summary2,  by=c("Nutrients2", "DayF"), all.x = T)
+    BW.Tall$Difference2<-BW.Tall$dAW.gd-BW.Tall$mean
+```
+
+## Relative genotypes performance by nutrient treatment over time (difference)
+
+```{r}
+
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
+
+BW_Diff_Col2 <- ggplot(BW.Tall, aes(Days, Difference2, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
+      annotate("segment", x = -30, xend = 0, y = -2.5, yend = -2.5,
+                  colour = "gray35", linetype = 1)+  
+      annotate("segment", x = 2, xend = 91, y = -2.5, yend = -2.5,
+                colour = "gray35", linetype = "dashed")+
+      annotate("segment", x = 79, xend = 91, y = -2.5, yend = 1.5,
+                colour = "gray35", linetype = "dotted")+
+      annotate("segment", x = 91, xend = 110, y =1.5, yend =1.5,
+                colour = "gray35",  linetype = "dotted")+
+   annotate("segment", x = -30, xend = 110, y = 0, yend = 0,
+                  colour = "gray90", linetype = 1)+  
+    
+      stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+      stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+      stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+      
+      scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+ 
+      ggthe_bw + Colour.colour + Fill.colour +
+      scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+      scale_y_continuous(name="Difference in growth (mg g-1 d-1) respecto to mean treatment", 
+                         breaks = seq(-4, 1.5, by=1)) +
+  
+    theme(text=element_text(size=12),
+          legend.position="bottom",
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_Diff_Col2
+        
+#ggsave(file="Outputs/S_3_BW_Diff_Col.svg", plot=BW_Diff_Col, width=5.0, height=5)
+          
+```
+
+##  Genets performance percentage
+
+```{r}
+# Calculate percentages changes (1 - Control)
+  BW.Tall$percentage2<-(BW.Tall$Difference2/BW.Tall$mean)*100
+
+```
+
+
+```{r}
+Colour.colour<-scale_colour_manual(values = c ("#4A6CAA", "#b45274"))
+Fill.colour<-scale_fill_manual(values = c ("#4A6CAA",  "#b45274"))
+
+BW_perent_Col3 <- ggplot(BW.Tall, aes(Days, percentage2, fill=Nutrients2,
+                              shape=factor(Nutrients2))) +
+      annotate("segment", x = -30, xend = 0, y = -140, yend = -140,
+                  colour = "gray35", linetype = 1)+  
+      annotate("segment", x = 2, xend = 91, y = -140, yend = -140,
+                colour = "gray35", linetype = "dashed")+
+      annotate("segment", x = 79, xend = 91, y = -139, yend = 28,
+                colour = "gray35", linetype = "dotted")+
+      annotate("segment", x = 91, xend = 110, y = 28, yend =28,
+                colour = "gray35",  linetype = "dotted")+
+    
+           stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                        position=position_dodge(width=5), width = 10)+
+           stat_summary(fun.y=mean, geom="point", size =2,
+                        position=position_dodge(width=5), alpha=0.8) +
+           stat_summary(fun.y=mean, geom="line", 
+                        position=position_dodge(width=5), linetype=1) + 
+    scale_shape_manual(values=c(21, 14),
+                     labels=c("A", "N and N+P"))+
+           ggthe_bw + Colour.colour + Fill.colour +
+    scale_x_continuous(name="Days in the experiment",
+                           limits = c(-35,113),
+                           breaks = seq(0, 113, 30),  
+                           expand = c(0, 0))+
+    scale_y_continuous(name="Percentage of growth change respecto to ambient", 
+                         breaks = seq(-140, 100, by=20)) +
+  
+      theme(text=element_text(size=12),
+          legend.position="bottom",
+          legend.title = element_blank(), 
+          strip.background =element_rect(fill=NA)) +
+
+     facet_wrap(~MoteGen)
+BW_perent_Col3
+
+#ggsave(file="Outputs/S_3_BW_Percentaje_Col.svg", plot=BW_perent_Col, width=5.0, height=5)
+
+```
+
+
+# 6. Visualize individual timepoints?
 
 ```{r}
 summary(BW.Tall$DayF)
@@ -480,13 +750,13 @@ BW_Timepoints
 ```
 
 
-# 1. Non-constrained models
+# 7. Other models (Non-constrained models)
 
 ## Only Ambient (Heat by genotype)
 
 
 ```{r}
-A_data<-subset(BW.Tall, Treatment=="A")
+A_data<-subset(BW.Tall, Treatment=="Ambient")
 
 fit1 <- gls(dAW.gd ~ DayF *MoteGen, data=A_data,
   correlation=corSymm(form=~TimePoint|Fra),
@@ -499,7 +769,6 @@ Only Ambient summary model
 
 ```{r}
 summary(fit1)
-
 intervals(fit1)
 anova(fit1, type="marginal")
 getVarCov(fit1)
@@ -577,10 +846,10 @@ pCI1 <- ggplot(predictions_1, aes(y=linear.predictors, x=Days,
 pCI1
 ```
 
-### Nomalized ambient before and after heat 
+### Normalized ambient before and after heat 
 
 ```{r}
-# Claculate relative changes (1 - Ambient)
+# Calculate relative changes (1 - Ambient)
     D75<-subset(predictions_1, DayF=="75" )
     D75 <- subset(D75, select = c(MoteGen, linear.predictors))
     colnames(D75)<-c("MoteGen", "Day75")
@@ -693,8 +962,7 @@ Model_Tratement <- ggplot(predictions_2, aes(y=linear.predictors, x=Days,
         geom_line(aes(group=Treatment, y=linear.predictors), position=pd, size=0.1) + 
         geom_point(aes(fill=Treatment), shape=21, position=pd, size=4, alpha=0.8) +
         
-        ggthe_bw+Fill.colour+
-        
+        ggthe_bw+
         geom_hline(yintercept = 0, linetype=3)+
       
         scale_x_continuous(name="Days in the experiment", 
@@ -729,6 +997,7 @@ Model_Tratement
 ## Treatment and Genotype
 
 ```{r}
+BW.nutrients<-subset(BW.Tall, Days<91)
 fit3 <- gls(dAW.gd ~ Treatment * DayF * Genotype, data=BW.nutrients,
      correlation=corSymm(form=~TimePoint|Fra),
       weights=varIdent(form=~1|TimePoint),
@@ -820,678 +1089,4 @@ Model_Tratement <- ggplot(predictions_3, aes(y=linear.predictors, x=Days,
 Model_Tratement + facet_wrap(~MoteGen)
 ```
 
-# 2. Constrained longitudinal data analysis (cLDA) 
-For randomized group studies with a pre-treatment datapoint (Baseline)
 
-
-References LDA and cLDA:
-
-* Fitzmaurice, Garrett M., et al. Applied Longitudinal Analysis. John Wiley & Sons, 2004.
-
-*Liu GF, Lu K, Mogg R, et al. Should baseline be a covariate or dependent variable in analyses of change from baseline in clinical trials? Stat Med 2009; 28: 2509-2530.
-
-* Pinheiro J, Bates D (2000): Mixed effects models in S and S-Plus. New York: Springer-Verlag.
-
-
-## Deal with baseline 
-
-* Remove treatment from BL and ambient 
-
-```{r}
-BW.Tall$TreatDay<-as.character(paste(BW.Tall$DayF, BW.Tall$Treatment, sep = "_"))
-BW.Tall$TreatDay[BW.Tall$Treatment=="A"]<-"0"
-BW.Tall$TreatDay[BW.Tall$Day=="-28"]<-"0"
-
-BW.Tall$TreatDay<-factor(BW.Tall$TreatDay)
-summary(BW.Tall$TreatDay)
-BW.Tall$TreatDay<-factor(BW.Tall$TreatDay, levels = c("0","28_N","28_N+P", "62_N","62_N+P",
-                                                      "75_N", "75_N+P","91_N", "91_N+P", "100_N","100_N+P"))
-
-```
-
-* Or remove interaction BL*Time from the matrix 
-
-```{r}
-# X<-model.matrix(~DayF*Treatment, data=BW.Tall)
-# colnames(X)
-# 
-# Xalt<- X[, c("DayF28", "DayF62", "DayF75", "DayF91", "DayF100", "DayF28:TreatmentN", "DayF62:TreatmentN",
-#              "DayF75:TreatmentN", "DayF91:TreatmentN","DayF100:TreatmentN","DayF28:TreatmentN+P" ,
-#              "DayF62:TreatmentN+P",  "DayF75:TreatmentN+P",  "DayF91:TreatmentN+P",  "DayF100:TreatmentN+P")] 
-# colnames(Xalt)
-
-```
-
-## Treatment model
-
-```{r}
-fit4 <- gls(dAW.gd ~ DayF + TreatDay, data=BW.Tall,
-  correlation=corSymm(form=~TimePoint|Fra),
-  weights=varIdent(form=~1|TimePoint),
-  na.action=na.exclude,
-  control=glsControl(opt="optim"))
- 
-# fit4 <- gls(dAW.gd ~ Xalt, data=BW.Tall,
-#   correlation=corSymm(form=~TimePoint|Fra),
-#   weights=varIdent(form=~1|TimePoint),
-#   na.action=na.exclude,
-#   control=glsControl(opt="optim"))
-
-```
-
-Summary model 
-
-```{r}
-summary(fit4)
-    intervals(fit4)
-    anova(fit4, type="marginal")  # type 3 tests
-    getVarCov(fit4)
-    #residuals(fit4, type="pearson")
-    
-    par(mfrow=c(1,2))
-    plot(fitted(fit4), residuals(fit4, type="pearson"))
-    abline(h=0)
-    qqnorm(residuals(fit4, type="pearson"))
-    abline(0,1)
-```
-
-Predictions 
-
-```{r}
-data4<-expand.grid(DayF=unique(BW.Tall$DayF),
-                   Treatment=unique(BW.Tall$Treatment))
-  data4$TreatDay<-as.character(paste(data4$DayF, data4$Treatment, sep = "_"))
-  data4$TreatDay[data4$Treatment=="A"]<-"0"
-  data4$TreatDay[data4$Day=="-28"]<-"0"
-  data4$TreatDay<-factor(data4$TreatDay, levels = c("0","28_N","28_N+P", "62_N","62_N+P",
-                                                    "75_N", "75_N+P","91_N", "91_N+P", "100_N","100_N+P"))
-
-data4<-data4[order(data4$Treatment, data4$DayF),]
-
-
-# data4<-expand.grid(DayF=unique(BW.Tall$DayF),
-                   # Treatment=unique(BW.Tall$Treatment))
-# data4<-data4[order(data4$Treatment, data4$DayF),]
-```
-
-
-```{r}
-clda_Gls_4 <- Gls(dAW.gd ~ DayF + TreatDay,
-        correlation=corSymm (form = ~TimePoint|MoteGen/Fra),
-        weights=varIdent(form=~1|TimePoint),
-        na.action = na.omit,
-        data = BW.Tall)
-
-
-predictions_4 <- cbind(data4, predict (clda_Gls_4, data4, conf.int=0.95))
-
-predictions_4$Treatment2<- factor(predictions_4$Treatment,
-        levels= c("BL", "A", "N", "N+P"))
-predictions_4$Treatment2[predictions_4$Day=="-28"] <- "BL"
-
-predictions_4$Days<-as.numeric(as.character(predictions_4$Day))
-
-# clda_Gls_4 <- Gls(dAW.gd ~ Xalt,
-#         correlation=corSymm (form = ~TimePoint|Fra),
-#         weights=varIdent(form=~1|TimePoint),
-#         na.action = na.omit,
-#         data = BW.Tall)
-# 
-# predictions_4 <- cbind(BW.Tall, predict (clda_Gls_4, BW.Tall, conf.int=0.95))
-```
-
-
-```{r}
-pd <- position_dodge(2)
-Colour.colour<-scale_colour_manual(values = c("black", "gray70", "gray35"))
-Fill.colour<-scale_fill_manual(values = c("white", "black", "gray70", "gray35"))
-limits <- aes(ymax = upper , ymin=lower, shape=Treatment2)
-
-pCI4 <- ggplot(predictions_4, aes(y=linear.predictors, x=Days, 
-                                fill=Treatment2 , shape=Treatment2)) + 
-  
-    
-          annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-                    colour = "gray90")+
-          annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
-        
-          annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                    colour = "gray90")+
-          annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-        
-          annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4,
-                    colour = "gray90")+
-        
-          annotate("segment", x = 91, xend = 110, y = 4, yend = 4,
-                    colour = "gray90")+
-          annotate("text", x = 100, y = 3.8, label = "Heat", size=3) +
-  
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=Treatment, y=linear.predictors), position=pd) + 
-        geom_point(position=pd, size=4, alpha=0.8) +
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                     labels=c("BL", "A", "N", "N+P"))+
-        Fill.colour+ ggthe_bw + ggtitle("a)") +
-        
-        geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        scale_y_continuous(name="Estimated growth rate (mg / g d) ", 
-                         breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position=c(0.2, 0.3),
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) 
-
- 
-pCI4
-```
-
-
-```{r}
-# predictions_4$Treatment2<- factor(predictions_4$Treatment, 
-#         levels= c("BL", "A", "N", "N+P"))
-#         predictions_4$Treatment2[predictions_4$DayF=="-28"] <- "BL"
-# 
-# 
-# pd <- position_dodge(2)
-# limits <- aes(ymax = upper , ymin=lower, shape=Treatment2)
-# 
-# pCI4 <- ggplot(predictions_4, aes(y=linear.predictors, x=Days, 
-#                                 fill=Treatment2 , shape=Treatment2)) + 
-#         geom_errorbar(limits, width= 2 , position=pd) + 
-#         geom_line(aes(group=Treatment, y=linear.predictors), position=pd) + 
-#         geom_point(position=pd, aes(fill=Treatment2), size=4, alpha=0.8) +
-#         scale_shape_manual(values=c(21, 21, 22, 24),
-#                      labels=c("BL", "A", "N", "N+P"))+
-#         Fill.colour+
-#         ggthe_bw+
-#         
-#         geom_hline(yintercept = 0, linetype=3)+
-#       
-#         scale_x_continuous(name="Days in the experiment", 
-#                          breaks = seq(0, 115, by=15)) +
-#         scale_y_continuous(name="Estimated growth (mg / g d) ", 
-#                          breaks = seq(-1, 4, by=1)) +
-#     
-#         theme(text=element_text(size=14),
-#           legend.position=c(0.2, 0.5),
-#           legend.title = element_blank(), 
-#           strip.background =element_rect(fill=NA)) +
-#     
-#       annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-#                 colour = "gray90")+
-#       annotate("text", x = -16, y = -1.2, label = "Baseline", size=3)+
-#     
-#       annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-#                 colour = "gray90")+
-#       annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-#     
-#       annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-#                 colour = "gray90")+
-#     
-#       annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-#                 colour = "gray90")+
-#       annotate("text", x = 99, y = -1.2, label = "Heat", size=3)
-# pCI4
-```
-
-## Treatment and Genotype model
-
-**Note:** Does not allow interaction among nutrient treatment and genotype
-
-```{r}
-fit5 <- gls(dAW.gd ~ (DayF * MoteGen) + TreatDay, data=BW.Tall,
-  correlation=corSymm(form=~TimePoint|Fra),
-  weights=varIdent(form=~1|TimePoint),
-  na.action=na.omit,
-  control=glsControl(opt="optim"))
-
-```
-
-Summary model 
-
-```{r}
-summary(fit5)
-  intervals(fit5)
-  anova(fit5, type="marginal")  # type 3 tests
-  getVarCov(fit5)
-  #residuals(fit5, type="pearson")
-  
-  par(mfrow=c(1,2))
-  plot(fitted(fit5), residuals(fit5, type="pearson"))
-  abline(h=0)
-  qqnorm(residuals(fit5, type="pearson"))
-  abline(0,1)
-```
-
-Predictions 
-
-```{r}
-pred5<-expand.grid(DayF=unique(BW.Tall$DayF),
-                    MoteGen=unique(BW.Tall$MoteGen),
-                    Treatment=unique(BW.Tall$Treatment))
-  pred5$TreatDay<-as.character(paste(pred5$Day, pred5$Treatment, sep = "_"))
-  pred5$TreatDay[pred5$Treatment=="A"]<-"0"
-  pred5$TreatDay[pred5$Day=="-28"]<-"0"
-  pred5$TreatDay<-factor(pred5$TreatDay, levels = c("0","28_N","28_N+P", "62_N","62_N+P",
-                                                    "75_N", "75_N+P","91_N", "91_N+P", "100_N","100_N+P"))
-  
-pred5<-pred5[order(pred5$Treatment, pred5$Day),]
-```
-
-
-```{r}
-clda_Gls5 <- Gls(dAW.gd ~ DayF * MoteGen + TreatDay, 
-        correlation=corSymm (form = ~TimePoint|Fra),
-        weights=varIdent(form=~1|TimePoint),
-        na.action=na.omit,
-        data = BW.Tall)
-
-predictions5 <- cbind(pred5, 
-predict (clda_Gls5, pred5, conf.int=0.95))
-
-predictions5$Treatment2<- factor(predictions5$Treatment, 
-        levels= c("BL", "A", "N", "N+P"))
-    predictions5$Treatment2[predictions5$Day=="-28"] <- "BL"
-
-predictions5$Days<-as.numeric(as.character(predictions5$Day))
-```
-
-
-```{r}
-pd <- position_dodge(1)
-limits <- aes(ymax = upper , ymin=lower, shape=Treatment2)
-
-pCI5 <- ggplot(predictions5, aes(y=linear.predictors, x=Days, 
-                                fill=Treatment2 , shape=Treatment2)) + 
-   #annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-          #          colour = "gray90")+
-          #annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-        
-          annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                    colour = "gray90")+
-          annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-        
-          annotate("segment", x = 79, xend = 91, y = -1.4, yend = 4.5,
-                    colour = "gray90")+
-        
-          annotate("segment", x = 91, xend = 110, y = 4.5, yend = 4.5,
-                    colour = "gray90")+
-          annotate("text", x = 99, y = -1.2, label = "H", size=3)+
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=Treatment, y=linear.predictors), position=pd) + 
-        geom_point(position=pd, size=2, alpha=0.8) +
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                     labels=c("BL", "A", "N", "N+P"))+
-        Fill.colour+ ggthe_bw+
-        
-        geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=30)) +
-        scale_y_continuous(name="Estimated growth rate (mg / g d) ", 
-                         breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="none",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA))
-    
- 
-pCI5<-pCI5+facet_wrap(~MoteGen)
-
-Growth_genotype<-grid.arrange(pCI4,BW_Col, nrow=1)
-#ggsave(file="Outputs/Growth_genotype.svg", plot=Growth_genotype, width=7, height=5.5)
-```
-
-
-```{r}
-pd <- position_dodge(1)
-limits <- aes(ymax = upper , ymin=lower, shape=Treatment2)
-
-pCI5b <- ggplot(predictions5, aes(y=linear.predictors, x=Days, 
-                                fill=MoteGen , shape=Treatment2)) + 
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=MoteGen, y=linear.predictors), size=0.1, position=pd) + 
-        geom_point(position=pd, size=4, alpha=0.8) +
-        scale_shape_manual(values=c(22, 21, 21, 21),
-                     labels=c("BL", "A", "N", "N+P"))+
-        ggthe_bw+
-        
-        geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        scale_y_continuous(name="Estimated growth (mg / g d) ", 
-                         breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="right",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) +
-    
-      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-                colour = "gray90")+
-    
-      annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -1.2, label = "H", size=3)
- 
-pCI5b+facet_wrap(~Treatment)
-```
-
-### Remove ambient from treatment-genotype mdel 
-
-```{r}
-# Claculate relative changes (1 - Ambient)
-    Ambient<-subset(predictions5, Treatment=="A" )
-    Ambient <- subset(Ambient, select = c(DayF, MoteGen, linear.predictors))
-    colnames(Ambient)<-c("DayF", "MoteGen", "Ambient")
-    N_effects<-merge(predictions5, Ambient, by=c("MoteGen", "DayF"), all.x = T)
-
-N_effects$effects<-N_effects$linear.predictors-N_effects$Ambient          
-    N_effects$effects_l<-N_effects$lower-N_effects$Ambient          
-    N_effects$effects_u<-N_effects$upper-N_effects$Ambient          
-    
-```
-
-```{r}
-pd <- position_dodge(1)
-limits <- aes(ymax = effects_u , ymin=effects_l, shape=Treatment2)
-
-pCI5c <- ggplot(N_effects, aes(y=effects, x=Days, 
-                                fill=MoteGen , shape=Treatment2)) + 
-        ggthe_bw + 
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=Treatment, y=effects), size=0.1, position=pd) + 
-        geom_point(aes(fill=MoteGen),position=pd, size=4, alpha=0.8) +
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                     labels=c("BL", "A", "N", "N+P"))+
-       
-      geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        #scale_y_continuous(name="Estimated growth (mg / g d) ", 
-         #                breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="none",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) +
-    
-      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-                colour = "gray90")+
-    
-      annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -1.2, label = "H", size=3)
- 
-pCI5c+facet_wrap(~MoteGen)
-```
-
-
-```{r}
-# Claculate relative changes (1 - Ambient)
-library(plyr)
-  G.Summary<-plyr::ddply (BW.Tall, . (MoteGen, TreatDay, DayF),summarise, 
-                                                G_mean = mean (dAW.gd, na.rm = F), 
-                                                G_sd = sd (dAW.gd, na.rm = F))
-  
-  
-  Ambient<-subset(G.Summary, TreatDay=="0")
-  Ambient <- subset(Ambient, select = c(DayF, MoteGen, G_mean))
-    colnames(Ambient)<-c("DayF", "MoteGen", "Ambient")
-    N_differences<-merge(BW.Tall, Ambient, by=c("MoteGen", "DayF"), all.x = T)
-
-N_differences$effects<-N_differences$dAW.gd-N_differences$Ambient       
-
-N_differences$Treatment2<- factor(N_differences$Treatment, 
-        levels= c("BL", "A", "N", "N+P"))
-N_differences$Treatment2[N_differences$DayF=="-28"] <- "BL"
-N_differences$Days<-as.character(N_differences$DayF)
-N_differences$Days<-as.numeric(N_differences$Days)
-
-
-pCI4 <- ggplot(N_differences, aes(y=effects, x=Days, 
-                                colour=Treatment2 , shape=Treatment2)) + 
-        ggthe_bw + 
-        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
-        stat_summary(aes(group=Treatment2, y=effects), fun.y=mean, geom="line") +  
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                    labels=c("BL", "A", "N", "N+P"))+
-       
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        #scale_y_continuous(name="Estimated growth (mg / g d) ", 
-         #                breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="none",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) +
-    
-      annotate("segment", x = -30, xend = -2, y = -4, yend = -4,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -3.5, label = "BL", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -4, yend = -4,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -3.5, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -4, yend = -3,
-                colour = "gray90")+
-    
-      annotate("segment", x = 91, xend = 110, y = -3, yend = -3,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -3.5, label = "H", size=3)
- 
-pCI4+facet_wrap(~MoteGen)
-    
-```
-
-## Pooled nutrient treatments * Genotype model
-
-```{r}
-
-BW.Tall$NutDay<-as.character(paste(BW.Tall$DayF, BW.Tall$Nutrients, sep = "_"))
-  BW.Tall$NutDay[BW.Tall$Treatment=="A"]<-"0"
-  BW.Tall$NutDay[BW.Tall$DayF=="-28"]<-"0"
-  
-  BW.Tall$NutDay<-factor(BW.Tall$NutDay)
-  summary(BW.Tall$NutDay)
-  BW.Tall$NutDay<-factor(BW.Tall$NutDay, levels = c("0","28_Nutrients","62_Nutrients",
-                                                    "75_Nutrients", "91_Nutrients", "100_Nutrients"))
-  
- BW.nutrients<-subset(BW.Tall, Days<76) # with baseline
-    BW.nutrients<-droplevels(BW.nutrients)
-
-```
-
-```{r}
-fit6 <- gls(dAW.gd ~ DayF + MoteGen * NutDay, data=BW.nutrients,
-  correlation=corSymm(form=~TimePoint|Fra),
-  weights=varIdent(form=~1|TimePoint),
-  na.action=na.omit,
-  control=glsControl(opt="optim"))
-
-# fit6 <- lme(dAW.gd ~ DayF*MoteGen+ NutDay, data=BW.nutrients,
-#             random = ~TimePoint|Fra,
-#             na.action=na.omit)
-```
-
-Summary model 
-
-```{r}
-summary(fit6)
-summary(fit6)$tTable
-
-  intervals(fit6)
-  anova(fit6, type="marginal")  # type 3 tests, Multivariate Wald test, F-test, type III anova
-  getVarCov(fit6)
-  #residuals(fit5, type="pearson")
-  
-  par(mfrow=c(1,2))
-  plot(fitted(fit6), residuals(fit6, type="pearson"))
-  abline(h=0)
-  qqnorm(residuals(fit6, type="pearson"))
-  abline(0,1)
-```
-
-Predictions 
-
-```{r}
-pred6<-expand.grid(DayF=unique(BW.nutrients$DayF),
-                    MoteGen=unique(BW.nutrients$MoteGen),
-                    Nutrients=unique(BW.nutrients$Nutrients))
-
-  pred6$NutDay<-as.character(paste(pred6$Day, pred6$Nutrients, sep = "_"))
-  pred6$NutDay[pred6$Nutrients=="Ambient"]<-"0"
-  pred6$NutDay[pred6$Day=="-28"]<-"0"
-  pred6$NutDay<-factor(pred6$NutDay, levels = c("0","28_Nutrients","62_Nutrients",
-                                                    "75_Nutrients"))
-                                                #, "91_Nutrients", "100_Nutrients"))
-  
-pred6<-pred6[order(pred6$Nutrients, pred6$Day),]
-```
-
-
-```{r}
-clda_Gls6 <- Gls(dAW.gd ~ DayF + MoteGen * NutDay, 
-        correlation=corSymm (form = ~TimePoint|Fra),
-        weights=varIdent(form=~1|TimePoint),
-        na.action=na.omit,
-        data = BW.nutrients)
-
-predictions6 <- cbind(pred6, 
-predict (clda_Gls6, pred6, conf.int=0.95))
-
-predictions6$Nutrients2<- factor(predictions6$Nutrients, 
-        levels= c("BL", "Ambient", "Nutrients"))
-    predictions6$Nutrients2[predictions6$Day=="-28"] <- "BL"
-
-predictions6$Days<-as.numeric(as.character(predictions6$Day))
-```
-
-
-```{r}
-pd <- position_dodge(1)
-limits <- aes(ymax = upper , ymin=lower, shape=Nutrients2)
-
-pCI6 <- ggplot(predictions6, aes(y=linear.predictors, x=Days, 
-                                fill=Nutrients2 , shape=Nutrients2)) + 
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=Nutrients, y=linear.predictors), position=pd) + 
-        geom_point(position=pd, size=4, alpha=0.8) +
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                     labels=c("BL", "A", "N", "N+P"))+
-       # Fill.colour+
-        ggthe_bw+
-        
-        geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        scale_y_continuous(name="Estimated growth (mg / g d) ", 
-                         breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="right",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) +
-    
-      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-                colour = "gray90")+
-    
-      annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -1.2, label = "H", size=3)
- 
-pCI6+facet_wrap(~MoteGen)
-```
-
-### Remove ambient from treatment-genotype mdel 
-
-
-```{r}
-# Claculate relative changes (1 - Ambient)
-    Ambient<-subset(predictions6, Nutrients=="Ambient" )
-    Ambient <- subset(Ambient, select = c(DayF, MoteGen, linear.predictors))
-    colnames(Ambient)<-c("DayF", "MoteGen", "Ambient")
-    N_effects<-merge(predictions6, Ambient, by=c("MoteGen", "DayF"), all.x = T)
-
-N_effects$effects<-N_effects$linear.predictors-N_effects$Ambient          
-    N_effects$effects_l<-N_effects$lower-N_effects$Ambient          
-    N_effects$effects_u<-N_effects$upper-N_effects$Ambient          
-    
-```
-
-```{r}
-pd <- position_dodge(1)
-limits <- aes(ymax = effects_u , ymin=effects_l, shape=Nutrients2)
-
-pCI5c <- ggplot(N_effects, aes(y=effects, x=Days, 
-                                fill=MoteGen , shape=Nutrients2)) + 
-        ggthe_bw + 
-        geom_errorbar(limits, width= 2 , position=pd) + 
-        geom_line(aes(group=Nutrients, y=effects), size=0.1, position=pd) + 
-        geom_point(aes(fill=MoteGen),position=pd, size=4, alpha=0.8) +
-        scale_shape_manual(values=c(21, 21, 22, 24),
-                     labels=c("BL", "A", "N", "N+P"))+
-       
-      geom_hline(yintercept = 0, linetype=3)+
-      
-        scale_x_continuous(name="Days in the experiment", 
-                         breaks = seq(0, 115, by=15)) +
-        #scale_y_continuous(name="Estimated growth (mg / g d) ", 
-         #                breaks = seq(-1, 4, by=1)) +
-    
-        theme(text=element_text(size=14),
-          legend.position="none",
-          legend.title = element_blank(), 
-          strip.background =element_rect(fill=NA)) +
-    
-      annotate("segment", x = -30, xend = -2, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = -16, y = -1.2, label = "BL", size=3)+
-    
-      annotate("segment", x = 2, xend = 91, y = -1.5, yend = -1.5,
-                colour = "gray90")+
-      annotate("text", x = 45, y = -1.2, label = "Nutrients", size=3)+
-    
-      annotate("segment", x = 79, xend = 91, y = -1.4, yend = -1,
-                colour = "gray90")+
-    
-      annotate("segment", x = 91, xend = 110, y = -1, yend = -1,
-                colour = "gray90")+
-      annotate("text", x = 99, y = -1.2, label = "H", size=3)
- 
-pCI5c+facet_wrap(~MoteGen)
-```
