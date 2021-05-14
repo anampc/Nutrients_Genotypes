@@ -1,0 +1,59 @@
+"","strata","time","n.risk","n.event","surv","std.err"
+"1","Genotype=G_48, Treatment=Ambient",82,10,0,1,0
+"2","Genotype=G_48, Treatment=Ambient",91,8,0,1,0
+"3","Genotype=G_48, Treatment=Ambient",106,8,0,1,0
+"4","Genotype=G_48, Treatment=Ambient",110,8,0,1,0
+"5","Genotype=G_48, Treatment=N      ",82,9,0,1,0
+"6","Genotype=G_48, Treatment=N      ",91,7,0,1,0
+"7","Genotype=G_48, Treatment=N      ",106,7,2,0.714285714285714,0.170746944190628
+"8","Genotype=G_48, Treatment=N      ",110,5,5,0,NA
+"9","Genotype=G_48, Treatment=N_P    ",82,9,0,1,0
+"10","Genotype=G_48, Treatment=N_P    ",91,7,0,1,0
+"11","Genotype=G_48, Treatment=N_P    ",106,7,2,0.714285714285714,0.170746944190628
+"12","Genotype=G_48, Treatment=N_P    ",110,5,3,0.285714285714286,0.170746944190628
+"13","Genotype=G_62, Treatment=Ambient",82,9,0,1,0
+"14","Genotype=G_62, Treatment=Ambient",91,7,0,1,0
+"15","Genotype=G_62, Treatment=Ambient",106,7,0,1,0
+"16","Genotype=G_62, Treatment=Ambient",110,7,0,1,0
+"17","Genotype=G_62, Treatment=N      ",82,10,0,1,0
+"18","Genotype=G_62, Treatment=N      ",91,8,0,1,0
+"19","Genotype=G_62, Treatment=N      ",106,7,4,0.5,0.176776695296637
+"20","Genotype=G_62, Treatment=N      ",110,4,4,0,NA
+"21","Genotype=G_62, Treatment=N_P    ",82,10,0,1,0
+"22","Genotype=G_62, Treatment=N_P    ",91,7,0,1,0
+"23","Genotype=G_62, Treatment=N_P    ",106,7,1,0.857142857142857,0.132260014253222
+"24","Genotype=G_62, Treatment=N_P    ",110,6,4,0.285714285714286,0.170746944190628
+"25","Genotype=G_31, Treatment=Ambient",82,5,0,1,0
+"26","Genotype=G_31, Treatment=Ambient",91,4,0,1,0
+"27","Genotype=G_31, Treatment=Ambient",106,4,0,1,0
+"28","Genotype=G_31, Treatment=Ambient",110,4,0,1,0
+"29","Genotype=G_31, Treatment=N      ",82,6,0,1,0
+"30","Genotype=G_31, Treatment=N      ",91,4,0,1,0
+"31","Genotype=G_31, Treatment=N_P    ",82,5,0,1,0
+"32","Genotype=G_31, Treatment=N_P    ",91,4,0,1,0
+"33","Genotype=G_31, Treatment=N_P    ",106,2,3,0.25,0.21650635094611
+"34","Genotype=G_31, Treatment=N_P    ",110,1,0,0.25,0.21650635094611
+"35","Genotype=G_08, Treatment=Ambient",82,2,0,1,0
+"36","Genotype=G_08, Treatment=Ambient",91,2,0,1,0
+"37","Genotype=G_08, Treatment=Ambient",106,2,0,1,0
+"38","Genotype=G_08, Treatment=Ambient",110,2,0,1,0
+"39","Genotype=G_08, Treatment=N      ",82,3,0,1,0
+"40","Genotype=G_08, Treatment=N      ",91,2,0,1,0
+"41","Genotype=G_08, Treatment=N_P    ",82,3,0,1,0
+"42","Genotype=G_08, Treatment=N_P    ",91,3,0,1,0
+"43","Genotype=G_07, Treatment=Ambient",82,9,0,1,0
+"44","Genotype=G_07, Treatment=Ambient",91,7,0,1,0
+"45","Genotype=G_07, Treatment=Ambient",106,7,0,1,0
+"46","Genotype=G_07, Treatment=Ambient",110,7,0,1,0
+"47","Genotype=G_07, Treatment=N      ",82,8,1,0.888888888888889,0.104756560175785
+"48","Genotype=G_07, Treatment=N      ",91,5,1,0.740740740740741,0.160967960622288
+"49","Genotype=G_07, Treatment=N_P    ",82,8,0,1,0
+"50","Genotype=G_07, Treatment=N_P    ",91,6,0,1,0
+"51","Genotype=G_50, Treatment=Ambient",82,4,0,1,0
+"52","Genotype=G_50, Treatment=Ambient",91,4,0,1,0
+"53","Genotype=G_50, Treatment=Ambient",106,4,0,1,0
+"54","Genotype=G_50, Treatment=Ambient",110,4,0,1,0
+"55","Genotype=G_50, Treatment=N      ",82,1,3,0.25,0.21650635094611
+"56","Genotype=G_50, Treatment=N      ",91,1,0,0.25,0.21650635094611
+"57","Genotype=G_50, Treatment=N_P    ",82,4,1,0.8,0.178885438199983
+"58","Genotype=G_50, Treatment=N_P    ",91,3,0,0.8,0.178885438199983

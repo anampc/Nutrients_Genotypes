@@ -25,6 +25,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
     library(ggthemes)
     library(survival)
     library(survminer)
+    library(gtsummary)
     #library(rms)
    
 # Default ggplot settings
@@ -76,7 +77,8 @@ Try survival package
     fit1 <- survfit(surv_object ~ Treatment, data = Survival.data)
     summary(fit1)
     
-    survdiff(surv_object~Treatment, data = Survival.data)
+    sd1<-survdiff(surv_object~Treatment, data = Survival.data)
+    1 - pchisq(sd1$chisq, length(sd1$n) - 1)# pvalue
     
     #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, ties = 'exact')
     #coxfit <- coxph(surv_object ~ Treatment, data = Survival.data, singular.ok = TRUE)
@@ -88,6 +90,11 @@ Try survival package
            break.time.by=15, xlim=c(0,115), risk.table.y.text = FALSE,
            risk.table.title="Number of fragments at risk") + ggtitle("Treatment (all genotypes)")
     Ac_Treatment_Only
+    
+# Other plots    
+    ggsurvplot(fit1, data = Survival.data, fun = "event")
+    ggsurvplot(fit1, data = Survival.data, fun = "cumhaz")
+    ggsurvplot(fit1, data = Survival.data, fun = "pct")
 ```
 
 ## Genotype and treatment
@@ -98,17 +105,28 @@ Model
 # Treatment and genotype model 1 
     # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit2 <- survfit(surv_object ~ Genotype + Treatment, data = Survival.data)
+    #fit2 <- survfit(surv_object ~ Treatment+ Genotype, data = Survival.data)
     summary(fit2)
+    results<-summary(fit2, times = c(82, 91, 106, 110))
+    save.df <- as.data.frame(results[c("strata", "time", "n.risk", "n.event", "surv", "std.err")])
+    write.csv(save.df, file = "survival.csv")
     
-    survdiff(surv_object~ Genotype + Treatment, data = Survival.data)
+    sd2<-survdiff(surv_object~ Genotype + Treatment, data = Survival.data)
+    sd2
+    1 - pchisq(sd2$chisq, length(sd2$n) - 1)# pvalue
 ```
 
 Cox hazards 
 
 ```{r}
  coxfit2 <- coxph(surv_object ~ Genotype + Treatment, data = Survival.data)
+ 
+  # coxfit2 <- coxph(surv_object ~ Genotype + Treatment +
+  #                  strata(Treatment), data = Survival.data)
     summary(coxfit2)
     coxfit2
+    
+   ggadjustedcurves(coxfit2, data=Survival.data, variable = "Treatment")
 
 ```
 
@@ -180,7 +198,7 @@ Plor survival models
        geom_segment(aes(x = 91, xend = 113, y = 0.5, yend = 0.5), colour = "gray35", linetype="dotted")
     Ac_facet_G
     #ggsave("Outputs/Ac_facet_G.svg", Ac_facet_G, width=4, height=6,dpi = 300)
-
+    
 ```
 
 
@@ -222,19 +240,70 @@ Plor survival models
   
   # Kaplan-Meier estimator. The "log-log" confidence interval is preferred.
     fit3 <- survfit(surv_object2 ~ Genotype, data = Survival.data2)
-    summary(fit3)
+    summary(fit3)    
+    summary(fit3)$table
     surv_pvalue(fit3)
-    
-    survdiff(surv_object2 ~ Genotype, data = Survival.data2)
+    res.sum <- surv_summary(fit3)
+    attr(res.sum, "table")
 
+    sd3<-survdiff(surv_object2 ~ Genotype, data = Survival.data2)
+    sd3
+    1 - pchisq(sd3$chisq, length(sd3$n) - 1)# pvalue
+    
+    results3<-summary(fit3, times = c(82, 91, 106, 110))
+    save.df <- as.data.frame(results3[c("strata", "time", "n.risk", "n.event", "surv", "std.err")])
+    write.csv(save.df, file = "survival3.csv")
+    
 ```
+
+### Figure 2a
+
+Plot survival model
+
+```{r}
+# Plot the survival model
+   Genotype_only2<-ggsurvplot(fit3, data = Survival.data2, pval = TRUE,
+               risk.table=T,
+               #risk.table = "abs_pct",  # absolute number and percentage at risk.
+               tables.height=0.4, conf.int = T, n.risk = TRUE,
+               #risk.table.y.text = FALSE, 
+               #surv.median.line = "hv", # Specify median survival
+               break.time.by=15, xlim=c(0,115), 
+               xlab="Days in the experiment",
+           #ncensor.plot = TRUE
+           risk.table.title="Number of A. cervicornis at risk",
+           #risk.table.y.text = FALSE,
+           risk.table.y.text.col = TRUE)
+  Genotype_only2
+  
+  #Genotype_only2$ncensor.plot
+     
+  Acer.Nut.Probabilities<-Genotype_only2$data.survplot
+  Acer.Nut.Probabilities
+    
+    #ggsave("Outputs/Fig_2_Surv_Genotype.svg", 
+    #       Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
+    #ggsave("Outputs/Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
+    #       width=4.5, height=4.5,dpi = 300)
+
+  
+  # Other plots    
+    ggsurvplot(fit3, data = Survival.data2, conf.int = TRUE, fun = "event")
+    ggsurvplot(fit3, data = Survival.data2, conf.int = TRUE, fun = "cumhaz")
+    ggsurvplot(fit3, data = Survival.data2, conf.int = TRUE, fun = "pct")
+```
+
 
  * Cox hazards 
 
 ```{r}
-    coxfit3 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
+  coxfit3 <- coxph(surv_object2 ~ Genotype, data = Survival.data2)
     summary(coxfit3)
     coxfit3
+    ggadjustedcurves(coxfit3, data=Survival.data2, variable = "Genotype")
+    
+  coxfit3 %>% 
+      gtsummary::tbl_regression(exp = TRUE) 
 
 ```
 
@@ -268,27 +337,6 @@ Plor survival models
 
 ```
 
-### Figure 2a
-
-Plot survival model
-
-```{r}
-# Plot the survival model
-   Genotype_only2<-ggsurvplot(fit3, data = Survival.data2, pval = TRUE,
-               risk.table=T, tables.height=0.4, conf.int = T, n.risk = TRUE,
-               #risk.table.y.text = FALSE, 
-               break.time.by=15, xlim=c(0,115), 
-           risk.table.title="Number of A. cervicornis at risk")
-  Genotype_only2
-     
-  Acer.Nut.Probabilities<-Genotype_only2$data.survplot
-    
-    #ggsave("Outputs/Fig_2_Surv_Genotype.svg", 
-    #       Genotype_only2$plot, width=4.5, height=3.5,dpi = 300)
-    #ggsave("Outputs/Fig_2_Surv_Genotype.pdf", print(Genotype_only2),
-    #       width=4.5, height=4.5,dpi = 300)
-
-```
 
 ### Figure 2b
 
