@@ -102,6 +102,15 @@ Remove / subset timepoints
 # Subset data 
       YII.nutrients<-subset(YII.Acer, Days<80)
       YII.heat<-subset(YII.Acer, Days>75)
+      
+      Y.II76<-subset(YII.Acer, Days==76)
+      write.csv(Y.II76, "YII76.csv", row.names = F)
+      
+      Y.II99<-subset(YII.Acer, Days==99)
+      write.csv(Y.II99, "YII99.csv", row.names = F)
+      
+      Y.II110<-subset(YII.Acer, Days==110)
+      write.csv(Y.II110, "Y.II110.csv", row.names = F)
 
 ```
 

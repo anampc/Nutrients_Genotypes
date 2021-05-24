@@ -30,6 +30,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
         library(lme4)
         library(lmerTest)
         library(emmeans)
+        library(multcomp)
         library(scales)
         library(skimr)
 
@@ -64,6 +65,16 @@ str(qPCR.variables)
 
   summary(qPCR.variables)
   #skim(qPCR.variables)
+  
+  ## Genotype information
+    MOTE<-read.csv("Genotype_Info.csv", header = TRUE)
+    qPCR.variables<-merge(qPCR.variables, MOTE, 
+                            by="Genotype", all.x=TRUE)
+    
+    qPCR.variables$MoteGen<-factor(as.character(
+    qPCR.variables$MoteGen), 
+                             levels=c("G_48", "G_62","G_31", 
+                                      "G_08","G_07", "G_50"))  # Resistance order
 
 ```
   
@@ -76,7 +87,7 @@ logSHTreatment <- ggplot(qPCR.variables, aes(Date, logA.SH, colour=factor(Treatm
        stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2)+
        stat_summary(fun.y=mean, geom="line", size =1) +
        theme_bw() 
-logSHTreatment + facet_wrap(~Genotype)
+logSHTreatment + facet_wrap(~MoteGen)
 
 # Removing weird points (whole fragment samples, between bleaching) and colonies not used (F)
     qPCR.variables_2<-subset(qPCR.variables, Date!="2018-02-05")
@@ -88,15 +99,7 @@ logSHTreatment + facet_wrap(~Genotype)
     qPCR.variables_2<-subset(qPCR.variables_2, Sample!="145_T5")
     #qPCR.variables_2<-subset(qPCR.variables_2, Colony!="Yellow")
     
-## Genotype information
-    MOTE<-read.csv("Genotype_Info.csv", header = TRUE)
-    qPCR.variables_2<-merge(qPCR.variables_2, MOTE, 
-                            by="Genotype", all.x=TRUE)
-    
-    qPCR.variables_2$MoteGen<-factor(as.character(
-      qPCR.variables_2$MoteGen), 
-                             levels=c("G_48", "G_62","G_31", 
-                                      "G_08","G_07", "G_50"))  # Resistance order
+
     
 
 logSH_Colony<- ggplot(qPCR.variables_2, aes (Date, logA.SH, colour=factor(Treatment))) +
@@ -154,6 +157,52 @@ Summary_GenetTreatment
 * Raw data - Treatments (All genotypes pooled)
 
 ```{r}
+Figure4 <- ggplot (qPCR.variables, aes(Days, logA.SH,
+                                       colour=Treatment,
+                                       #group=Fragment,
+                                       shape=Treatment)) + 
+    ggthe_bw + Fill.colour+ ggtitle("a.")+
+    theme(legend.position="bottom",
+        legend.title = element_blank(),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+       #geom_jitter(aes(colour=factor(Replicate))) +
+     
+        
+      annotate("segment", x = 1, xend = 91, y = -2, yend = -2,
+                  colour = "gray35", linetype=2)+
+      annotate("segment", x = 79, xend = 91, y = -2, yend =0,
+                  colour = "gray35", linetype=3)+
+      annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
+                  colour = "gray35", linetype=3)+
+      annotate("text", x = 3, y = 0.02, label = "BL", size=3, colour="gray")+
+      annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3, colour="gray")+
+      annotate("text", x = 99, y = 0.02, label = "H", size=3, colour="gray")+
+  
+    #scale_y_continuous(breaks = seq(0, 0.4, 0.05),
+     #                  #limits = c(0,0.5),
+      #                 expand = c(0.01,0.01),
+       #            name=("Symbiont to host cell ratio  (S/H)")) +
+    scale_x_continuous(name="Days in the experiment",
+                         limits = c(-2,116),
+                         breaks = seq(0, 110, 15),  
+                         expand = c(0, 0)) +
+    stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", 
+                    position = position_dodge(width = 4), width = 2 )+
+    stat_summary(fun.y=mean, geom="point", size =2, alpha=0.8, 
+                   position = position_dodge(width = 4)) +
+    stat_summary(fun.y=mean, geom="line", 
+                    position = position_dodge(width = 4))
+
+Figure4
+Figure4+facet_wrap(~MoteGen)
+
+
+#ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.3, height=3.5)
+```
+
+
+```{r}
 
 Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                                           shape=Treatment)) + 
@@ -189,7 +238,7 @@ Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                     position = position_dodge(width = 4))
 
 Figure4
-Figure4+facet_wrap(~Genotype)
+Figure4+facet_wrap(~MoteGen)
 
 Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                                           shape=Treatment)) + 
@@ -225,23 +274,25 @@ Figure4 <- ggplot (qPCR.variables_2, aes(Days, A.Acer, colour=Treatment,
                     position = position_dodge(width = 2))
 
 Figure4
-Figure4+facet_wrap(~Genotype)
+Figure4+facet_wrap(~MoteGen)
 
 
 Figure4 <- ggplot (qPCR.variables_2, aes(Days, logA.SH, colour=Treatment,
                                           shape=Treatment)) + 
     ggthe_bw + Fill.colour+ ggtitle("a.")+
-    theme(legend.position=c(0.2, 0.3),
-        legend.title = element_blank()) +
+    theme(legend.position="bottom",
+        legend.title = element_blank(),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
        #geom_jitter(aes(colour=factor(Replicate))) +
      
         
-      annotate("segment", x = 73, xend = 91, y = 0.01, yend = 0.01,
-                  colour = "gray90", linetype=2)+
-      annotate("segment", x = 79, xend = 91, y = 0.01, yend = 0.04,
-                  colour = "gray90", linetype=3)+
+      annotate("segment", x = 73, xend = 91, y = -2, yend = -2,
+                  colour = "gray35", linetype=2)+
+      annotate("segment", x = 79, xend = 91, y = -2, yend =0,
+                  colour = "gray35", linetype=3)+
       annotate("segment", x = 91, xend = 110, y = 0.04, yend = 0.04,
-                  colour = "gray90", linetype=3)+
+                  colour = "gray35", linetype=3)+
       annotate("text", x = 3, y = 0.02, label = "BL", size=3, colour="gray")+
       annotate("text", x = 45, y = 0.02, label = "Nutrients", size=3, colour="gray")+
       annotate("text", x = 99, y = 0.02, label = "H", size=3, colour="gray")+
@@ -262,7 +313,7 @@ Figure4 <- ggplot (qPCR.variables_2, aes(Days, logA.SH, colour=Treatment,
                     position = position_dodge(width = 4))
 
 Figure4
-Figure4+facet_wrap(~Genotype)
+Figure4+facet_wrap(~MoteGen)
 
 
 #ggsave(file="Outputs/Fig_4_SH_Acer.svg", plot=Figure4, width=3.3, height=3.5)

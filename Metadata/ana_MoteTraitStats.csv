@@ -1,0 +1,45 @@
+genotype,trait,unit,method,mean,sd,min,max,n
+31,annual colony volumetric growth,annual proportionate growth,3D photogrammetry,2.432722568,1.528759487,0.51830797,6.003753403,18
+31,annual interstitial space growth,annual proportionate growth,3D photogrammetry,13.6165988,11.97242292,0.022617515,36.69887211,19
+31,annual linear growth,annual proportionate growth,ruler,3.956774279,2.33940361,0.416972664,8.900309299,22
+31,bleaching photochemical efficiency,dimensionless,I-PAM,0.961377007,0.046219508,0.880877743,1,6
+31,bulk density,g cm^-3,ct scanning,1.05,NA,1.05,1.05,1
+31,calcification,mg cm^-2 day^-1,buoyant weight,7.212752175,7.827668904,0.61389109,36.5175,40
+31,calcification,mg day^-1,buoyant weight,74.7,NA,74.7,74.7,1
+31,dark calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.4551,0.412936455,-0.307,1.144,20
+31,light calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.6157,0.357543387,0.04,1.534,20
+31,P:R,dimensionless,incubation chambers,0.490426381,0.283357834,0.040358744,1.126799814,20
+31,photosynthesis,µmol O2 cm^-2 h^-1,incubation chambers,0.390547562,0.207952646,-0.050704225,0.72266905,20
+31,respiration,µmol O2 cm^-2 h^-1,incubation chambers,-0.899884609,0.278763162,-1.578468431,-0.499150911,20
+50,annual colony volumetric growth,annual proportionate growth,3D photogrammetry,5.454886347,6.319493295,0.009014934,26.33094405,22
+50,annual interstitial space growth,annual proportionate growth,3D photogrammetry,23.39460123,46.04032427,0.064578072,216.8295707,22
+50,annual linear growth,annual proportionate growth,ruler,4.475605076,4.642438495,0.050614702,21.865254,24
+50,bleaching photochemical efficiency,dimensionless,I-PAM,0.932383026,0.080551618,0.759103641,1,7
+50,calcification,mg cm^-2 day^-1,buoyant weight,7.05278275,7.348475315,0.480351906,28.71,36
+50,dark calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.382,0.363271249,-0.037,1.594,19
+50,light calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.449894737,0.323003422,-0.068,1.264,19
+50,P:R,dimensionless,incubation chambers,0.568507398,0.392296406,0.240214555,1.707104279,19
+50,photosynthesis,µmol O2 cm^-2 h^-1,incubation chambers,0.491619139,0.252727611,0.171550095,1.120534497,19
+50,respiration,µmol O2 cm^-2 h^-1,incubation chambers,-0.951578345,0.318885278,-1.770639535,-0.570297732,19
+62,annual colony volumetric growth,annual proportionate growth,3D photogrammetry,5.121894418,4.348026086,0.887095403,13.96567209,12
+62,annual interstitial space growth,annual proportionate growth,3D photogrammetry,21.56120605,20.80680269,0.00723448,59.96598015,13
+62,annual linear growth,annual proportionate growth,ruler,4.344813756,2.41470579,0.530482418,8.911111637,13
+62,bleaching photochemical efficiency,dimensionless,I-PAM,0.974202758,0.023669949,0.93968254,1,6
+62,calcification,mg cm^-2 day^-1,buoyant weight,7.018460831,7.890097113,0.396167789,36.3825,40
+62,dark calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.2301,0.275305744,-0.119,0.647,20
+62,light calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.412105263,0.395932359,-0.06,1.182,19
+62,P:R,dimensionless,incubation chambers,0.425943512,0.310563428,0.001002758,1.257131843,21
+62,photosynthesis,µmol O2 cm^-2 h^-1,incubation chambers,0.307787303,0.229201802,-0.194863138,0.762058424,21
+62,respiration,µmol O2 cm^-2 h^-1,incubation chambers,-0.847911239,0.2132704,-1.312871287,-0.518499338,21
+7,annual colony volumetric growth,annual proportionate growth,3D photogrammetry,5.620232736,3.965613496,0.679287542,16.28783878,17
+7,annual interstitial space growth,annual proportionate growth,3D photogrammetry,24.70054644,22.28526253,0.288676246,76.4003364,18
+7,annual linear growth,annual proportionate growth,ruler,7.42611317,19.80836742,0.103766338,97.80665796,23
+7,bleaching photochemical efficiency,dimensionless,I-PAM,0.979410948,0.029842131,0.928917609,1,6
+7,bulk density,g cm^-3,ct scanning,1.186666667,0.028867513,1.17,1.22,3
+7,calcification,mg cm^-2 day^-1,buoyant weight,7.751244538,8.368907329,0.298726243,30.2175,38
+7,calcification,mg day^-1,buoyant weight,61.56666667,12.06662063,54.6,75.5,3
+7,dark calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.315052632,0.311646786,-0.191,0.921,19
+7,light calcification,µmol cm^-2 h^-1,alkalinity anomaly,0.494736842,0.2597661,0.111,1.06,19
+7,P:R,dimensionless,incubation chambers,0.389807189,0.209251099,0.031120609,0.795643345,19
+7,photosynthesis,µmol O2 cm^-2 h^-1,incubation chambers,0.324400627,0.182069317,0.027369905,0.70113678,19
+7,respiration,µmol O2 cm^-2 h^-1,incubation chambers,-0.853066676,0.230253106,-1.334149788,-0.390281709,19

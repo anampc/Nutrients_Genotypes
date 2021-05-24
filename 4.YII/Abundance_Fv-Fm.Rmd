@@ -1,0 +1,190 @@
+---
+title: "Changes in Fv/Fm in elevated nutrients and heat stress (Only *A.cer*)"
+author: "Ana Palacio"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    df_print: paged
+    theme: united
+bibliography: packages.bib
+nocite: '@*'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, fig.width=7, fig.height=7)
+```
+
+
+# General project set-up 
+
+```{r libraries, results="hide"}
+
+# Load libraries and sources required to run the script
+    library(tidyverse)
+    library(ggthemes)
+    library(lmerTest)
+    library(emmeans)
+    library(multcomp)
+    library(effects)
+    library(gridExtra)
+    library(rstatix)
+
+# Default ggplot settings
+
+   Fill.colour<-scale_colour_manual(values = c ("#4A6CAA", "#469B53", "#AA4A74"))
+
+    ggthe_bw<-theme_bw() + theme(panel.grid.major = element_blank(), 
+                    panel.grid.minor = element_blank(),
+                    #panel.background = element_blank(), 
+                    axis.line = element_line(colour = "black"),
+                    plot.background=element_blank(),
+                    legend.title = element_blank(), 
+                    legend.box.background = element_rect(),
+                    panel.background =element_rect(fill = NA, color = "white"),
+                    legend.position="bottom",
+                    strip.background =element_rect(fill=NA))
+```
+
+# Data exploration
+
+##  1. Get the files with all the YII by species
+
+Metadata
+
+```{r, data}
+  YII.76<-read.csv("YII_76.csv", header = T)
+  YII.99<-read.csv("YII_99.csv", header = T)
+  YII.110<-read.csv("YII_110.csv", header = T)
+  
+  Rick.data<-read.csv("rick_allDays.csv", header = T)
+  Rick.75<-subset(Rick.data, Days=="Day75")
+  Rick.100<-subset(Rick.data, Days=="Day100")
+  Rick.111<-subset(Rick.data, Days=="Day111")
+  
+  YII.R.76<-left_join(Rick.75, YII.76, by = "Fragment")
+  summary(YII.R.76)
+  
+  YII.R.99<-left_join(Rick.100, YII.99, by = "Fragment")
+  summary(YII.R.99)
+  
+  YII.R.110<-left_join(Rick.111, YII.110, by = "Fragment")
+  summary(YII.R.110)
+
+YII.R<-rbind(YII.R.76, YII.R.99)  
+YII.R<-rbind(YII.R, YII.R.110)  
+
+str(YII.R)
+  
+```
+
+
+
+```{r}
+# Organize data type
+      #YII.data$Date <-as.Date(YII.data$Date.y, "%Y-%m-%d")
+      #YII.data$Days<-(as.numeric(YII.data$Date) -17485)
+      #Time as a factor, not as int
+      #str(YII.data)
+      #YII.data$DaysF<-as.factor(YII.data$Days)
+
+      YII.R$Treatment <- as.factor(YII.R$Treatment.y)
+      YII.R$Fragment <- as.character(YII.R$Fragment)
+      
+      YII.R$Genotype<-factor(as.character(YII.R$Genotype.y), 
+                             levels=c("G_48", "G_62","G_31", 
+                                      "G_08","G_07", "G_50"
+                            ))  # Survivorship order
+
+# Differentiate ambient from elevated nutrients (N and N+P)      
+      YII.R$Nutrients<-"Nutrients"
+      YII.R$Nutrients[YII.R$Treatment=="A"]<-"Ambient"
+ 
+# Check the data
+      str(YII.R)
+      summary(YII.R)
+```
+
+
+## 2. Exploratory graphs
+
+All time points (nutrients + heat stress)
+
+* Colony (Genotype) differences
+
+```{r explore}
+
+
+YII_Abundance<- ggplot(YII.R, aes (Genotype, Abundance,
+                                   colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(~Day)
+YII_Abundance
+
+
+YII_Abundance<- ggplot(YII.R, aes (Abundance, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(~Day)
+YII_Abundance
+
+#YII_Abundance<- ggplot(YII.R, aes (Abundance, YII, colour=Treatment)) +
+#        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Genotype~Day)
+#YII_Abundance
+    
+
+YII_Richness<- ggplot(YII.R, aes (Richness, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Treatment~Day)
+YII_Richness
+
+YII_Richness<- ggplot(YII.R, aes (Richness, YII, colour=Treatment, shape=Treatment)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Genotype~Day)
+YII_Richness
+
+
+YII_Richness<- ggplot(YII.R, aes (Richness, YII, colour=Genotype, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Treatment~Day)
+YII_Richness
+
+
+YII_S_H<- ggplot(YII.R, aes (TotalSH, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(~Day)
+YII_S_H
+
+YII_S_H<- ggplot(YII.R, aes (TotalSH, Abundance, colour=Genotype, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Treatment~Day)
+YII_S_H
+
+YII_S_H<- ggplot(YII.R, aes (TotalSH, Abundance, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(Day~Genotype)
+YII_S_H
+
+```
+
+
+```{r}
+YII_Abundance<- ggplot(data=subset(YII.R, Day==75), aes (Abundance, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+YII_Abundance
+    
+YII_Richness<- ggplot(data=subset(YII.R, Day==75), aes (Richness, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+YII_Richness
+
+YII_Richness<- ggplot(data=subset(YII.R, Day==100), aes (Richness, YII, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+YII_Richness
+
+
+YII_S_H<- ggplot(data=subset(YII.R, Day==75), aes (TotalSH, YII, colour=Treatment)) +
+  geom_point(aes(size=Abundance),alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+YII_S_H
+
+YII_S_H<- ggplot(data=subset(YII.R, Day==75), aes (TotalSH, YII, colour=Treatment)) +
+  geom_point(aes(size=Richness),alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+YII_S_H
+
+Abundance_S_H<- ggplot(data=subset(YII.R, Day==75), aes (Abundance, TotalSH, colour=Treatment, shape=Genotype)) +
+        geom_point(size=4, alpha=.7) +   theme_bw() + facet_wrap(~Genotype)
+Abundance_S_H
+```
+
+
+
