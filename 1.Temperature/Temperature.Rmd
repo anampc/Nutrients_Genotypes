@@ -4,8 +4,8 @@ author: "Ana M. Palacio-Castro"
 date: "`r Sys.Date()`"
 output:
   html_document:
-    fig_height: 4
-    fig_width: 6
+    fig_height: 5
+    fig_width: 7
     df_print: paged
     toc: yes
 editor_options:
@@ -114,112 +114,23 @@ Summary_Tanks <- ddply (Temperature, .(Period, Treatment, Replicate),summarise,
 Summary_Tanks
 ```
 
-<<<<<<< HEAD
 # 4. Get the sample times and merge them with the temperature
 
 ```{r}
-=======
-# Get the sample times 
-
-```{r}
-
->>>>>>> 583278279c9cc522fc6c7504757953592775b861
 Meassurments<-read.csv("Time_data.csv", header = T)
 Meassurments$Date<-as.Date(Meassurments$Date)
 Meassurments$Day<-as.numeric(Meassurments$Date)-17483
 Meassurments$Date<-NULL
 
-<<<<<<< HEAD
 Temperature<-subset(Temperature, Day<114)
 Temperature<-subset(Temperature, Day>-1)
 data<-join(Temperature, Meassurments, by="Day")
-=======
-#ggsave(file="Outputs/Figure_1_samples.svg", plot=Samples, dpi = 300, width=6, height=4)
-  
 ```
 
 # Figure 1: Experimental conditions
 
 ```{r}
-  
-Temperature_1<- ggplot(Temperature, aes (Day, Temperature)) + theme_bw() +
-  scale_y_continuous(limits = c(24,33.4),
-                       name=(expression("Temperature"~(degree*C))),
-                       breaks = seq(24, 32, 1),  
-                       expand = c(0, 0)) +
-  scale_x_continuous(name="Days in the experiment",
-                       limits = c(-1,114),
-                       breaks = seq(0, 113, 15),  
-                       expand = c(0, 0))+
-  
-    annotate("segment", x = 2, xend = 91, y = 32, yend = 32,
-              colour = "black", linetype=2)+
-    annotate("segment", x = 79, xend = 79, y = 24, yend = 32,
-              colour = "gray", linetype=1)+
-    annotate("segment", x = 91, xend = 91, y = 24, yend = 32,
-              colour = "gray", linetype=1)+
 
-    annotate("text", x= c(46, 84, 101), y = c(32.5,25.5,24.5), 
-             label=c("Nutrient treatments (Ambient, NH4, NH4+PO4)", " ", " "), size=3) +
-    
-  annotate("text", x= c(40, 84, 102), y = c(24.5, 24.5, 24.5), 
-             label=c("Phase 1: Control temperature", 
-                     "Phase2: \n Ramp-up",
-                     "Phase 3:\n Heat stress"), size=3) +
-  annotate("segment", x = 2, xend = 78, y = 25, yend = 25,
-              colour = "black", linetype=1)+
-  annotate("segment", x = 91, xend = 113, y = 26, yend = 26,
-              colour = "black", linetype=1)+
-  annotate("segment", x = 79, xend = 90, y = 25.5, yend = 25.5,
-              colour = "black", linetype=1)+
-    theme(legend.position=c(0.2, 0.4),
-          plot.background=element_blank(),
-          panel.grid.major.y = element_blank(),
-          panel.grid.major.x = element_blank(),
-          panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_blank(),
-          legend.box.background = element_rect(),
-          panel.background =element_rect(fill = NA, color = "black"),
-          legend.text=element_text(size=8)) +
-    geom_smooth(span=0.5, colour="black")+
-    #scale_colour_manual(values = c("black","gray"))+
-    #stat_summary(fun.data = "mean_cl_boot",geom = "errorbar", width = 0.2 )+
-    #stat_summary(fun.y=mean, geom="line") +
-  
-# Samples  
-    annotate("point",x=c(75, 100, 111), y=c(32), 
-             shape=21, size=2, fill="white") +
-    annotate("point",x=c(82, 111), y=c(32, 32.5), 
-             shape=21, size=2, fill="white")+
-    annotate("point",x=c(82, 111), y=c(32, 32.5), 
-             shape=4, size=2)+
-# Labels
-    annotate("point",x=c(3, 3), y=c(30, 31), 
-               shape=21, size=2, fill="white")+
-    annotate("point",x=c(3), y=c(30), 
-               shape=4, size=2)+
-    annotate("text", x= c(28,25), y = c(30.0,31), 
-                 label=c( "Sacrificial samples - censored events",
-                         "Microbiome samples"), size=3)
-  
-Temperature_1
-  
-#ggsave(file="Outputs/Figure_1_Experiment_d.svg", plot=Temperature_BW2, dpi = 300, width=6, height=4)
-  
->>>>>>> 583278279c9cc522fc6c7504757953592775b861
-```
-
-```{r}
-Temperature<-subset(Temperature, Day<114)
-Temperature<-subset(Temperature, Day>-1)
-data<-join(Temperature, Meassurments, by="Day")
-```
-
-```{r}
-<<<<<<< HEAD
-
-=======
->>>>>>> 583278279c9cc522fc6c7504757953592775b861
 Design<- ggplot(data) + theme_bw() +
   
   scale_y_continuous(limits = c(24,33.4),
@@ -280,12 +191,6 @@ Design<- ggplot(data) + theme_bw() +
           panel.background =element_rect(fill = NA, color = "black")
           ) 
 Design
-<<<<<<< HEAD
-=======
-
-#ggsave(file="Outputs/Figure_1_Experiment_design.svg", plot=Design, dpi = 300, width=6, height=4)
-```
->>>>>>> 583278279c9cc522fc6c7504757953592775b861
 
 #ggsave(file="Outputs/Figure_1_Experiment_design.svg", plot=Design, dpi = 300, width=6, height=4)
 ```
