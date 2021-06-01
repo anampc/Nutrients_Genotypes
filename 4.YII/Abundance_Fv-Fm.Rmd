@@ -117,7 +117,9 @@ All time points (nutrients + heat stress)
 
 YII_Abundance<- ggplot(YII.R, aes (Genotype, Abundance,
                                    colour=Treatment, shape=Genotype)) +
-        geom_point(size=4, alpha=.7) +   theme_bw() + facet_grid(~Day)
+        geom_point(size=2, alpha=.7) +   
+        geom_boxplot() +   
+  theme_bw() + facet_grid(Day~.)
 YII_Abundance
 
 
