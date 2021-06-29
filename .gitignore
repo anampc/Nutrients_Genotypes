@@ -22,6 +22,7 @@ vignettes/*.pdf
 **/.knit.md
 
 # Other files
+/Figures
 **/.directory
 **/.dropbox
 **/*.DS_Store*
