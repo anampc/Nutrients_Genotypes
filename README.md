@@ -2,7 +2,7 @@
 
 This repository contains data and analysis scripts for the manuscript:
 
-## TITLE
+## Genotypic variation in the susceptibility to elevated nutrients and heat stress in the staghorn coral, *Acropora cervicornis*
 #### **Authors**: Ana M. Palacio-Castro, Caroline E. Dennison, Stephanie M. Rosales, Andrew C. Baker
 #### **Journal**: _Coral Reefs_ [doi:XXX](http://dx.doi.org/XXX)  
 
