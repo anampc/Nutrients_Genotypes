@@ -63,13 +63,13 @@ Metadata
   Rick.111<-subset(Rick.data, Days=="Day111")
   
   YII.R.76<-left_join(Rick.75, YII.76, by = "Fragment")
-  summary(YII.R.76)
+  #summary(YII.R.76)
   
   YII.R.99<-left_join(Rick.100, YII.99, by = "Fragment")
-  summary(YII.R.99)
+  #summary(YII.R.99)
   
   YII.R.110<-left_join(Rick.111, YII.110, by = "Fragment")
-  summary(YII.R.110)
+  #summary(YII.R.110)
 
 YII.R<-rbind(YII.R.76, YII.R.99)  
 YII.R<-rbind(YII.R, YII.R.110)  
