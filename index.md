@@ -2,8 +2,8 @@
 
 This repository contains data and analysis scripts for the manuscript:
 
-## Genotypic variation in the susceptibility to elevated nutrients and heat stress in the staghorn coral, *Acropora cervicornis*
-#### **Authors**: Ana M. Palacio-Castro, Caroline E. Dennison, Stephanie M. Rosales, Andrew C. Baker
+## Microbiome signatures in *Acropora cervicornis* are associated with genotypic resilience to elevated nutrients and heat stress
+#### **Authors**: Ana M. Palacio-Castro, Stephanie M. Rosales, Caroline E. Dennison, Andrew C. Baker
 #### **Journal**: _Coral Reefs_ [doi:XXX](http://dx.doi.org/XXX)  
 
 -----
