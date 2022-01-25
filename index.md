@@ -1,37 +1,46 @@
-## Welcome to GitHub Pages
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.5041424.svg)](http://10.5281/zenodo.5041424)
 
-You can use the [editor on GitHub](https://github.com/anampc/Nutrients_Genotypes/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This repository contains data and analysis scripts for the manuscript:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Genotypic variation in the susceptibility to elevated nutrients and heat stress in the staghorn coral, *Acropora cervicornis*
+#### **Authors**: Ana M. Palacio-Castro, Caroline E. Dennison, Stephanie M. Rosales, Andrew C. Baker
+#### **Journal**: _Coral Reefs_ [doi:XXX](http://dx.doi.org/XXX)  
 
-### Markdown
+-----
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+<br>
 
-```markdown
-Syntax highlighted code block
+### Description:
 
-# Header 1
-## Header 2
-### Header 3
+In this study, we examined the effects of pre-exposure to elevated nutrients (NH~4~ and NH~4~ + PO~4~ for >2 months at 26 °C), followed by heat stress (31.5 °C for 3-weeks) on  six different *A. cervicornis* genets that are used in coral resoration in South Florida
 
-- Bulleted
-- List
+</br>
 
-1. Numbered
-2. List
+### Contents:
 
-**Bold** and _Italic_ and `Code` text
+#### [1.Temperature:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/1.Temperature/Temperature.html)
 
-[Link](url) and ![Image](src)
-```
+* Contains raw temperature data (Day_Tem.csv) and code (Temperature.Rmd) for **Figure 1**
+* Includes scheme of experimental conditions, data and sample collection
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+#### [2.Mortality:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/2.Mortality/Mortatily_Acer.html)
 
-### Jekyll Themes
+Contains raw mortality data and code for **Figure 2**
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/anampc/Nutrients_Genotypes/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+* **Mortatily_Acer.Rmd:** code for survivorship analysis and **Figure 2**
+* Data/**Acer_Mortality.csv:** Raw mortality data for *A. cervicornis*
 
-### Support or Contact
+#### [3.Growth:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/3.Growth/Acer_Growth_Genotypes.html)
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Contains raw mortality data and code for **Figure 3**
+
+* **Acer_Growth_Genotypes.html.Rmd:** code for growth rate analysis and **Figure 3**
+* **Growth_corrected.csv:** Calculated change in areal weight per fragment and data point
+
+#### [4.YII:](https://ghcdn.rawgit.org/anampc/NutrientsCaribbean/master/4.YII/YII_Acer.html)
+
+Contains raw photochemical efficiency (*F~v~/F~m~*) data and code for **Figure 4**
+
+* **YII_Script.Rmd:** code for *F~v~/F~m~* analysis and **Figure 4**
+
+* YII_Data/**All_YII_data.csv:** YII values for all coral species
