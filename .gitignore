@@ -32,3 +32,10 @@ vignettes/*.pdf
 **/*.eds
 **/*.xls
 **/*.xlsx
+
+rsconnect/
+1.Temperature/Temperature.html
+2.Mortality/Mortatily_Acer.html
+3.Growth/Acer_Growth_Genotypes.html
+4.YII/YII_Acer.html
+
