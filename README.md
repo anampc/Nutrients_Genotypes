@@ -39,9 +39,9 @@ Contains raw mortality data and code for **Figure 3**
 
 #### [4.YII:](https://rpubs.com/anampc20/MS_2022_CR_Fig_4)
 
-Contains raw photochemical efficiency (*F~v~/F~m~*) data and code for **Figure 4**
+Contains raw photochemical efficiency (*Fv/Fm*) data and code for **Figure 4**
 
-* **YII_Script.Rmd:** code for *F~v~/F~m~* analysis and **Figure 4**
+* **YII_Script.Rmd:** code for *Fv/Fm* analysis and **Figure 4**
 
 * YII_Data/**All_YII_data.csv:** YII values for all coral species
 
